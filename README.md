@@ -2,7 +2,7 @@
 
 This is the repo for the final project of CSC12002 - Database Management System course at HCMUS.
 
-## Features
+## Docs
 
 For the overview of the project, please refer to [The Overview Doc](docs/da3-overview.md) (Vietnamese only).
 
