@@ -65,7 +65,7 @@ Các thông tin của bệnh nhân nằm rải rác ở phần [3. Business Requ
 
 - Đối tượng người dùng cho phép: Quản trị viên (admin), nhân viên (Staff), nha sĩ (Dentist)
 - Xem danh sách bệnh nhân
-- Thêm/cập nhất bệnh nhân
+- Thêm/cập nhật bệnh nhân
 - Hồ sơ chi tiết bệnh nhân:
   - Thông tin cơ bản của bệnh nhân như tên, tuổi, giới tính, ...
   - Tổng tiền điều trị đã thanh toán
