@@ -4,7 +4,7 @@ This is the repo for the final project of CSC12002 - Database Management System 
 
 ## Features
 
-For the overview of the project, please refer to [The Overview Doc](docs/chp1-da3-overview.md) (Vietnamese only).
+For the overview of the project, please refer to [The Overview Doc](docs/da3-overview.md) (Vietnamese only).
 
 ## Contributors
 
