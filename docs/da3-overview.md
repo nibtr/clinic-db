@@ -106,7 +106,7 @@ Các thông tin của bệnh nhân nằm rải rác ở phần [3. Business Requ
         - Mặt đỉnh (Top - T)
         - Mặt chân răng (Root - R)
       - Sau khi lựa chọn đủ thông tin, nhấn hoàn tất
-      - Người dùng có thể cậph nhật lại thông tin điều trị này
+      - Người dùng có thể cập nhật lại thông tin điều trị này
     - Tại hồ sơ bệnh nhân, các nha sĩ có thể xem được danh sách các thanh toán của bệnh nhân bao gồm:
       - Tên nha sĩ phụ trách các điều trị
       - Tổng tiền cần thanh toán và ngày thực hiện thanh toán
