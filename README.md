@@ -10,5 +10,5 @@ For the overview of the business rules (requirements) of the project, please ref
 
 - [Hieu Nguyen Ho Trung](https://github.com/nhthieu)
 - [Nam Vu Hoai](https://github.com/namhoai1109)
-- [Man Huynh Nguyen](https://github.com/nhman2002)
+- [Man Nguyen Huynh](https://github.com/nhman2002)
 - [Trung Thieu Vinh](https://github.com/tvtrungg)
