@@ -1,7 +1,7 @@
 ---
 title: DA#3 - Modeling
 date-of-creation: 2023-07-03
-date-last-updated: 2023-07-03
+date-last-updated: 2023-07-05
 description: Mô hình hóa nghiệp vụ và yêu cầu nghiệp vụ của đồ án
 ---
 
@@ -32,25 +32,44 @@ description: Mô hình hóa nghiệp vụ và yêu cầu nghiệp vụ của đ�
 
 ### Hồ sơ bệnh nhân (Dental medical record)
 
-- Thông tin cơ bản của bệnh nhân: tên, tuổi, giới tính, sdt, email, địa chỉ, ngày sinh, quốc tịch.
-- Tổng tiền điều trị đã thanh toán cho riêng section đó
-- Ghi chú về tình trạng dị ứng và chống chỉ định thuốc của bệnh nhân.
+- Tên
+- Tuổi
+- Giới tính
+- Ngày sinh
+- SDT
+- Tổng tiền điều trị đã thanh toán *
 - Thông tin tổng quan về sức khỏe răng miệng của bệnh nhân.
-### Kế hoạch điều trị (Treatment Plan)
+- Ghi chú về tình trạng dị ứng
+- Thông tin chống chỉ định thuốc của bệnh nhân.
 
-- Mã điều trị
+### Kế hoạch điều trị (Treatment Plan) (DANH SÁCH NHỮNG BUỔI ĐIỀU TRỊ CỦA BỆNH NHÂN)
+
+- **Mã điều trị**
 - Mô tả
-- Ngày điều trị
-- Bác sĩ thực hiện
-- Trợ khám (nếu có)
+- **Ngày điều trị**
+- **Bác sĩ thực hiện**
+- **Trợ khám (nếu có)**
 - Ghi chú cho buổi điều trị
 - Danh sách các răng cần thực hiện điều trị
-- Các kế hoạch điều trị sẽ có màu khác nhau tùy theo trạng thái điều trị, gồm:
+- Trạng thái (màu):
   - Kế hoạch (xanh dương)
   - Đã hoàn thành (xanh lá)
   - Đã hủy (vàng)
+- Liệu trình (FK)
+- Răng (enum)
 
-### Liệu trinh (Treatment)
+### Liệu trình (Treatment)
+
+- **Ngày điều trị**
+- **Bác sĩ thực hiện**
+- **Trợ khám (nếu có)**
+- Danh mục điều trị *
+
+### Danh mục điều trị (Treatment Item)
+
+- Mã danh mục điều trị
+- Tên danh mục
+- Mô tả
 
 ### Thanh toán (Payment)
 
@@ -82,3 +101,32 @@ description: Mô hình hóa nghiệp vụ và yêu cầu nghiệp vụ của đ�
 - Phòng
 - Tình trạng (cuộc hẹn mới/tái khám)
 - Danh mục điều trị
+
+**My personal understanding about Treament plan**:
+
+**Kế hoạch điều trị**:
+
+| STT | Ngày điều trị | Liệu trình | Bệnh nhân |
+| --- | ------------- | ---------- | --------- |
+| 1   | 2021-07-03    | A-1        | BN-1      |
+| 2   | 2021-07-10    | A-1        | BN-1      |
+| 3   | 2021-07-17    | A-1        | BN-1      |
+| ... | ...           | ...        | ...       |
+
+**Liệu trình**:
+
+| PK  | Tên liệu trình |
+| --- | -------------- |
+| A-1 | Bọc răng sứ    |
+| A-2 | Chỉnh nha      |
+| ... | ...            |
+
+
+**Danh mục điều trị**:
+
+| Mã danh mục | Tên danh mục | Mô tả  | Liệu trình |
+| ----------- | ------------ | ------ | ---------- |
+| DM-1        | Danh mục 1   | blabla | A-1        |
+| DM-2        | Danh mục 2   | blabla | A-1        |
+| DM-3        | Danh mục 3   | blabla | A-1        |
+| ...         | ...          | ...    | ...        |

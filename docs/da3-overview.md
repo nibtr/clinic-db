@@ -1,7 +1,7 @@
 ---
 title: DA#3 - Overview
 date-of-creation: 2023-07-03
-date-last-updated: 2023-07-03
+date-last-updated: 2023-07-05
 description: Tổng quan về mục tiêu nghiệp vụ và yêu cầu nghiệp vụ của đồ án
 ---
 
@@ -88,10 +88,11 @@ Các thông tin của bệnh nhân nằm rải rác ở phần [3. Business Requ
         - Kế hoạch (xanh dương)
         - Đã hoàn thành (xanh lá)
         - Đã hủy (vàng)
-    - Thêm kế hoạch điều trị của bệnh nhân: Gồm 3 bước:
-      - Chọn liệu trình (Treatment selection)
-      - Chọn răng (Tooth selection)
-      - Xem lại thông tin điều trị (Treatment Information Review)
+    - Lên kế hoạch điều trị của bệnh nhân: Gồm 3 bước:
+      1. Chọn liệu trình (Treatment selection)
+      2. Chọn danh mục điều trị
+      3. Chọn răng
+
       - Tại bước chọn liệu trình, nhân viên sẽ thực hiện:
         - Chọn ngày điều trị
         - Chọn bác sĩ thực hiện
