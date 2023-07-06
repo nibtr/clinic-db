@@ -70,7 +70,8 @@ Các thông tin của bệnh nhân nằm rải rác ở phần [3. Business Requ
   - Thông tin cơ bản của bệnh nhân như tên, tuổi, giới tính, ...
   - Tổng tiền điều trị đã thanh toán
   - Thông tin tổng quan về sức khỏe răng miệng của bệnh nhân
-  - Ghi chú về tình trạng dị ứng và chống chỉ định thuốc của bệnh nhân
+  - Ghi chú về tình trạng dị ứng
+  - Ghi chú về chống chỉ định thuốc của bệnh nhân
   - **Thông tin về kế hoạch điều trị, thông tin thanh toán của bệnh nhân:**
     - Thêm/xóa/cập nhật thông tin chống chỉ định thuốc của bệnh nhân
     - Cập nhật thông tin tình trạng sức khỏe răng miệng của bệnh nhân: Các bác sĩ có thể cập nhật thông tin tổng quan về tình trạng sức khỏe răng miệng của bệnh nhân vào hồ sơ chi tiết của bệnh nhân trong phần sức khỏe răng miệng.
