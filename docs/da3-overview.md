@@ -1,7 +1,7 @@
 ---
 title: DA#3 - Overview
 date-of-creation: 2023-07-03
-date-last-updated: 2023-07-03
+date-last-updated: 2023-07-09
 description: Tổng quan về mục tiêu nghiệp vụ và yêu cầu nghiệp vụ của đồ án
 ---
 
@@ -66,65 +66,63 @@ Các thông tin của bệnh nhân nằm rải rác ở phần [3. Business Requ
 - Đối tượng người dùng cho phép: Quản trị viên (admin), nhân viên (Staff), nha sĩ (Dentist)
 - Xem danh sách bệnh nhân
 - Thêm/cập nhật bệnh nhân
-- Hồ sơ chi tiết bệnh nhân:
-  - Thông tin cơ bản của bệnh nhân như tên, tuổi, giới tính, ...
-  - Tổng tiền điều trị đã thanh toán
-  - Thông tin tổng quan về sức khỏe răng miệng của bệnh nhân
-  - Ghi chú về tình trạng dị ứng và chống chỉ định thuốc của bệnh nhân
-  - **Thông tin về kế hoạch điều trị, thông tin thanh toán của bệnh nhân:**
-    - Thêm/xóa/cập nhật thông tin chống chỉ định thuốc của bệnh nhân
-    - Cập nhật thông tin tình trạng sức khỏe răng miệng của bệnh nhân: Các bác sĩ có thể cập nhật thông tin tổng quan về tình trạng sức khỏe răng miệng của bệnh nhân vào hồ sơ chi tiết của bệnh nhân trong phần sức khỏe răng miệng.
-    - Xem/thêm/cập nhật các kế hoạch điều trị của bệnh nhân:
-      - Các bác sĩ có thể xem được danh sách các kế hoạch điều trị của bệnh nhân.
-      - Hiển thị thông tin chi tiết của kế hoạch điều trị:
-        - Mã điều trị
-        - Mô tả
-        - Ngày điều trị
-        - Bác sĩ thực hiện
-        - Trợ khám (nếu có)
-        - Ghi chú cho buổi điều trị
-        - Danh sách các răng cần thực hiện điều trị
-      - Các kế hoạch điều trị sẽ có màu khác nhau tùy theo trạng thái điều trị, gồm:
-        - Kế hoạch (xanh dương)
-        - Đã hoàn thành (xanh lá)
-        - Đã hủy (vàng)
-    - Thêm kế hoạch điều trị của bệnh nhân: Gồm 3 bước:
-      - Chọn liệu trình (Treatment selection)
-      - Chọn răng (Tooth selection)
-      - Xem lại thông tin điều trị (Treatment Information Review)
-      - Tại bước chọn liệu trình, nhân viên sẽ thực hiện:
-        - Chọn ngày điều trị
-        - Chọn bác sĩ thực hiện
-        - Trợ khám (nếu có)
-        - Chọn danh mục điều trị
-      - Sau khi chọn danh mục điều trị, phần mềm sẽ hiển thị tiếp các mã điều trị nằm trong danh mục đó để người dùng lựa chọn.
-      - Tại bước chọn răng, người dùng chọn bằng cách tích vào răng đó -> chọn bề mặt răng cần điều trị. Các bề mặt răng như sau (các chi tiết không quan trọng)
-        - Mặt trong (Lingual - L)
-        - Mặt ngoài (Facial - F)
-        - Mặt xa (Distal - D)
-        - Mặt gần (Mesial - M)
-        - Mặt đỉnh (Top - T)
-        - Mặt chân răng (Root - R)
-      - Sau khi lựa chọn đủ thông tin, nhấn hoàn tất
-      - Người dùng có thể cập nhật lại thông tin điều trị này
-    - Tại hồ sơ bệnh nhân, các nha sĩ có thể xem được danh sách các thanh toán của bệnh nhân bao gồm:
-      - Tên nha sĩ phụ trách các điều trị
-      - Tổng tiền cần thanh toán và ngày thực hiện thanh toán
-      - Thông tin chi tiết của mỗi thanh toán gồm:
-        - Ngày giao dịch
-        - Người thanh toán
-        - Tổng tiền cần thanh toán
-        - Tiền đã trả
-        - Tiền thối
-        - Loại thanh toán (tiền mặt hoặc online)
-        - Ghi chú và danh sách các điều trị cần thanh toán, mỗi điều trị gồm:
-          - Mã điều trị
-          - Mô tả
-          - Phí và ngày điều trị
-          - Hình thức thanh toán (tiền mặt/online)
-        - Nếu bệnh nhân thanh toán tiền mặt, nhân viên (Staff) sẽ cập nhật vào mục thanh toán trong hồ sơ bệnh nhân
-      - Thêm/xóa/cập nhật đơn thuốc của bệnh nhân: Đối tượng người dùng cho phép: quản trị viên, nhân viên, nha sĩ
-  
+#### Chi tiết hồ sơ bệnh nhân:
+
+- Thông tin cơ bản của bệnh nhân như tên, tuổi, giới tính, ...
+- Tổng tiền điều trị đã thanh toán
+- Thông tin tổng quan về sức khỏe răng miệng của bệnh nhân
+- Ghi chú về tình trạng dị ứng
+- Ghi chú về **chống chỉ định thuốc** của bệnh nhân
+- Các bác sĩ có thể xem được danh sách các thanh toán của bệnh nhân bao gồm:
+  - Tên bác sĩ phụ trách các điều trị
+  - Tổng tiền cần thanh toán và ngày thực hiện thanh toán
+  - Thông tin chi tiết của mỗi thanh toán gồm:
+    - Ngày giao dịch
+    - Người thanh toán
+    - Tổng tiền cần thanh toán
+    - Tiền đã trả
+    - Tiền thối
+    - Loại thanh toán (tiền mặt hoặc online)
+
+#### Thông tin về kế hoạch điều trị
+
+Khi khám bệnh xong lần đầu, bác sĩ sẽ lập kế hoạch điều trị cho bệnh nhân. Kế hoạch điều trị là danh sách các buổi điều trị của bệnh nhân. Mỗi buổi điều trị (mỗi instance trong kế hoạch điều trị) sẽ có các thông tin như sau:
+- Ngày điều trị
+- Bác sĩ điều trị
+- Ghi chú cho buổi điều trị
+- Trợ khám (nếu có) (assistant)
+- Mô tả (sẽ có các tùy chọn có sẵn để lựa chọn (dropdown))
+- Danh mục điều trị (category)
+- Các [Procedure](#điều-trị-procedure) (đây là các mục điều trị)
+- Trạng thái:
+  - Kế hoạch (xanh dương)
+  - Đã hoàn thành (xanh lá)
+  - Đã hủy (vàng)
+- Danh sách các [răng](#răng) cần điều trị 
+- Thông tin thanh toán cho buổi điều trị
+- Thông tin đơn thuốc cho buổi điều trị
+
+Sau khi lựa chọn đủ thông tin, nhấn hoàn tất. Bác sĩ có thể cập nhật lại thông tin điều trị này. Ngoài ra, bác sĩ có thể cập nhật cập nhật thông tin tình trạng sức khỏe răng miệng của bệnh nhân:
+- Thêm/xóa/cập nhật thông tin chống chỉ định thuốc của bệnh nhân
+- Cập nhật thông tin tình trạng sức khỏe răng miệng của bệnh nhân
+- Xem/thêm/cập nhật các kế hoạch điều trị của bệnh nhân
+
+#### Răng 
+
+Các bề mặt răng như sau:
+- Mặt trong (Lingual - L)
+- Mặt ngoài (Facial - F)
+- Mặt xa (Distal - D)
+- Mặt gần (Mesial - M)
+- Mặt đỉnh (Top - T)
+- Mặt chân răng (Root - R)
+
+#### Điều trị (Procedure)
+
+Mỗi điều trị gồm:
+  - Mã điều trị
+  - Mô tả
+  - Phí điều trị
 ### 3.2. Quản lí cuộc hẹn
 
 - Xem các cuộc hẹn trong từng ngày (đối tượng người dùng cho phép: quản trị viên, nhân viên, nha sĩ)
@@ -139,8 +137,6 @@ Các thông tin của bệnh nhân nằm rải rác ở phần [3. Business Requ
 - Nha sĩ chỉ được phép xem thông tin cuộc hẹn (read-only)
 - Lọc các cuộc hẹn trong ngày (Đối tượng người dùng cho phép: quản trị viên, nhân viên, nha sĩ)
   - **Lọc theo bệnh nhân (tên)**
-  - **Lọc theo phòng khám** [^1]
-  [^1]: Cần xem lại chỗ này vì chưa rõ là quản lí nhiều phòng khám hay chỉ 1 phòng khám
   - **Lọc các cuộc hẹn của riêng nha sĩ**: Nha sĩ có thể lựa chọn lọc các cuộc hẹn mà mình chịu trách nhiệm
 - Thêm/xem/xóa/sửa các yêu cầu hẹn từ bệnh nhân (Đối tượng người dùng cho phép: quản trị viên, nhân viên)
   - Hiển thị: Tên bệnh nhân, ngày hẹn được yêu cầu, ghi chú và thời gian yêu cầu được gửi
