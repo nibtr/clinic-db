@@ -146,12 +146,12 @@ Mỗi điều trị gồm:
     - Hệ thống hỗ trợ tự động tìm kiếm ngày làm việc gần nhất của nha sĩ mặc định của bệnh nhân
 - **Mỗi nha sĩ có lịch làm việc riêng** => Chỉ hiển thị các bác sĩ có lịch làm việc trong thời gian bệnh nhân muốn hẹn
 - Khi thay đổi ngày hẹn thì danh sách nha sĩ được chọn cũng sẽ được cập nhật
-- Có thể xem danh sách các tái khám liên kết của bệnh nhân
-- Thông tin mỗi tái khám bao gồm: 
+- Có thể xem danh sách các tái khám liên kết của bệnh nhân, (tái khám liên kết là buổi tái khám có liên kết với 1 buổi khám trước đó, danh sách tái khám liên kết có thể là khi nhấn vào 1 buổi khám nào đó sẽ hiện ra các buổi tái khám được liên kết với buổi khám đó -> tạo bảng tái khám liên kết)
+- Thông tin mỗi tái khám bao gồm (thông tin display): 
   - Ngày chỉ định
   - Mã
   - Ghi chú.
-- Nếu bệnh nhân tới tái khám thì cần xác nhận liên kết tái khám.
+- Nếu bệnh nhân tới tái khám thì cần xác nhận liên kết tái khám (chỉ cần bệnh nhân confirm với nhân viên).
 
 ### 3.3 Quản lý dữ liệu hệ thống
 
