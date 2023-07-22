@@ -1,6 +1,6 @@
-# CSC12002 - DA#3: Dental Clinic Management System
+# CSC12002 - DA#3: Dental Clinic Management System Documentations
 
-This is the repo for the final project of CSC12002 - Advanced Database course at HCMUS.
+This is the repo for the documentations throughout the development process of the Dental Clinic project. This is the final project for the course CSC12002 - Advanced Database at HCMUS.
 
 ## Docs
 
