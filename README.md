@@ -1,6 +1,6 @@
-# CSC12002 - DA#3: Dental Clinic Management System Documentations
+# CSC12002 - DA#3: Dental Clinic Management System - Documentations
 
-This is the repo for the documentations throughout the development process of the Dental Clinic project. This is the final project for the course CSC12002 - Advanced Database at HCMUS.
+This is the repo for the documentations throughout the development process of the Dental Clinic project for the course CSC12002 - Advanced Database at HCMUS.
 
 ## Diagrams
 
@@ -15,7 +15,13 @@ For each diagram there are older versions, please refer to the latest one.
 
 For the overview of the business rules (requirements) of the project, please refer to [The Overview Doc](docs/da3-overview.md) (Vietnamese only).
 
-For the  overview diagram of the database, please refer to diagrams folder.
+## Server
+
+The server repo can be found [here](https://github.com/nhthieu/dental-clinic-server)
+
+## Client
+
+to be added
 
 ## Contributors
 
