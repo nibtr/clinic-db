@@ -2,6 +2,15 @@
 
 This is the repo for the documentations throughout the development process of the Dental Clinic project. This is the final project for the course CSC12002 - Advanced Database at HCMUS.
 
+## Diagrams
+
+All the diagrams are located in the `diagram` folder. This includes:
+
+- Conceptual design diagram
+- Logical design diagram
+
+For each diagram there are older versions, please refer to the latest one.
+
 ## Docs
 
 For the overview of the business rules (requirements) of the project, please refer to [The Overview Doc](docs/da3-overview.md) (Vietnamese only).
