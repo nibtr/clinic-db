@@ -17,11 +17,11 @@ For the overview of the business rules (requirements) of the project, please ref
 
 ## Server
 
-The server repo can be found [here](https://github.com/nhthieu/dental-clinic-server)
+The repo for the server can be found [here](https://github.com/nhthieu/dental-clinic-server)
 
 ## Client
 
-to be added
+The repo for the client can be found [here](https://github.com/nhthieu/dental-clinic-client)
 
 ## Contributors
 
