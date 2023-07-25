@@ -70,6 +70,7 @@ For the method, there are 2 options: cash or online, denoted by `c` and `o` resp
 | `id`       | `int`            |
 | `time`     | `datetime2`      |
 | `note`     | `nvarchar(1000)` |
+| `status`   | `char(3)`        |
 
 ## Room Table
 
@@ -85,3 +86,88 @@ The room code is a 6-character string that is generated following the convention
 - Next is a 2-digit number that is the room number.
 
 For example: `EXA-01` is the code for the first examination room.
+
+## Treatment Session Table
+
+| Field Name    | Data Type         |
+| ------------- | ----------------- |
+| `id`          | `int`             |
+| `health_note` | `nvarchar(1000)`* |
+| `description` | `nvarchar(1000)`* |
+
+## Procedure Table
+
+| Field Name    | Data Type       |
+| ------------- | --------------- |
+| `code`        | `char(3)`       |
+| `name`        | `nvarchar(50)`  |
+| `description` | `nvarchar(500)` |
+| `fee`         | `int`           |
+
+## Category Table
+
+| Field Name    | Data Type       |
+| ------------- | --------------- |
+| `code`        | `char(3)`       |
+| `name`        | `nvarchar(50)`  |
+| `description` | `nvarchar(255)` |
+
+## Drug Table
+
+| Field Name    | Data Type       |
+| ------------- | --------------- |
+| `code`        | `char(17)`      |
+| `name`        | `varchar(50)`   |
+| `description` | `nvarchar(255)` |
+| `price`       | `int`           |
+
+Code is a 17-character string that is generated following the convention:
+
+- The first 3 characters are the national drug code (NDC)
+- Followed by a `-` character.
+- Next 6-digit number is the Labeler Code
+- Followed by a `-` character.
+- Next 4-digit number is the Product Code
+- Followed by a `-` character.
+- Next 2-digit number is the Package Code
+
+For example: `NDC-45678-9012-34` is a valid code.
+
+## Tooth Table
+
+| Field Name   | Data Type       |
+| ------------ | --------------- |
+| `type`       | `char(1)`       |
+| `decription` | `nvarchar(255)` |
+
+The type is a single character that indicates the type of the tooth.
+- Lingual (L)
+- Facial (F)
+- Distal (D)
+- Mesial (M)
+- Top (T)
+- Root (R)
+
+## Prescription Table
+
+| Field Name | Data Type         |
+| ---------- | ----------------- |
+| `note`     | `nvarchar(1000)`* |
+
+## Appointment Request Table
+
+| Field Name        | Data Type       |
+| ----------------- | --------------- |
+| `id`              | `int`           |
+| `appointmentTime` | `datetime2`     |
+| `requestTime`     | `datetime2`     |
+| `note`            | `nvarchar(255)` |
+| `patientName`     | `nvarchar(50)`  |
+| `patientPhone`    | `char(10)`      |
+
+## Schedule Table
+
+| Field Name | Data Type |
+| ---------- | --------- |
+| `id`       | `int`     |
+| `day`      | `char(3)` |
