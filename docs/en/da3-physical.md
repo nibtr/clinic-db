@@ -17,6 +17,7 @@ We only account for the data types that are not foreign keys since they can be i
 | `username` | `char(10)`    |
 | `password` | `char(60)`    |
 | `email`    | `varchar(50)` |
+| `role`     | `char(3)`     |
 
 For the *password*, we decided to use the following convention:
 
@@ -27,6 +28,8 @@ For the *password*, we decided to use the following convention:
 - The password is hashed using the `bcrypt` algorithm with 12 rounds.
 
 For example: `sta-123456` will result in a hashed version `$2a$12$gEy/fBApnlR7CYu5hWQvWOQh9pt.vGPGCH3TTIdYLc4xqDODqVvwm` which is *60 characters long*.
+
+Role is a 3-character string that indicates the role of the account (sta, den, adm).
 
 ## Personel Table
 
@@ -70,12 +73,14 @@ For the method, there are 2 options: cash or online, denoted by `c` and `o` resp
 | `id`       | `int`            |
 | `time`     | `datetime2`      |
 | `note`     | `nvarchar(1000)` |
-| `status`   | `char(3)`        |
+| `status`   | `varchar(6)`     |
+<!-- do, doing, done, cancel -->
 
 ## Room Table
 
 | Field Name | Data Type     |
 | ---------- | ------------- |
+| `id`       | `int`         |
 | `code`     | `char(6)`     |
 | `name`     | `varchar(50)` |
 
@@ -99,6 +104,7 @@ For example: `EXA-01` is the code for the first examination room.
 
 | Field Name    | Data Type       |
 | ------------- | --------------- |
+| `id`          | `int`           |
 | `code`        | `char(3)`       |
 | `name`        | `nvarchar(50)`  |
 | `description` | `nvarchar(500)` |
@@ -108,6 +114,7 @@ For example: `EXA-01` is the code for the first examination room.
 
 | Field Name    | Data Type       |
 | ------------- | --------------- |
+| `id`          | `int`           |
 | `code`        | `char(3)`       |
 | `name`        | `nvarchar(50)`  |
 | `description` | `nvarchar(255)` |
@@ -116,6 +123,7 @@ For example: `EXA-01` is the code for the first examination room.
 
 | Field Name    | Data Type       |
 | ------------- | --------------- |
+| `id`          | `int`           |
 | `code`        | `char(17)`      |
 | `name`        | `varchar(50)`   |
 | `description` | `nvarchar(255)` |
@@ -135,10 +143,11 @@ For example: `NDC-45678-9012-34` is a valid code.
 
 ## Tooth Table
 
-| Field Name   | Data Type       |
-| ------------ | --------------- |
-| `type`       | `char(1)`       |
-| `decription` | `nvarchar(255)` |
+| Field Name | Data Type     |
+| ---------- | ------------- |
+| `id`       | `int`         |
+| `type`     | `char(1)`     |
+| `name`     | `varchar(50)` |
 
 The type is a single character that indicates the type of the tooth.
 - Lingual (L)
