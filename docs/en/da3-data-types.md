@@ -196,6 +196,14 @@ The type is a single character that indicates the type of the tooth.
 - Top (T)
 - Root (R)
 
+## Tooth_Session Table
+
+| Field Name           | Data Type | Constraints                |
+| -------------------- | --------- | -------------------------- |
+| `toothID`            | `int`     | `PRIMARY KEY, FOREIGN KEY` |
+| `treatmentSessionID` | `int`     | `PRIMARY KEY, FOREIGN KEY` |
+| `order`              | `int`     | `PRIMARY KEY`              |
+
 ## Prescription Table
 
 | Field Name           | Data Type        | Constraints             |
