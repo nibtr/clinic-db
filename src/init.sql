@@ -18,13 +18,14 @@ CREATE TABLE [dbo].[Account] (
 	[role] CHAR(3) NOT NULL,
     [email] varchar(50),
     CONSTRAINT [Account_pk] PRIMARY KEY ([id]),
-    CONSTRAINT [Account_username_unique] UNIQUE ([username])
+    CONSTRAINT [Account_username_unique] UNIQUE ([username]),
+	CONSTRAINT [Account_email_unique] UNIQUE ([email])
 );
 
 --CreateTable
 CREATE TABLE [dbo].[Personel] (
     [id] INT NOT NULL IDENTITY(1,1),
-    [nationalId] char(12),
+    [nationalId] char(12) NOT NULL,
     [name] NVARCHAR(50) NOT NULL,
     [dob] DATE,
     [gender] char(1),
@@ -36,7 +37,7 @@ CREATE TABLE [dbo].[Personel] (
 
 -- CreateTable
 CREATE TABLE [dbo].[Staff] (
-    [id] INT NOT NULL IDENTITY(1,1),
+    [id] INT NOT NULL,
     CONSTRAINT [Staff_pk] PRIMARY KEY ([id])
 );
 
@@ -45,22 +46,22 @@ CREATE TABLE [dbo].[Patient] (
     [id] INT NOT NULL IDENTITY(1,1),
     [drugContraindications] NVARCHAR(500),
     [oralHealthStatus] NVARCHAR(500),
-    [allergyStatus] NVARCHAR(500) NOT NULL,
-    CONSTRAINT [Customer_pk] PRIMARY KEY ([id]),
+    [allergyStatus] NVARCHAR(500),
+    CONSTRAINT [Patient_pk] PRIMARY KEY ([id]),
 );
 
 -- CreateTable
 CREATE TABLE [dbo].[Dentist] (
     [id] INT NOT NULL IDENTITY(1,1),
-    CONSTRAINT [Partner_pkey] PRIMARY KEY ([id]),
+    CONSTRAINT [Dentist_pk] PRIMARY KEY ([id]),
 );
 
 CREATE TABLE [dbo].[PaymentRecord] (
     [id] INT NOT NULL IDENTITY(1,1),
 	[date] DATE NOT NULL,
 	[total] INT NOT NULL,
-	[amountPaid] INT,
-	[change] INT,
+	[amountPaid] INT DEFAULT 0,
+	[change] INT DEFAULT 0,
 	[method] char(1),
     CONSTRAINT [PaymentRecord_pk] PRIMARY KEY ([id]),
 );
