@@ -60,7 +60,7 @@ CREATE TABLE [dbo].[PaymentRecord] (
     [id] INT NOT NULL IDENTITY(1,1),
 	[date] DATE NOT NULL,
 	[total] INT NOT NULL,
-	[amountPaid] INT DEFAULT 0,
+	[paid] INT DEFAULT 0,
 	[change] INT DEFAULT 0,
 	[method] char(1),
     CONSTRAINT [PaymentRecord_pk] PRIMARY KEY ([id]),
