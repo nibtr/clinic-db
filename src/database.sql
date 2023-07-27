@@ -12,7 +12,7 @@ CREATE TABLE [dbo].[Account] (
     [password] CHAR(60) NOT NULL,
     [email] VARCHAR(50) UNIQUE NOT NULL,
     [role] CHAR(3) NOT NULL,
-    [personelID] INT NOT NULL,
+    [personelID] INT UNIQUE NOT NULL,
     CONSTRAINT [Account_pkey] PRIMARY KEY CLUSTERED ([id])
 );
 
@@ -65,7 +65,7 @@ CREATE TABLE [dbo].[Session] (
     [id] INT NOT NULL IDENTITY(1,1),
     [time] DATETIME2 NOT NULL,
     [note] NVARCHAR(1000),
-    [status] CHAR(6) DEFAULT 'do',
+    [status] VARCHAR(6) DEFAULT 'do',
 	[patientID] INT NOT NULL,
 	[assistantID] INT,
 	[dentistID] INT NOT NULL,
@@ -74,7 +74,7 @@ CREATE TABLE [dbo].[Session] (
 );	
 
 CREATE TABLE [dbo].[TreatmentSession] (
-    [id] INT NOT NULL,
+    [id] INT,
     [healthNote] NVARCHAR(1000),
     [description] NVARCHAR(1000),
 	[categoryID] INT NOT NULL,
@@ -140,7 +140,6 @@ CREATE TABLE [dbo].[ToothSession] (
 	CONSTRAINT [ToothSession_pkey] PRIMARY KEY CLUSTERED ([toothID],[treatmentSessionID],[order])
 );	
 
-
 CREATE TABLE [dbo].[Prescription] (
 	[drugID] INT NOT NULL,
 	[treatmentSessionID] INT NOT NULL,
@@ -184,17 +183,17 @@ AlTER TABLE [dbo].[Dentist] ADD CONSTRAINT [FK_Dentist_Personel] FOREIGN KEY ([i
 
 -- Constraint in table Payment Record
 AlTER TABLE [dbo].[PaymentRecord] ADD CONSTRAINT [FK_PaymentRecord_Patient] FOREIGN KEY ([patientID]) REFERENCES [dbo].[Patient]([id]) ON DELETE NO ACTION ON UPDATE CASCADE;
-AlTER TABLE [dbo].[PaymentRecord] ADD CONSTRAINT [FK_PaymentRecord_TreatmentSession] FOREIGN KEY ([treatmentSessionID]) REFERENCES [dbo].[TreatmentSession]([id]) ON DELETE SET NULL ON UPDATE CASCADE;
+AlTER TABLE [dbo].[PaymentRecord] ADD CONSTRAINT [FK_PaymentRecord_TreatmentSession] FOREIGN KEY ([treatmentSessionID]) REFERENCES [dbo].[TreatmentSession]([id]) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 -- Constraint in table Session
-AlTER TABLE [dbo].[Session] ADD CONSTRAINT [FK_Session_Room] FOREIGN KEY ([roomID]) REFERENCES [dbo].[Room]([id]) ON DELETE SET NULL ON UPDATE CASCADE;
+AlTER TABLE [dbo].[Session] ADD CONSTRAINT [FK_Session_Room] FOREIGN KEY ([roomID]) REFERENCES [dbo].[Room]([id]) ON DELETE NO ACTION ON UPDATE CASCADE;
 AlTER TABLE [dbo].[Session] ADD CONSTRAINT [FK_Session_Patient] FOREIGN KEY ([patientID]) REFERENCES [dbo].[Patient]([id]) ON DELETE NO ACTION ON UPDATE CASCADE;
 AlTER TABLE [dbo].[Session] ADD CONSTRAINT [FK_Session_Assistant] FOREIGN KEY ([assistantID]) REFERENCES [dbo].[Assistant]([id]) ON DELETE SET NULL ON UPDATE CASCADE;
 AlTER TABLE [dbo].[Session] ADD CONSTRAINT [FK_Session_Dentist] FOREIGN KEY ([dentistID]) REFERENCES [dbo].[Dentist]([Id]) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 -- Constraint in table Treatment Session
-AlTER TABLE [dbo].[TreatmentSession] ADD CONSTRAINT [FK_TreatmentSession_Session] FOREIGN KEY ([id]) REFERENCES [dbo].[Session]([id]) ON DELETE CASCADE ON UPDATE CASCADE;
-AlTER TABLE [dbo].[TreatmentSession] ADD CONSTRAINT [FK_TreatmentSession_Category] FOREIGN KEY ([categoryID]) REFERENCES [dbo].[Category]([id]) ON DELETE SET NULL ON UPDATE CASCADE;
+AlTER TABLE [dbo].[TreatmentSession] ADD CONSTRAINT [FK_TreatmentSession_Session] FOREIGN KEY ([id]) REFERENCES [dbo].[Session]([id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
+AlTER TABLE [dbo].[TreatmentSession] ADD CONSTRAINT [FK_TreatmentSession_Category] FOREIGN KEY ([categoryID]) REFERENCES [dbo].[Category]([id]) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 -- Constraint in table Procedure
 AlTER TABLE [dbo].[Procedure] ADD CONSTRAINT [FK_Procedure_Category] FOREIGN KEY ([categoryID]) REFERENCES [dbo].[Category]([id]) ON DELETE CASCADE ON UPDATE CASCADE;
@@ -208,10 +207,10 @@ AlTER TABLE [dbo].[ToothSession] ADD CONSTRAINT [FK_ToothSession_Tooth] FOREIGN 
 AlTER TABLE [dbo].[ToothSession] ADD CONSTRAINT [FK_ToothSession_TreatmentSession] FOREIGN KEY ([treatmentSessionID]) REFERENCES [dbo].[TreatmentSession]([id]) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 -- Constraint in table Examination Session
-AlTER TABLE [dbo].[ExaminationSession] ADD CONSTRAINT [FK_ExaminationSession_Session] FOREIGN KEY ([id]) REFERENCES [dbo].[Session]([id]) ON DELETE CASCADE ON UPDATE CASCADE;
+AlTER TABLE [dbo].[ExaminationSession] ADD CONSTRAINT [FK_ExaminationSession_Session] FOREIGN KEY ([id]) REFERENCES [dbo].[Session]([id]) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 -- Constraint in table Re-Examination Session
-AlTER TABLE [dbo].[ReExaminationSession] ADD CONSTRAINT [FK_ReExaminationSession_Session] FOREIGN KEY ([id]) REFERENCES [dbo].[Session]([id]) ON DELETE CASCADE ON UPDATE CASCADE;
+AlTER TABLE [dbo].[ReExaminationSession] ADD CONSTRAINT [FK_ReExaminationSession_Session] FOREIGN KEY ([id]) REFERENCES [dbo].[Session]([id]) ON DELETE NO ACTION ON UPDATE CASCADE;
 AlTER TABLE [dbo].[ReExaminationSession] ADD CONSTRAINT [FK_ReExaminationSession_ExaminationSession] FOREIGN KEY ([relatedExaminationID]) REFERENCES [dbo].[ExaminationSession]([id]) ON DELETE CASCADE ON UPDATE NO ACTION;
 
 -- Constraint in table Assistant
@@ -221,10 +220,20 @@ AlTER TABLE [dbo].[Assistant] ADD CONSTRAINT [FK_Assistant_Dentist] FOREIGN KEY 
 AlTER TABLE [dbo].[Schedule] ADD CONSTRAINT [FK_Schedule_Day] FOREIGN KEY ([dayID]) REFERENCES [dbo].[Day]([id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
 AlTER TABLE [dbo].[Schedule] ADD CONSTRAINT [FK_Schedule_Dentist] FOREIGN KEY ([dentistID]) REFERENCES [dbo].[Dentist]([id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
+-- Init some basic table
+INSERT INTO [dbo].[Day](day) values ('SUN')
+INSERT INTO [dbo].[Day](day) values ('MON')
+INSERT INTO [dbo].[Day](day) values ('TUE')
+INSERT INTO [dbo].[Day](day) values ('WED')
+INSERT INTO [dbo].[Day](day) values ('THU')
+INSERT INTO [dbo].[Day](day) values ('FRI')
+INSERT INTO [dbo].[Day](day) values ('SAT')
+
 COMMIT TRAN;
 END TRY
 
 BEGIN CATCH
+	PRINT(@@ERROR)
     ROLLBACK TRAN;
 END CATCH;
 
