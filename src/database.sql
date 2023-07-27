@@ -8,7 +8,7 @@ BEGIN TRY
 BEGIN TRAN;
 CREATE TABLE [dbo].[Account] (
     [id] INT NOT NULL IDENTITY(1,1),
-    [username] CHAR(10) UNIQUE NOT NULL,
+    [username] CHAR(10) UNIQUE,
     [password] CHAR(60) NOT NULL,
     [email] VARCHAR(50) UNIQUE,
     [role] CHAR(3) NOT NULL,
@@ -18,7 +18,7 @@ CREATE TABLE [dbo].[Account] (
 
 CREATE TABLE [dbo].[Personel] (
     [id] INT NOT NULL IDENTITY(1,1),
-    [nationalId] CHAR(12) UNIQUE NOT NULL,
+    [nationalId] CHAR(12) UNIQUE,
     [name] NVARCHAR(50) NOT NULL,
     [dob] DATE,
     [gender] CHAR(1),
@@ -26,10 +26,25 @@ CREATE TABLE [dbo].[Personel] (
 	CONSTRAINT [Personel_pkey] PRIMARY KEY CLUSTERED ([id])
 );
 
+CREATE TABLE [dbo].[Staff] (
+    [id] INT,
+	CONSTRAINT [Staff-pkey] PRIMARY KEY CLUSTERED ([id])
+);	
+
+CREATE TABLE [dbo].[Dentist] (
+    [id] INT,
+	CONSTRAINT [Dentist_pkey] PRIMARY KEY CLUSTERED ([id])
+);
+
+CREATE TABLE [dbo].[Assistant] (
+    [id] INT,
+	CONSTRAINT [Assistant_pkey] PRIMARY KEY CLUSTERED ([id])
+);	
+
 CREATE TABLE [dbo].[Patient] (
     [id] INT,
-    [drugContraindication] NVARCHAR(500) NOT NULL,
-    [oralHealthStatus] NVARCHAR(500) NOT NULL,
+    [drugContraindication] NVARCHAR(500),
+    [oralHealthStatus] NVARCHAR(500),
     [allergyStatus] NVARCHAR(255),
     CONSTRAINT [Patient_pkey] PRIMARY KEY CLUSTERED ([id])
 );
@@ -58,20 +73,30 @@ CREATE TABLE [dbo].[Session] (
 	CONSTRAINT [Session_pkey] PRIMARY KEY CLUSTERED ([id])
 );	
 
-CREATE TABLE [dbo].[Room] (
-    [id] INT NOT NULL IDENTITY(1,1),
-    [code] CHAR(6) UNIQUE,
-    [name] VARCHAR(50) NOT NULL,
-	[amount] INT,
-	CONSTRAINT [Room_pkey] PRIMARY KEY CLUSTERED ([id])
-);	
-
 CREATE TABLE [dbo].[TreatmentSession] (
     [id] INT NOT NULL,
     [health_note] NVARCHAR(1000),
     [description] NVARCHAR(1000),
 	[categoryId] INT NOT NULL,
 	CONSTRAINT [TreatmentSession_pkey] PRIMARY KEY CLUSTERED ([id])
+);	
+
+CREATE TABLE [dbo].[ExaminationSession] (
+    [id] INT,
+	CONSTRAINT [ExaminationSession_pkey] PRIMARY KEY CLUSTERED ([id])
+);	
+
+CREATE TABLE [dbo].[ReExaminationSession] (
+    [id] INT,
+	[relatedExamination] INT NOT NULL,
+	CONSTRAINT [ReExaminationSession_pkey] PRIMARY KEY CLUSTERED ([id],[relatedExamination])
+);	
+
+CREATE TABLE [dbo].[Room] (
+    [id] INT NOT NULL IDENTITY(1,1),
+    [code] CHAR(6) UNIQUE,
+    [name] VARCHAR(50) NOT NULL,
+	CONSTRAINT [Room_pkey] PRIMARY KEY CLUSTERED ([id])
 );	
 
 CREATE TABLE [dbo].[Procedure] (
@@ -105,13 +130,21 @@ CREATE TABLE [dbo].[Tooth] (
     [id] INT NOT NULL IDENTITY(1,1),
     [type] CHAR(1) UNIQUE,
     [name] NVARCHAR(50) NOT NULL,
-	CONSTRAINT [Tooth_pkey] PRIMARY KEY CLUSTERED ([type])
+	CONSTRAINT [Tooth_pkey] PRIMARY KEY CLUSTERED ([id])
 );	
 
+CREATE TABLE [dbo].[ToothSession] (
+    [toothId] INT,
+	[treatmentSessionId] INT,
+	[order] INT,
+	CONSTRAINT [ToothSession_pkey] PRIMARY KEY CLUSTERED ([toothId],[treatmentSessionId],[order])
+);	
+
+
 CREATE TABLE [dbo].[Prescription] (
-    [note] NVARCHAR(500),
 	[drugId] INT NOT NULL,
 	[treatmentSessionId] INT NOT NULL,
+    [note] NVARCHAR(500),
 	CONSTRAINT [Prescription_pkey] PRIMARY KEY CLUSTERED ([drugId],[treatmentSessionId])
 );	
 
@@ -125,56 +158,18 @@ CREATE TABLE [dbo].[AppointmentRequest] (
 	CONSTRAINT [AppointmentRequest_pkey] PRIMARY KEY CLUSTERED ([id])
 );	
 
+CREATE TABLE [dbo].[Day] (
+    [id] INT NOT NULL IDENTITY(1,1),
+	[day] CHAR(3) UNIQUE,
+	CONSTRAINT [Day_pkey] PRIMARY KEY CLUSTERED ([id])
+);	
+
 CREATE TABLE [dbo].[Schedule] (
     [dayId] INT NOT NULL,
     [dentistId] INT NOT NULL,
 	CONSTRAINT [Schedule_pkey] PRIMARY KEY CLUSTERED ([dayId],[dentistId])
 );	
 
-CREATE TABLE [dbo].[Staff] (
-    [id] INT,
-	CONSTRAINT [Staff-pkey] PRIMARY KEY CLUSTERED ([id])
-);	
-
-CREATE TABLE [dbo].[Dentist] (
-    [id] INT NOT NULL IDENTITY(1,1),
-    [dentistId] INT,
-    [scheduleId] INT,
-	[dayId] INT,
-	[isAbScent] CHAR(1),
-	CONSTRAINT [Dentist_pkey] PRIMARY KEY CLUSTERED ([dentistId])
-);
-
-CREATE TABLE [dbo].[Assistant] (
-    [id] INT NOT NULL IDENTITY(1,1),
-    [assistantId] INT,
-	CONSTRAINT [Assistant_pkey] PRIMARY KEY CLUSTERED ([assistantId])
-);	
-
-CREATE TABLE [dbo].[ToothSession] (
-    [toothType] CHAR(1),
-	[treatmentSessionId] INT,
-	[order] INT,
-	CONSTRAINT [Account_pkey] PRIMARY KEY CLUSTERED ([toothType],[treatmentSessionId],[order])
-);	
-
-CREATE TABLE [dbo].[ExaminationSession] (
-    [id] INT,
-	CONSTRAINT [ExaminationSession_pkey] PRIMARY KEY CLUSTERED ([id])
-);	
-
-CREATE TABLE [dbo].[ReExaminationSession] (
-    [id] INT,
-	[relatedExamination] INT NOT NULL,
-	CONSTRAINT [ReExaminationSession_pkey] PRIMARY KEY CLUSTERED ([id],[relatedExamination])
-);	
-
-CREATE TABLE [dbo].[Day] (
-    [id] INT NOT NULL IDENTITY(1,1),
-	[dentistId] INT,
-	[day] CHAR(3) UNIQUE,
-	CONSTRAINT [Day_pkey] PRIMARY KEY CLUSTERED ([id])
-);	
 
 
 -- Constraint in table Patient
@@ -187,6 +182,9 @@ ALTER TABLE [dbo].[Account] ADD CONSTRAINT [FK_Account_Personel] FOREIGN KEY ([p
 -- Constraint in table Staff
 AlTER TABLE [dbo].[Staff] ADD CONSTRAINT [FK_Staff_Personel] FOREIGN KEY ([id]) REFERENCES [dbo].[Personel]([id]) ON DELETE CASCADE ON UPDATE CASCADE;
 
+-- Constraint in table Dentist
+AlTER TABLE [dbo].[Dentist] ADD CONSTRAINT [FK_Dentist_Personel] FOREIGN KEY ([id]) REFERENCES [dbo].[Personel]([id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
 -- Constraint in table Payment Record
 AlTER TABLE [dbo].[PaymentRecord] ADD CONSTRAINT [FK_PaymentRecord_Patient] FOREIGN KEY ([patientId]) REFERENCES [dbo].[Patient]([id]) ON DELETE NO ACTION ON UPDATE CASCADE;
 AlTER TABLE [dbo].[PaymentRecord] ADD CONSTRAINT [FK_PaymentRecord_TreatmentSession] FOREIGN KEY ([treatmentSessionId]) REFERENCES [dbo].[TreatmentSession]([id]) ON DELETE NO ACTION ON UPDATE CASCADE;
@@ -194,8 +192,8 @@ AlTER TABLE [dbo].[PaymentRecord] ADD CONSTRAINT [FK_PaymentRecord_TreatmentSess
 -- Constraint in table Session
 AlTER TABLE [dbo].[Session] ADD CONSTRAINT [FK_Session_Room] FOREIGN KEY ([roomId]) REFERENCES [dbo].[Room]([id]) ON DELETE NO ACTION ON UPDATE CASCADE;
 AlTER TABLE [dbo].[Session] ADD CONSTRAINT [FK_Session_Patient] FOREIGN KEY ([patientId]) REFERENCES [dbo].[Patient]([id]) ON DELETE NO ACTION ON UPDATE CASCADE;
-AlTER TABLE [dbo].[Session] ADD CONSTRAINT [FK_Session_Assistant] FOREIGN KEY ([assistantId]) REFERENCES [dbo].[Assistant]([assistantId]) ON DELETE SET NULL ON UPDATE CASCADE;
-AlTER TABLE [dbo].[Session] ADD CONSTRAINT [FK_Session_Dentist] FOREIGN KEY ([dentistId]) REFERENCES [dbo].[Dentist]([dentistId]) ON DELETE NO ACTION ON UPDATE CASCADE;
+AlTER TABLE [dbo].[Session] ADD CONSTRAINT [FK_Session_Assistant] FOREIGN KEY ([assistantId]) REFERENCES [dbo].[Assistant]([id]) ON DELETE SET NULL ON UPDATE CASCADE;
+AlTER TABLE [dbo].[Session] ADD CONSTRAINT [FK_Session_Dentist] FOREIGN KEY ([dentistId]) REFERENCES [dbo].[Dentist]([Id]) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 -- Constraint in table Treatment Session
 AlTER TABLE [dbo].[TreatmentSession] ADD CONSTRAINT [FK_TreatmentSession_Session] FOREIGN KEY ([id]) REFERENCES [dbo].[Session]([id]) ON DELETE NO ACTION;
@@ -209,8 +207,8 @@ AlTER TABLE [dbo].[Prescription] ADD CONSTRAINT [FK_Prescription_TreatmentSessio
 AlTER TABLE [dbo].[Prescription] ADD CONSTRAINT [FK_Prescription_Drug] FOREIGN KEY ([drugId]) REFERENCES [dbo].[Drug]([id]) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 -- Constraint in table Tooth Session
+AlTER TABLE [dbo].[ToothSession] ADD CONSTRAINT [FK_ToothSession_Tooth] FOREIGN KEY ([toothId]) REFERENCES [dbo].[Tooth]([id]) ON DELETE CASCADE ON UPDATE CASCADE;
 AlTER TABLE [dbo].[ToothSession] ADD CONSTRAINT [FK_ToothSession_TreatmentSession] FOREIGN KEY ([treatmentSessionId]) REFERENCES [dbo].[TreatmentSession]([id]) ON DELETE NO ACTION ON UPDATE CASCADE;
-AlTER TABLE [dbo].[ToothSession] ADD CONSTRAINT [FK_ToothSession_Tooth] FOREIGN KEY ([toothType]) REFERENCES [dbo].[Tooth]([type]) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- Constraint in table Examination Session
 AlTER TABLE [dbo].[ExaminationSession] ADD CONSTRAINT [FK_ExaminationSession_Session] FOREIGN KEY ([id]) REFERENCES [dbo].[Session]([id]) ON DELETE NO ACTION ON UPDATE CASCADE;
@@ -220,15 +218,12 @@ AlTER TABLE [dbo].[ReExaminationSession] ADD CONSTRAINT [FK_ReExaminationSession
 AlTER TABLE [dbo].[ReExaminationSession] ADD CONSTRAINT [FK_ReExaminationSession_ExaminationSession] FOREIGN KEY ([relatedExamination]) REFERENCES [dbo].[ExaminationSession]([id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- Constraint in table Assistant
-AlTER TABLE [dbo].[Assistant] ADD CONSTRAINT [FK_Assistant_Dentist] FOREIGN KEY ([assistantId]) REFERENCES [dbo].[Dentist]([dentistId]) ON DELETE NO ACTION ON UPDATE NO ACTION;
+AlTER TABLE [dbo].[Assistant] ADD CONSTRAINT [FK_Assistant_Dentist] FOREIGN KEY ([id]) REFERENCES [dbo].[Dentist]([id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 
--- Constraint in table Dentist
-AlTER TABLE [dbo].[Dentist] ADD CONSTRAINT [FK_Dentist_Personel] FOREIGN KEY ([dentistId]) REFERENCES [dbo].[Personel]([id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
-AlTER TABLE [dbo].[Dentist] ADD CONSTRAINT [FK_Dentist_Schedule] FOREIGN KEY ([dayID],[scheduleId]) REFERENCES [dbo].[Schedule]([dayId],[dentistId]) ON DELETE SET NULL ON UPDATE CASCADE;
-
--- Constraint in table Day
-AlTER TABLE [dbo].[Day] ADD CONSTRAINT [FK_Day_Schedule] FOREIGN KEY ([id],[dentistId]) REFERENCES [dbo].[Schedule]([dayId],[dentistId]) ON DELETE NO ACTION ON UPDATE NO ACTION;
+-- Constraint in table Schedule
+AlTER TABLE [dbo].[Schedule] ADD CONSTRAINT [FK_Schedule_Day] FOREIGN KEY ([dayId]) REFERENCES [dbo].[Day]([id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
+AlTER TABLE [dbo].[Schedule] ADD CONSTRAINT [FK_Schedule_Dentist] FOREIGN KEY ([dentistId]) REFERENCES [dbo].[Dentist]([id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 
 COMMIT TRAN;
