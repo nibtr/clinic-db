@@ -12,7 +12,7 @@ CREATE TABLE [dbo].[Account] (
     [password] CHAR(60) NOT NULL,
     [email] VARCHAR(50) UNIQUE NOT NULL,
     [role] CHAR(3) NOT NULL,
-    [personelID] INT NOT NULL,
+    [personelID] INT UNIQUE NOT NULL,
     CONSTRAINT [Account_pkey] PRIMARY KEY CLUSTERED ([id])
 );
 
@@ -193,7 +193,7 @@ AlTER TABLE [dbo].[Session] ADD CONSTRAINT [FK_Session_Dentist] FOREIGN KEY ([de
 
 -- Constraint in table Treatment Session
 AlTER TABLE [dbo].[TreatmentSession] ADD CONSTRAINT [FK_TreatmentSession_Session] FOREIGN KEY ([id]) REFERENCES [dbo].[Session]([id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
-AlTER TABLE [dbo].[TreatmentSession] ADD CONSTRAINT [FK_TreatmentSession_Category] FOREIGN KEY ([categoryID]) REFERENCES [dbo].[Category]([id]) ON DELETE SET NULL ON UPDATE CASCADE;
+AlTER TABLE [dbo].[TreatmentSession] ADD CONSTRAINT [FK_TreatmentSession_Category] FOREIGN KEY ([categoryID]) REFERENCES [dbo].[Category]([id]) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 -- Constraint in table Procedure
 AlTER TABLE [dbo].[Procedure] ADD CONSTRAINT [FK_Procedure_Category] FOREIGN KEY ([categoryID]) REFERENCES [dbo].[Category]([id]) ON DELETE CASCADE ON UPDATE CASCADE;
@@ -219,6 +219,15 @@ AlTER TABLE [dbo].[Assistant] ADD CONSTRAINT [FK_Assistant_Dentist] FOREIGN KEY 
 -- Constraint in table Schedule
 AlTER TABLE [dbo].[Schedule] ADD CONSTRAINT [FK_Schedule_Day] FOREIGN KEY ([dayID]) REFERENCES [dbo].[Day]([id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
 AlTER TABLE [dbo].[Schedule] ADD CONSTRAINT [FK_Schedule_Dentist] FOREIGN KEY ([dentistID]) REFERENCES [dbo].[Dentist]([id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+-- Init some basic table
+INSERT INTO [dbo].[Day](day) values ('SUN')
+INSERT INTO [dbo].[Day](day) values ('MON')
+INSERT INTO [dbo].[Day](day) values ('TUE')
+INSERT INTO [dbo].[Day](day) values ('WED')
+INSERT INTO [dbo].[Day](day) values ('THU')
+INSERT INTO [dbo].[Day](day) values ('FRI')
+INSERT INTO [dbo].[Day](day) values ('SAT')
 
 COMMIT TRAN;
 END TRY
