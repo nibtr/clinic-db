@@ -11,18 +11,18 @@ CREATE TABLE [dbo].[Account] (
     [username] CHAR(10) UNIQUE NOT NULL,
     [password] CHAR(60) NOT NULL,
     [email] VARCHAR(50) UNIQUE NOT NULL,
-    [role] CHAR(3) NOT NULL,
     [personelID] INT UNIQUE NOT NULL,
     CONSTRAINT [Account_pkey] PRIMARY KEY CLUSTERED ([id])
 );
 
 CREATE TABLE [dbo].[Personel] (
     [id] INT NOT NULL IDENTITY(1,1),
-    [nationalId] CHAR(12) UNIQUE NOT NULL,
+    [nationalID] CHAR(12) UNIQUE NOT NULL,
     [name] NVARCHAR(50) NOT NULL,
     [dob] DATE,
     [gender] CHAR(1),
 	[phone]	CHAR(10) UNIQUE NOT NULL,
+	[role] CHAR(3) NOT NULL,
 	CONSTRAINT [Personel_pkey] PRIMARY KEY CLUSTERED ([id])
 );
 
@@ -221,13 +221,48 @@ AlTER TABLE [dbo].[Schedule] ADD CONSTRAINT [FK_Schedule_Day] FOREIGN KEY ([dayI
 AlTER TABLE [dbo].[Schedule] ADD CONSTRAINT [FK_Schedule_Dentist] FOREIGN KEY ([dentistID]) REFERENCES [dbo].[Dentist]([id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- Init some basic table
-INSERT INTO [dbo].[Day](day) values ('SUN')
-INSERT INTO [dbo].[Day](day) values ('MON')
-INSERT INTO [dbo].[Day](day) values ('TUE')
-INSERT INTO [dbo].[Day](day) values ('WED')
-INSERT INTO [dbo].[Day](day) values ('THU')
-INSERT INTO [dbo].[Day](day) values ('FRI')
-INSERT INTO [dbo].[Day](day) values ('SAT')
+-- Personel & Account for admin
+INSERT INTO [dbo].[Personel](nationalID, name, dob, gender, phone, role) values('123456789123', 'Admin', '2002-06-01', 'm', '0777058016', 'adm')
+
+-- Day
+INSERT INTO [dbo].[Day] values('SUN')
+INSERT INTO [dbo].[Day] values('MON')
+INSERT INTO [dbo].[Day] values('TUE')
+INSERT INTO [dbo].[Day] values('WED')
+INSERT INTO [dbo].[Day] values('THU')
+INSERT INTO [dbo].[Day] values('FRI')
+INSERT INTO [dbo].[Day] values('SAT')
+
+--Tooth
+INSERT INTO [dbo].[Tooth](type, name) values('L', 'Lingual')
+INSERT INTO [dbo].[Tooth](type, name) values('F', 'Facial')
+INSERT INTO [dbo].[Tooth](type, name) values('D', 'Distal')
+INSERT INTO [dbo].[Tooth](type, name) values('M', 'Mesial')
+INSERT INTO [dbo].[Tooth](type, name) values('T', 'Top')
+INSERT INTO [dbo].[Tooth](type, name) values('R', 'Root')
+
+--Room
+INSERT INTO [dbo].[Room](code, name) values('EXA-01', 'Examination Room 1');
+INSERT INTO [dbo].[Room](code, name) values('EXA-02', 'Examination Room 2');
+INSERT INTO [dbo].[Room](code, name) values('EXA-03', 'Examination Room 3');
+INSERT INTO [dbo].[Room](code, name) values('EXA-04', 'Examination Room 4');
+INSERT INTO [dbo].[Room](code, name) values('EXA-05', 'Examination Room 5');
+INSERT INTO [dbo].[Room](code, name) values('SPE-01', 'Special Room 1');
+INSERT INTO [dbo].[Room](code, name) values('SPE-02', 'Special Room 2');
+INSERT INTO [dbo].[Room](code, name) values('EME-01', 'Emergency Room 1');
+INSERT INTO [dbo].[Room](code, name) values('EME-02', 'Emergency Room 2');
+INSERT INTO [dbo].[Room](code, name) values('EME-03', 'Emergency Room 3');
+INSERT INTO [dbo].[Room](code, name) values('EME-04', 'Emergency Room 4');
+
+--Category
+INSERT INTO [dbo].[Category](code, name) values('CA1', 'Boc rang su')
+INSERT INTO [dbo].[Category](code, name) values('CA2', 'Cay ghep implant')
+INSERT INTO [dbo].[Category](code, name) values('CA3', 'Nieng rang tham my')
+INSERT INTO [dbo].[Category](code, name) values('CA4', 'Tay trang rang')
+INSERT INTO [dbo].[Category](code, name) values('CA5', 'Nho rang khon')
+INSERT INTO [dbo].[Category](code, name) values('CA6', 'Mat dan su Veneer')
+INSERT INTO [dbo].[Category](code, name) values('CA7', 'Han tram rang')
+INSERT INTO [dbo].[Category](code, name) values('CA8', 'Dieu tri tuy')
 
 COMMIT TRAN;
 END TRY
