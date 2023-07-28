@@ -303,11 +303,11 @@ Version:4.5.2.4316-->
               </element>
               <element>
                 <key type="string">MinValue</key>
-                <value type="string">615991392000000000</value>
+                <value type="string">637134336000000000</value>
               </element>
               <element>
                 <key type="string">MaxValue</key>
-                <value type="string">638080416000000000</value>
+                <value type="string">638395776000000000</value>
               </element>
               <element>
                 <key type="string">UseColumnOffset</key>
@@ -386,7 +386,7 @@ Version:4.5.2.4316-->
               </element>
               <element>
                 <key type="string">MinValue</key>
-                <value type="string">615991392000000000</value>
+                <value type="string">637134336000000000</value>
               </element>
               <element>
                 <key type="string">MaxValue</key>
@@ -468,13 +468,13 @@ Version:4.5.2.4316-->
           <DefinedSize>50</DefinedSize>
           <Generator version="1" type="GeneratorDetails">
             <GeneratorTypeName>RedGate.SQLDataGenerator.ExpressionGenerators.Regexp.RegexpGenerator</GeneratorTypeName>
-            <DisplayName>Nick Name</DisplayName>
-            <Description>Mike124, Chris1, Tom78, Jenny39, Amy12, Mel54...</Description>
+            <DisplayName>Full Names</DisplayName>
+            <Description>Emma Smith, John Brown, Andrew Clarke, Tom O'Hare, Claire Harris...</Description>
             <CategoryName>Personal</CategoryName>
             <GeneratorProperties type="Dictionary&lt;string, object&gt;" version="1">
               <element>
                 <key type="string">Expression</key>
-                <value type="string">($"NamesFirst.txt")[0-9]{0,3}</value>
+                <value type="string">($"NamesFirst.txt") ($"NamesLast.txt")</value>
               </element>
               <element>
                 <key type="string">UseSequence</key>
@@ -518,7 +518,7 @@ Version:4.5.2.4316-->
             <GeneratorProperties type="Dictionary&lt;string, object&gt;" version="1">
               <element>
                 <key type="string">Expression</key>
-                <value type="string">[0-9]{3}(-|)[0-9]{3}(-|)[0-9]{4}</value>
+                <value type="string">0\d{9}</value>
               </element>
               <element>
                 <key type="string">UseSequence</key>
@@ -550,7 +550,7 @@ Version:4.5.2.4316-->
       <TableType>Generated</TableType>
       <PopulationDetails version="2" type="PopulationDetails">
         <PopulationType>RowCount</PopulationType>
-        <RowCount>700</RowCount>
+        <RowCount>200</RowCount>
         <ProportionTableExists>False</ProportionTableExists>
         <Proportion>0</Proportion>
         <TimeToPopulate>0</TimeToPopulate>
@@ -941,7 +941,7 @@ Version:4.5.2.4316-->
       <TableType>Generated</TableType>
       <PopulationDetails version="2" type="PopulationDetails">
         <PopulationType>RowCount</PopulationType>
-        <RowCount>1000</RowCount>
+        <RowCount>200</RowCount>
         <ProportionTableExists>False</ProportionTableExists>
         <Proportion>0</Proportion>
         <TimeToPopulate>0</TimeToPopulate>
@@ -985,7 +985,7 @@ Version:4.5.2.4316-->
             <GeneratorProperties type="Dictionary&lt;string, object&gt;" version="1">
               <element>
                 <key type="string">Expression</key>
-                <value type="string">[A-Z0-9]*</value>
+                <value type="string">NDC-\d{5}-\d{4}-\d{2}</value>
               </element>
               <element>
                 <key type="string">UseSequence</key>
@@ -1023,13 +1023,13 @@ Version:4.5.2.4316-->
           <DefinedSize>50</DefinedSize>
           <Generator version="1" type="GeneratorDetails">
             <GeneratorTypeName>RedGate.SQLDataGenerator.ExpressionGenerators.Regexp.RegexpGenerator</GeneratorTypeName>
-            <DisplayName>Nick Name</DisplayName>
-            <Description>Mike124, Chris1, Tom78, Jenny39, Amy12, Mel54...</Description>
-            <CategoryName>Personal</CategoryName>
+            <DisplayName>Product Name</DisplayName>
+            <Description>Product Names</Description>
+            <CategoryName>Shopping</CategoryName>
             <GeneratorProperties type="Dictionary&lt;string, object&gt;" version="1">
               <element>
                 <key type="string">Expression</key>
-                <value type="string">($"NamesFirst.txt")[0-9]{0,3}</value>
+                <value type="string">(Re|Ad|Par|Tru|Thru|In|Bar|Cip|Dop|End|Em|Fro|Gro|Hap|Kli|Lom|Mon|Qwi|Rap|Sup|Sur|Tip|Tup|Un|Up|Var|Win|Zee)(ban|cad|dud|dim|er|frop|glib|hup|jub|kil|mun|nip|peb|pick|quest|rob|sap|sip|tan|tin|tum|ven|wer|werp|zap)(il|ic|im|in|up|ad|ack|am|on|ep|ed|ef|eg|aqu|ef|edg|op|oll|omm|ew|an|ex|pl)?(icator|or|ar|ax|an|ex|istor|entor|antor|in|over|ower|azz)</value>
               </element>
               <element>
                 <key type="string">UseSequence</key>
@@ -1117,7 +1117,7 @@ Version:4.5.2.4316-->
             <GeneratorProperties type="Dictionary&lt;string, object&gt;" version="1">
               <element>
                 <key type="string">Increment</key>
-                <value type="string">1</value>
+                <value type="string">25000</value>
               </element>
               <element>
                 <key type="string">UseSequence</key>
@@ -1129,11 +1129,11 @@ Version:4.5.2.4316-->
               </element>
               <element>
                 <key type="string">MinValue</key>
-                <value type="string">-2147483648</value>
+                <value type="string">500000</value>
               </element>
               <element>
                 <key type="string">MaxValue</key>
-                <value type="string">2147483647</value>
+                <value type="string">5000000</value>
               </element>
               <element>
                 <key type="string">UseColumnOffset</key>
@@ -1267,18 +1267,22 @@ Version:4.5.2.4316-->
           <Scale>0</Scale>
           <DefinedSize>500</DefinedSize>
           <Generator version="1" type="GeneratorDetails">
-            <GeneratorTypeName>RedGate.SQLDataGenerator.ExpressionGenerators.Regexp.RegexpGenerator</GeneratorTypeName>
-            <DisplayName>Regex Generator</DisplayName>
-            <Description>Generates data from a Regular Expression</Description>
-            <CategoryName>Generic</CategoryName>
+            <GeneratorTypeName>RedGate.SQLDataGenerator.DescriptionGenerators.TextGenerator</GeneratorTypeName>
+            <DisplayName>Description</DisplayName>
+            <Description>Id eudis quo</Description>
+            <CategoryName>Shopping</CategoryName>
             <GeneratorProperties type="Dictionary&lt;string, object&gt;" version="1">
               <element>
-                <key type="string">Expression</key>
-                <value type="string">[A-Z0-9]*</value>
+                <key type="string">InputText</key>
+                <value type="string">Id eudis quo linguens imaginator pars fecit.  Et quad estis vobis homo, si quad fecit, non apparens vantis. Sed quad ut novum vobis regit, et nomen novum eggredior.  Longam, e gravis et pladior venit.  Tam quo, et bono quorum glavans e funem.  Quad rarendum habitatio quoque plorum fecundio, et quis gravis delerium.  Versus esset in dolorum cognitio, travissimantor quantare sed quartu manifestum egreddior estum.  Multum gravum et plurissimum parte brevens, non quo plorum in volcans essit.  Pro linguens non trepicandor si nomen transit.</value>
               </element>
               <element>
-                <key type="string">UseSequence</key>
-                <value type="string">False</value>
+                <key type="string">MinLen</key>
+                <value type="string">100</value>
+              </element>
+              <element>
+                <key type="string">MaxLen</key>
+                <value type="string">500</value>
               </element>
               <element>
                 <key type="string">NullsAllowed</key>
@@ -1291,10 +1295,6 @@ Version:4.5.2.4316-->
               <element>
                 <key type="string">Seed</key>
                 <value type="string">8193</value>
-              </element>
-              <element>
-                <key type="string">Unique</key>
-                <value type="string">False</value>
               </element>
             </GeneratorProperties>
           </Generator>
@@ -1311,18 +1311,22 @@ Version:4.5.2.4316-->
           <Scale>0</Scale>
           <DefinedSize>500</DefinedSize>
           <Generator version="1" type="GeneratorDetails">
-            <GeneratorTypeName>RedGate.SQLDataGenerator.ExpressionGenerators.Regexp.RegexpGenerator</GeneratorTypeName>
-            <DisplayName>Regex Generator</DisplayName>
-            <Description>Generates data from a Regular Expression</Description>
-            <CategoryName>Generic</CategoryName>
+            <GeneratorTypeName>RedGate.SQLDataGenerator.DescriptionGenerators.TextGenerator</GeneratorTypeName>
+            <DisplayName>Description</DisplayName>
+            <Description>Id eudis quo</Description>
+            <CategoryName>Shopping</CategoryName>
             <GeneratorProperties type="Dictionary&lt;string, object&gt;" version="1">
               <element>
-                <key type="string">Expression</key>
-                <value type="string">[A-Z0-9]*</value>
+                <key type="string">InputText</key>
+                <value type="string">Id eudis quo linguens imaginator pars fecit.  Et quad estis vobis homo, si quad fecit, non apparens vantis. Sed quad ut novum vobis regit, et nomen novum eggredior.  Longam, e gravis et pladior venit.  Tam quo, et bono quorum glavans e funem.  Quad rarendum habitatio quoque plorum fecundio, et quis gravis delerium.  Versus esset in dolorum cognitio, travissimantor quantare sed quartu manifestum egreddior estum.  Multum gravum et plurissimum parte brevens, non quo plorum in volcans essit.  Pro linguens non trepicandor si nomen transit.</value>
               </element>
               <element>
-                <key type="string">UseSequence</key>
-                <value type="string">False</value>
+                <key type="string">MinLen</key>
+                <value type="string">100</value>
+              </element>
+              <element>
+                <key type="string">MaxLen</key>
+                <value type="string">500</value>
               </element>
               <element>
                 <key type="string">NullsAllowed</key>
@@ -1335,10 +1339,6 @@ Version:4.5.2.4316-->
               <element>
                 <key type="string">Seed</key>
                 <value type="string">8194</value>
-              </element>
-              <element>
-                <key type="string">Unique</key>
-                <value type="string">False</value>
               </element>
             </GeneratorProperties>
           </Generator>
@@ -1355,18 +1355,22 @@ Version:4.5.2.4316-->
           <Scale>0</Scale>
           <DefinedSize>255</DefinedSize>
           <Generator version="1" type="GeneratorDetails">
-            <GeneratorTypeName>RedGate.SQLDataGenerator.ExpressionGenerators.Regexp.RegexpGenerator</GeneratorTypeName>
-            <DisplayName>Regex Generator</DisplayName>
-            <Description>Generates data from a Regular Expression</Description>
-            <CategoryName>Generic</CategoryName>
+            <GeneratorTypeName>RedGate.SQLDataGenerator.DescriptionGenerators.TextGenerator</GeneratorTypeName>
+            <DisplayName>Description</DisplayName>
+            <Description>Id eudis quo</Description>
+            <CategoryName>Shopping</CategoryName>
             <GeneratorProperties type="Dictionary&lt;string, object&gt;" version="1">
               <element>
-                <key type="string">Expression</key>
-                <value type="string">[A-Z0-9]*</value>
+                <key type="string">InputText</key>
+                <value type="string">Id eudis quo linguens imaginator pars fecit.  Et quad estis vobis homo, si quad fecit, non apparens vantis. Sed quad ut novum vobis regit, et nomen novum eggredior.  Longam, e gravis et pladior venit.  Tam quo, et bono quorum glavans e funem.  Quad rarendum habitatio quoque plorum fecundio, et quis gravis delerium.  Versus esset in dolorum cognitio, travissimantor quantare sed quartu manifestum egreddior estum.  Multum gravum et plurissimum parte brevens, non quo plorum in volcans essit.  Pro linguens non trepicandor si nomen transit.</value>
               </element>
               <element>
-                <key type="string">UseSequence</key>
-                <value type="string">False</value>
+                <key type="string">MinLen</key>
+                <value type="string">100</value>
+              </element>
+              <element>
+                <key type="string">MaxLen</key>
+                <value type="string">255</value>
               </element>
               <element>
                 <key type="string">NullsAllowed</key>
@@ -1379,10 +1383,6 @@ Version:4.5.2.4316-->
               <element>
                 <key type="string">Seed</key>
                 <value type="string">8195</value>
-              </element>
-              <element>
-                <key type="string">Unique</key>
-                <value type="string">False</value>
               </element>
             </GeneratorProperties>
           </Generator>
@@ -1807,13 +1807,13 @@ Version:4.5.2.4316-->
       <TableType>Generated</TableType>
       <PopulationDetails version="2" type="PopulationDetails">
         <PopulationType>RowCount</PopulationType>
-        <RowCount>1000</RowCount>
+        <RowCount>30000</RowCount>
         <ProportionTableExists>False</ProportionTableExists>
         <Proportion>0</Proportion>
         <TimeToPopulate>0</TimeToPopulate>
       </PopulationDetails>
       <InvalidRowBehaviour>SkipRow</InvalidRowBehaviour>
-      <Included>False</Included>
+      <Included>True</Included>
       <Append>True</Append>
       <Name>Personel</Name>
       <Schema>dbo</Schema>
@@ -2110,7 +2110,7 @@ Version:4.5.2.4316-->
             <GeneratorProperties type="Dictionary&lt;string, object&gt;" version="1">
               <element>
                 <key type="string">Expression</key>
-                <value type="string">sta|den</value>
+                <value type="string">pat</value>
               </element>
               <element>
                 <key type="string">UseSequence</key>
@@ -2749,7 +2749,7 @@ Version:4.5.2.4316-->
       <TableType>Generated</TableType>
       <PopulationDetails version="2" type="PopulationDetails">
         <PopulationType>RowCount</PopulationType>
-        <RowCount>1000</RowCount>
+        <RowCount>2000</RowCount>
         <ProportionTableExists>False</ProportionTableExists>
         <Proportion>0</Proportion>
         <TimeToPopulate>0</TimeToPopulate>
@@ -2818,7 +2818,7 @@ Version:4.5.2.4316-->
           </Fields>
           <ForeignKeyFillMethod>Unique</ForeignKeyFillMethod>
           <MaxBuckets>1000</MaxBuckets>
-          <Seed>0</Seed>
+          <Seed>7</Seed>
           <MinRepeats>1</MinRepeats>
           <MaxRepeats>10</MaxRepeats>
           <NullsAllowed>False</NullsAllowed>
@@ -2830,7 +2830,7 @@ Version:4.5.2.4316-->
           </Fields>
           <ForeignKeyFillMethod>Unique</ForeignKeyFillMethod>
           <MaxBuckets>1000</MaxBuckets>
-          <Seed>0</Seed>
+          <Seed>10</Seed>
           <MinRepeats>1</MinRepeats>
           <MaxRepeats>10</MaxRepeats>
           <NullsAllowed>False</NullsAllowed>
@@ -2842,7 +2842,7 @@ Version:4.5.2.4316-->
       <TableType>Generated</TableType>
       <PopulationDetails version="2" type="PopulationDetails">
         <PopulationType>RowCount</PopulationType>
-        <RowCount>1000</RowCount>
+        <RowCount>100000</RowCount>
         <ProportionTableExists>False</ProportionTableExists>
         <Proportion>0</Proportion>
         <TimeToPopulate>0</TimeToPopulate>
@@ -2925,11 +2925,11 @@ Version:4.5.2.4316-->
               </element>
               <element>
                 <key type="string">MinValue</key>
-                <value type="string">615991392000000000</value>
+                <value type="string">636503616000000000</value>
               </element>
               <element>
                 <key type="string">MaxValue</key>
-                <value type="string">638080416000000000</value>
+                <value type="string">638395776000000000</value>
               </element>
               <element>
                 <key type="string">UseColumnOffset</key>
@@ -3013,7 +3013,7 @@ Version:4.5.2.4316-->
             <GeneratorProperties type="Dictionary&lt;string, object&gt;" version="1">
               <element>
                 <key type="string">Expression</key>
-                <value type="string">[A-Z0-9]*</value>
+                <value type="string">do|done|doing|cancel</value>
               </element>
               <element>
                 <key type="string">UseSequence</key>
@@ -3196,7 +3196,7 @@ Version:4.5.2.4316-->
         <TimeToPopulate>0</TimeToPopulate>
       </PopulationDetails>
       <InvalidRowBehaviour>SkipRow</InvalidRowBehaviour>
-      <Included>True</Included>
+      <Included>False</Included>
       <Append>False</Append>
       <Name>Staff</Name>
       <Schema>dbo</Schema>
