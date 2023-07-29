@@ -14,6 +14,13 @@ CREATE TABLE [dbo].[Account] (
     [personelID] INT UNIQUE NOT NULL,
     CONSTRAINT [Account_pkey] PRIMARY KEY CLUSTERED ([id])
 );
+-- For the *password*, we decided to use the following convention:
+-- - The password is a 10-character string.
+-- - The password is prefixed with a 3-letter code that indicates the type of the account (sta, den, adm).
+-- - Followed by a `-` character.
+-- - Followed by a 6-digit number that is generated randomly.
+-- - The password is hashed using the `bcrypt` algorithm with 12 rounds.
+-- For example: `sta-123456` will result in a hashed version `$2a$12$gEy/fBApnlR7CYu5hWQvWOQh9pt.vGPGCH3TTIdYLc4xqDODqVvwm` which is *60 characters long*.
 
 CREATE TABLE [dbo].[Personel] (
     [id] INT NOT NULL IDENTITY(1,1),
@@ -25,6 +32,16 @@ CREATE TABLE [dbo].[Personel] (
 	[type] CHAR(3) NOT NULL,
 	CONSTRAINT [Personel_pkey] PRIMARY KEY CLUSTERED ([id])
 );
+-- - `type` is a 3-character string that indicates the type of personel:
+--   - `ADM`: Administrator
+--   - `DEN`: Dentist
+--   - `STA`: Staff
+--   - `PAT`: Patient
+-- - We don't save `age` because it can be calculated from `dob`, and it's not a good idea either since we have to update it every year.
+-- - Caculate `age` from `dob` using the following formula:
+-- ```sql
+-- SELECT DATEDIFF(YEAR, dob, GETDATE()) - CASE WHEN (MONTH(dob) > MONTH(GETDATE())) OR (MONTH(dob) = MONTH(GETDATE()) AND DAY(dob) > DAY(GETDATE())) THEN 1 ELSE 0 END
+-- ```
 
 CREATE TABLE [dbo].[Staff] (
     [id] INT,
@@ -59,20 +76,33 @@ CREATE TABLE [dbo].[PaymentRecord] (
 	[patientID] INT NOT NULL,
 	[treatmentSessionID] INT UNIQUE NOT NULL,
 	CONSTRAINT [PaymentRecord_pkey] PRIMARY KEY CLUSTERED ([id])
-);	
+);
+-- For the method, there are 2 options: 
+-- - Cash: denoted by `C`
+-- - Online: denoted by `O`
 
 CREATE TABLE [dbo].[Session] (
     [id] INT NOT NULL IDENTITY(1,1),
     [time] DATETIME2 NOT NULL,
     [note] NVARCHAR(1000),
-    [status] VARCHAR(6) DEFAULT 'do',
+    [status] CHAR(3) DEFAULT 'SCH',
 	[patientID] INT NOT NULL,
 	[assistantID] INT,
 	[dentistID] INT NOT NULL,
 	[roomID] INT NOT NULL,
-    [type] CHAR(1) NOT NULL,
+    [type] CHAR(3) NOT NULL,
 	CONSTRAINT [Session_pkey] PRIMARY KEY CLUSTERED ([id])
-);	
+);
+-- - `status` is a 3-character string that indicates the status of the session:
+--   - `SCH`: Scheduled
+--   - `CAN`: Cancelled
+--   - `RES`: Rescheduled
+--   - `COM`: Completed
+--   - `EXE`: Executing
+-- - `type` is a 3-character string that indicates the type of the session:
+--   - `TRE`: Treatment
+--   - `EXA`: Examination
+--   - `REX`: Re-examination
 
 CREATE TABLE [dbo].[TreatmentSession] (
     [id] INT,
@@ -99,6 +129,11 @@ CREATE TABLE [dbo].[Room] (
     [name] VARCHAR(50) NOT NULL,
 	CONSTRAINT [Room_pkey] PRIMARY KEY CLUSTERED ([id])
 );	
+-- - The room code is a 6-character string that is generated following the convention:
+--   - The first 3 characters are the room type code (examination room, operating room, etc.).
+--   - Followed by a `-` character.
+--   - Next is a 2-digit number that is the room number.
+--   - For example: `EXA-01` is the code for the first examination room.
 
 CREATE TABLE [dbo].[Procedure] (
     [id] INT NOT NULL IDENTITY(1,1),
@@ -108,7 +143,8 @@ CREATE TABLE [dbo].[Procedure] (
     [fee] INT NOT NULL,
 	[categoryID] INT NOT NULL,
 	CONSTRAINT [Procedure_pkey] PRIMARY KEY CLUSTERED ([id])
-);	
+);
+-- - `code` is a 3-character string that is generated based on the name of the procedure. For example: `TA2` is the code for `Tooth Extraction`.
 
 CREATE TABLE [dbo].[Category] (
     [id] INT NOT NULL IDENTITY(1,1),
@@ -116,7 +152,8 @@ CREATE TABLE [dbo].[Category] (
     [name] NVARCHAR(50) NOT NULL,
     [description] NVARCHAR(255),
 	CONSTRAINT [Category_pkey] PRIMARY KEY CLUSTERED ([id])
-);	
+);
+-- - `code` is a 3-character string that is generated based on the name of the category. For example: `GEN` is the code for `General`.
 
 CREATE TABLE [dbo].[Drug] (
     [id] INT NOT NULL IDENTITY(1,1),
@@ -126,6 +163,15 @@ CREATE TABLE [dbo].[Drug] (
     [price] INT NOT NULL,
 	CONSTRAINT [Drug_pkey] PRIMARY KEY CLUSTERED ([id])
 );
+-- - Code is a 17-character string that is generated following the convention:
+--   - The first 3 characters are the national drug code (NDC)
+--   - Followed by a `-` character.
+--   - Next 6-digit number is the Labeler Code
+--   - Followed by a `-` character.
+--   - Next 4-digit number is the Product Code
+--   - Followed by a `-` character.
+--   - Next 2-digit number is the Package Code
+--   - For example: `NDC-45678-9012-34` is a valid code.
 
 CREATE TABLE [dbo].[Tooth] (
     [id] INT NOT NULL IDENTITY(1,1),
@@ -133,6 +179,13 @@ CREATE TABLE [dbo].[Tooth] (
     [name] VARCHAR(50) NOT NULL,
 	CONSTRAINT [Tooth_pkey] PRIMARY KEY CLUSTERED ([id])
 );	
+-- - The type is a single character that indicates the type of the tooth.
+--   - Lingual (L)
+--   - Facial (F)
+--   - Distal (D)
+--   - Mesial (M)
+--   - Top (T)
+--   - Root (R)
 
 CREATE TABLE [dbo].[ToothSession] (
     [toothID] INT,
@@ -162,7 +215,15 @@ CREATE TABLE [dbo].[Day] (
     [id] INT NOT NULL IDENTITY(1,1),
 	[day] CHAR(3) UNIQUE NOT NULL,
 	CONSTRAINT [Day_pkey] PRIMARY KEY CLUSTERED ([id])
-);	
+);
+-- - The day is a 3-character string that indicates the day of the week:
+--   - Sunday (SUN)
+--   - Monday (MON)
+--   - Tuesday (TUE)
+--   - Wednesday (WED)
+--   - Thursday (THU)
+--   - Friday (FRI)
+--   - Saturday (SAT)
 
 CREATE TABLE [dbo].[Schedule] (
     [dayID] INT NOT NULL,
