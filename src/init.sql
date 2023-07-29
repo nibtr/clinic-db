@@ -11,7 +11,7 @@ CREATE TABLE [dbo].[Account] (
     [username] CHAR(10) UNIQUE NOT NULL,
     [password] CHAR(60) NOT NULL,
     [email] VARCHAR(50) UNIQUE NOT NULL,
-    [personelID] INT UNIQUE NOT NULL,
+    [personnelID] INT UNIQUE NOT NULL,
     CONSTRAINT [Account_pkey] PRIMARY KEY CLUSTERED ([id])
 );
 -- For the *password*, we decided to use the following convention:
@@ -22,7 +22,7 @@ CREATE TABLE [dbo].[Account] (
 -- - The password is hashed using the `bcrypt` algorithm with 12 rounds.
 -- For example: `sta-123456` will result in a hashed version `$2a$12$gEy/fBApnlR7CYu5hWQvWOQh9pt.vGPGCH3TTIdYLc4xqDODqVvwm` which is *60 characters long*.
 
-CREATE TABLE [dbo].[Personel] (
+CREATE TABLE [dbo].[Personnel] (
     [id] INT NOT NULL IDENTITY(1,1),
     [nationalID] CHAR(12) UNIQUE NOT NULL,
     [name] NVARCHAR(50) NOT NULL,
@@ -30,9 +30,9 @@ CREATE TABLE [dbo].[Personel] (
     [gender] CHAR(1),
 	[phone]	CHAR(10) UNIQUE NOT NULL,
 	[type] CHAR(3) NOT NULL,
-	CONSTRAINT [Personel_pkey] PRIMARY KEY CLUSTERED ([id])
+	CONSTRAINT [Personnel_pkey] PRIMARY KEY CLUSTERED ([id])
 );
--- - `type` is a 3-character string that indicates the type of personel:
+-- - `type` is a 3-character string that indicates the type of personnel:
 --   - `ADM`: Administrator
 --   - `DEN`: Dentist
 --   - `STA`: Staff
@@ -208,6 +208,7 @@ CREATE TABLE [dbo].[AppointmentRequest] (
     [note] NVARCHAR(255),
     [patientName] NVARCHAR(50) NOT NULL,
     [patientPhone] CHAR(10) NOT NULL,
+    [categoryName] NVARCHAR(50) NOT NULL,
 	CONSTRAINT [AppointmentRequest_pkey] PRIMARY KEY CLUSTERED ([id])
 );	
 
@@ -232,16 +233,16 @@ CREATE TABLE [dbo].[Schedule] (
 );	
 
 -- Constraint in table Patient
-ALTER TABLE [dbo].[Patient] ADD CONSTRAINT [FK_Patient_Personel] FOREIGN KEY ([id]) REFERENCES [dbo].[Personel]([id]) ON DELETE NO ACTION ON UPDATE CASCADE;
+ALTER TABLE [dbo].[Patient] ADD CONSTRAINT [FK_Patient_Personnel] FOREIGN KEY ([id]) REFERENCES [dbo].[Personnel]([id]) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 -- Constraint in table Account
-ALTER TABLE [dbo].[Account] ADD CONSTRAINT [FK_Account_Personel] FOREIGN KEY ([personelID]) REFERENCES [dbo].[Personel]([id]) ON DELETE NO ACTION ON UPDATE CASCADE;
+ALTER TABLE [dbo].[Account] ADD CONSTRAINT [FK_Account_Personnel] FOREIGN KEY ([personnelID]) REFERENCES [dbo].[Personnel]([id]) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 -- Constraint in table Staff
-AlTER TABLE [dbo].[Staff] ADD CONSTRAINT [FK_Staff_Personel] FOREIGN KEY ([id]) REFERENCES [dbo].[Personel]([id]) ON DELETE NO ACTION ON UPDATE CASCADE;
+AlTER TABLE [dbo].[Staff] ADD CONSTRAINT [FK_Staff_Personnel] FOREIGN KEY ([id]) REFERENCES [dbo].[Personnel]([id]) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 -- Constraint in table Dentist
-AlTER TABLE [dbo].[Dentist] ADD CONSTRAINT [FK_Dentist_Personel] FOREIGN KEY ([id]) REFERENCES [dbo].[Personel]([id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
+AlTER TABLE [dbo].[Dentist] ADD CONSTRAINT [FK_Dentist_Personnel] FOREIGN KEY ([id]) REFERENCES [dbo].[Personnel]([id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- Constraint in table Payment Record
 AlTER TABLE [dbo].[PaymentRecord] ADD CONSTRAINT [FK_PaymentRecord_Patient] FOREIGN KEY ([patientID]) REFERENCES [dbo].[Patient]([id]) ON DELETE NO ACTION ON UPDATE CASCADE;
@@ -283,9 +284,9 @@ AlTER TABLE [dbo].[Schedule] ADD CONSTRAINT [FK_Schedule_Day] FOREIGN KEY ([dayI
 AlTER TABLE [dbo].[Schedule] ADD CONSTRAINT [FK_Schedule_Dentist] FOREIGN KEY ([dentistID]) REFERENCES [dbo].[Dentist]([id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- Init some basic table
--- Personel & Account for admin
-INSERT INTO [dbo].[Personel](nationalID, name, dob, gender, phone, type) values('123456789123', 'Admin', '2002-06-01', 'm', '0777058016', 'adm')
-INSERT INTO [dbo].[Account](username, password, email, personelID) values('adm-123456', '$2a$12$/k35hQ1YWbiBt3a0EAFFl.o4Ec2eHd1KqfAD3Sv3lyidWSxdEQy4i', 'admin@gmail.com', 1)
+-- Personnel & Account for admin
+INSERT INTO [dbo].[Personnel](nationalID, name, dob, gender, phone, type) values('123456789123', 'Admin', '2002-06-01', 'M', '0777058016', 'ADM')
+INSERT INTO [dbo].[Account](username, password, email, personnelID) values('ADM-123456', '$2a$12$/k35hQ1YWbiBt3a0EAFFl.o4Ec2eHd1KqfAD3Sv3lyidWSxdEQy4i', 'admin@gmail.com', 1)
 
 -- Day
 INSERT INTO [dbo].[Day] values('SUN')

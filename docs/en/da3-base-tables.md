@@ -46,6 +46,10 @@ For example: `sta-123456` will result in a hashed version `$2a$12$gEy/fBApnlR7CY
   - `DEN`: Dentist
   - `STA`: Staff
   - `PAT`: Patient
+- `gender` is:
+  - `M` for Male
+  - `F` for Female
+- `dob` format: `YYYY-MM-DD`
 - We don't save `age` because it can be calculated from `dob`, and it's not a good idea either since we have to update it every year.
 - Caculate `age` from `dob` using the following formula:
 
@@ -104,12 +108,12 @@ For the method, there are 2 options:
 | `id`          | `int`            | `PRIMARY KEY`           | n > 0        | x       |
 | `time`        | `datetime2`      | `NOT NULL`              | x            | x       |
 | `note`        | `nvarchar(1000)` | `X`                     | 0 < n < 1001 | x       |
-| `status`      | `char(3)`        | `NOT NULL`              | x            | SCH     |
+| `status`      | `char(3)`        | `NOT NULL`              | x            | `SCH`   |
 | `patientID`   | `int`            | `FOREIGN KEY, NOT NULL` | n > 0        | x       |
 | `assistantID` | `int`            | `FOREIGN KEY`           | n > 0        | x       |
 | `dentistID`   | `int`            | `FOREIGN KEY, NOT NULL` | n > 0        | x       |
 | `roomID`      | `int`            | `FOREIGN KEY, NOT NULL` | n > 0        | x       |
-| `type`        | `char(3)`        | `NOT NULL`              | x            | EXA     |
+| `type`        | `char(3)`        | `NOT NULL`              | x            | `EXA `  |
 
 - `status` is a 3-character string that indicates the status of the session:
   - `SCH`: Scheduled
@@ -245,6 +249,7 @@ For the method, there are 2 options:
 | `note`            | `nvarchar(255)` | `X`           | 0 < n < 256 | x       |
 | `patientName`     | `nvarchar(50)`  | `NOT NULL`    | 0 < n < 51  | x       |
 | `patientPhone`    | `char(10)`      | `NOT NULL`    | 0 < n < 11  | x       |
+| `categoryName`    | `nvarchar(50)`  | `NOT NULL`    | 0 < n < 51  | x       |
 
 ## Day
 
