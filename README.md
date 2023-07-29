@@ -17,7 +17,8 @@ For the overview of the business rules (requirements) of the project, please ref
 
 ## Script
 
-All the script related to the database can be found in the `src` folder
+- All the script related to the database can be found in the `src` folder
+- Link for the .bak file: [Google Drive](https://drive.google.com/file/d/1lHS3nE9doGHy1JNKV0_C61H5JIKwdcPY/view?usp=sharing)
 
 ## Server
 
