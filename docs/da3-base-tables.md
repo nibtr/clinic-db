@@ -9,13 +9,13 @@ description: Base tables for the database
 
 ## Account Table
 
-| Field Name   | Data Type     | Constraints             | Domain     | Default |
-| ------------ | ------------- | ----------------------- | ---------- | ------- |
-| `id`         | `int`         | `PRIMARY KEY`           | n > 0      | x       |
-| `username`   | `char(10)`    | `UNIQUE`                | 0 < n < 11 | x       |
-| `password`   | `char(60)`    | `NOT NULL`              | 0 < n < 61 | x       |
-| `email`      | `varchar(50)` | `UNIQUE`                | 0 < n < 51 | x       |
-| `personelID` | `int`         | `FOREIGN KEY, NOT NULL` | n > 0      | x       |
+| Field Name    | Data Type     | Constraints             | Domain     | Default |
+| ------------- | ------------- | ----------------------- | ---------- | ------- |
+| `id`          | `int`         | `PRIMARY KEY`           | n > 0      | x       |
+| `username`    | `char(10)`    | `UNIQUE`                | 0 < n < 11 | x       |
+| `password`    | `char(60)`    | `NOT NULL`              | 0 < n < 61 | x       |
+| `email`       | `varchar(50)` | `UNIQUE`                | 0 < n < 51 | x       |
+| `personnelID` | `int`         | `FOREIGN KEY, NOT NULL` | n > 0      | x       |
 
 For the *password*, we decided to use the following convention:
 
@@ -27,8 +27,7 @@ For the *password*, we decided to use the following convention:
 
 For example: `sta-123456` will result in a hashed version `$2a$12$gEy/fBApnlR7CYu5hWQvWOQh9pt.vGPGCH3TTIdYLc4xqDODqVvwm` which is *60 characters long*.
 
-
-## Personel Table
+## Personnel Table
 
 | Field Name   | Data Type      | Constraints   | Domain     | Default |
 | ------------ | -------------- | ------------- | ---------- | ------- |
@@ -41,7 +40,7 @@ For example: `sta-123456` will result in a hashed version `$2a$12$gEy/fBApnlR7CY
 | `age`        | `int`          | `derived`     | n > 0      | x       |
 | `type`       | `char(3)`      | `NOT NULL`    | x          | x       |
 
-- `type` is a 3-character string that indicates the type of personel:
+- `type` is a 3-character string that indicates the type of personnel:
   - `ADM`: Administrator
   - `DEN`: Dentist
   - `STA`: Staff
