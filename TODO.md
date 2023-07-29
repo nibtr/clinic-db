@@ -1,0 +1,28 @@
+- [x] Base table
+  - [x] Data types
+  - [x] Constraints
+  - [x] Domain
+  - [x] Default values 
+- [ ] File Organization
+  - [ ] Transactions Analysis:
+    - Transactions that run frequently and will have a significant impact on the performance of the database
+    - Transactions that are critical to the operation of the business
+    - The times of day/week when there will be a high demand made on the database (peak load)
+  - [ ] Determine frequency information
+  - [ ] Data usage analysis
+  - [ ] Determine file organization:
+    - Sequential
+    - Indexed
+    - Hashed
+  - [ ] Indexing
+- [ ] User views
+- [ ] Security
+- [ ] Denormalization (if needed)
+  - Combining 1-1 relationships
+  - Duplicating non-key columns in 1-M relationships to reduce joins
+  - Duplicate foreign keys in 1-M relationships to reduce joins
+  - Duplicating columns in M-M relationships to reduce joins
+  - Introducing repeating groups
+  - Creating extract tables
+  - Partitioning tables
+- [ ] Monitor and tune the system: *to be done later*
