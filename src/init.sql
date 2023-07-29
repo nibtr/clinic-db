@@ -1,4 +1,4 @@
-create database DentalClinicDev
+﻿create database DentalClinicDev
 go
 use DentalClinicDev
 go
@@ -22,7 +22,7 @@ CREATE TABLE [dbo].[Personel] (
     [dob] DATE,
     [gender] CHAR(1),
 	[phone]	CHAR(10) UNIQUE NOT NULL,
-	[role] CHAR(3) NOT NULL,
+	[type] CHAR(3) NOT NULL,
 	CONSTRAINT [Personel_pkey] PRIMARY KEY CLUSTERED ([id])
 );
 
@@ -70,6 +70,7 @@ CREATE TABLE [dbo].[Session] (
 	[assistantID] INT,
 	[dentistID] INT NOT NULL,
 	[roomID] INT NOT NULL,
+    [type] CHAR(1) NOT NULL,
 	CONSTRAINT [Session_pkey] PRIMARY KEY CLUSTERED ([id])
 );	
 
@@ -222,7 +223,8 @@ AlTER TABLE [dbo].[Schedule] ADD CONSTRAINT [FK_Schedule_Dentist] FOREIGN KEY ([
 
 -- Init some basic table
 -- Personel & Account for admin
-INSERT INTO [dbo].[Personel](nationalID, name, dob, gender, phone, role) values('123456789123', 'Admin', '2002-06-01', 'm', '0777058016', 'adm')
+INSERT INTO [dbo].[Personel](nationalID, name, dob, gender, phone, type) values('123456789123', 'Admin', '2002-06-01', 'm', '0777058016', 'adm')
+INSERT INTO [dbo].[Account](username, password, email, personelID) values('adm-123456', '$2a$12$/k35hQ1YWbiBt3a0EAFFl.o4Ec2eHd1KqfAD3Sv3lyidWSxdEQy4i', 'admin@gmail.com', 1)
 
 -- Day
 INSERT INTO [dbo].[Day] values('SUN')
