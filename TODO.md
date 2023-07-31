@@ -25,4 +25,6 @@
   - Introducing repeating groups
   - Creating extract tables
   - Partitioning tables
-- [ ] Monitor and tune the system: *to be done later*
+- [ ] Monitor and tune the system:
+  - [x] Buffer cache (Theoretically)
+  - [ ] Buffer cache (Practically), applied to the database
