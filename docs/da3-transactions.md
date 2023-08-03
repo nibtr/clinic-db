@@ -151,3 +151,4 @@ We estimated some frequency information of the database based on the information
 - A patient will have a maximum of **10** treatment sessions, with **2-3** treatment sessions per week.
 - An examination will take around **30** minutes, and a treatment will take around **1-2** hour(s).
 - With the above assumptions, we estimated that there will be on average **8-9** patients per room per day.
+

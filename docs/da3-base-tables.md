@@ -56,32 +56,26 @@ For example: `sta-123456` will result in a hashed version `$2a$12$gEy/fBApnlR7CY
 SELECT DATEDIFF(YEAR, dob, GETDATE()) - CASE WHEN (MONTH(dob) > MONTH(GETDATE())) OR (MONTH(dob) = MONTH(GETDATE()) AND DAY(dob) > DAY(GETDATE())) THEN 1 ELSE 0 END
 ```
 
-## Staff Table
-
-| Field Name | Data Type | Constraints                | Domain | Default |
-| ---------- | --------- | -------------------------- | ------ | ------- |
-| `id`       | `int`     | `PRIMARY KEY, FOREIGN KEY` | n > 0  | x       |
-
-## Dentist Table
-
-| Field Name | Data Type | Constraints                | Domain | Default |
-| ---------- | --------- | -------------------------- | ------ | ------- |
-| `id`       | `int`     | `PRIMARY KEY, FOREIGN KEY` | n > 0  | x       |
-
-## Assistant Table
-
-| Field Name | Data Type | Constraints                | Domain | Default |
-| ---------- | --------- | -------------------------- | ------ | ------- |
-| `id`       | `int`     | `PRIMARY KEY, FOREIGN KEY` | n > 0  | x       |
-
 ## Patient Table
 
-| Field Name             | Data Type       | Constraints                | Domain      | Default |
-| ---------------------- | --------------- | -------------------------- | ----------- | ------- |
-| `id`                   | `int`           | `PRIMARY KEY, FOREIGN KEY` | n > 0       | x       |
-| `drugContraindication` | `nvarchar(500)` | `X`                        | 0 < n < 501 | x       |
-| `oralHealthStatus`     | `nvarchar(500)` | `X`                        | 0 < n < 501 | x       |
-| `allergyStatus`        | `nvarchar(255)` | `X`                        | 0 < n < 256 | x       |
+| Field Name             | Data Type       | Constraints   | Domain      | Default |
+| ---------------------- | --------------- | ------------- | ----------- | ------- |
+| `id`                   | `int`           | `PRIMARY KEY` | n > 0       | x       |
+| `drugContraindication` | `nvarchar(500)` | `X`           | 0 < n < 501 | x       |
+| `allergyStatus`        | `nvarchar(255)` | `X`           | 0 < n < 256 | x       |
+| `nationalID`           | `char(12)`      | `UNIQUE`      | 0 < n < 13  | x       |
+| `name`                 | `nvarchar(50)`  | `NOT NULL`    | 0 < n < 51  | x       |
+| `dob`                  | `date`          | `X`           | x           | x       |
+| `gender`               | `char(1)`       | `X`           | x           | x       |
+| `phone`                | `char(10)`      | `UNIQUE`      | 0 < n < 11  | x       |
+| `age`                  | `int`           | `derived`     | n > 0       | x       |
+
+- We don't save `age` because it can be calculated from `dob`, and it's not a good idea either since we have to update it every year.
+- Caculate `age` from `dob` using the following formula:
+
+```sql
+SELECT DATEDIFF(YEAR, dob, GETDATE()) - CASE WHEN (MONTH(dob) > MONTH(GETDATE())) OR (MONTH(dob) = MONTH(GETDATE()) AND DAY(dob) > DAY(GETDATE())) THEN 1 ELSE 0 END
+```
 
 ## Payment Record Table
 
@@ -102,17 +96,15 @@ For the method, there are 2 options:
 
 ## Session Table
 
-| Field Name    | Data Type        | Constraints             | Domain       | Default |
-| ------------- | ---------------- | ----------------------- | ------------ | ------- |
-| `id`          | `int`            | `PRIMARY KEY`           | n > 0        | x       |
-| `time`        | `datetime2`      | `NOT NULL`              | x            | x       |
-| `note`        | `nvarchar(1000)` | `X`                     | 0 < n < 1001 | x       |
-| `status`      | `char(3)`        | `NOT NULL`              | x            | `SCH`   |
-| `patientID`   | `int`            | `FOREIGN KEY, NOT NULL` | n > 0        | x       |
-| `assistantID` | `int`            | `FOREIGN KEY`           | n > 0        | x       |
-| `dentistID`   | `int`            | `FOREIGN KEY, NOT NULL` | n > 0        | x       |
-| `roomID`      | `int`            | `FOREIGN KEY, NOT NULL` | n > 0        | x       |
-| `type`        | `char(3)`        | `NOT NULL`              | x            | `EXA `  |
+| Field Name  | Data Type        | Constraints             | Domain       | Default |
+| ----------- | ---------------- | ----------------------- | ------------ | ------- |
+| `id`        | `int`            | `PRIMARY KEY`           | n > 0        | x       |
+| `time`      | `datetime2`      | `NOT NULL`              | x            | x       |
+| `note`      | `nvarchar(1000)` | `X`                     | 0 < n < 1001 | x       |
+| `status`    | `char(3)`        | `NOT NULL`              | x            | `SCH`   |
+| `type`      | `char(3)`        | `NOT NULL`              | x            | `EXA `  |
+| `patientID` | `int`            | `FOREIGN KEY, NOT NULL` | n > 0        | x       |
+| `roomID`    | `int`            | `FOREIGN KEY, NOT NULL` | n > 0        | x       |
 
 - `status` is a 3-character string that indicates the status of the session:
   - `SCH`: Scheduled
@@ -272,3 +264,12 @@ For the method, there are 2 options:
 | ----------- | --------- | ----------------------- | ------ | ------- |
 | `dayID`     | `int`     | `FOREIGN KEY, NOT NULL` | n > 0  | x       |
 | `dentistID` | `int`     | `FOREIGN KEY, NOT NULL` | n > 0  | x       |
+
+## Personnel_Session Table
+
+| Field Name    | Data Type | Constraints             | Domain | Default |
+| ------------- | --------- | ----------------------- | ------ | ------- |
+| `id`          | `int`     | `PRIMARY KEY`           | n > 0  | x       |
+| `dentistID`   | `int`     | `FOREIGN KEY, NOT NULL` | n > 0  | x       |
+| `roomID`      | `int`     | `FOREIGN KEY, NOT NULL` | n > 0  | x       |
+| `assistantID` | `int`     | `FOREIGN KEY`           | n > 0  | x       |
