@@ -1,7 +1,7 @@
 ---
 title: DA#3 - Transactions
 date-of-creation: 2023-08-02
-date-last-updated: 2023-08-02
+date-last-updated: 2023-08-03
 description: Transactions Analysis
 ---
 
@@ -75,25 +75,25 @@ description: Transactions Analysis
 | STA21 | Filter appointments by room                                  |
 | STA22 | Filter appointments by dentist                               |
 | STA23 | View a patient's list of re-examination sessions             |
+| STA24 | Create a new treatment session for a patient                 |
 
 ## Dentist
 
-| Order        | Functionality                                    |
-| ------------ | ------------------------------------------------ |
-| DEN1         | View his/her schedule                            |
-| DEN2         | View list of his/her sessions for a day          |
-| DEN3         | View a patient's medical details                 |
-| DEN4         | Update a patient's medical details               |
-| DEN5         | View a patient's treatment plan                  |
-| **DEN6[^1]** | **Create a new treatment session for a patient** |
-| DEN7         | View list of categories                          |
-| DEN7         | View list of procedures of a category            |
-| DEN8         | View a patient's payment records                 |
-| DEN9         | Create a prescription for a patient              |
-| DEN10        | View a patient's prescription                    |
-| DEN11        | Update a patient's prescription                  |
-| DEN12        | Delete a patient's prescription                  |
-| DEN13        | View list of drugs                               |
+| Order | Functionality                           |
+| ----- | --------------------------------------- |
+| DEN1  | View his/her schedule                   |
+| DEN2  | View list of his/her sessions for a day |
+| DEN3  | View a patient's medical details        |
+| DEN4  | Update a patient's medical details      |
+| DEN5  | View a patient's treatment plan         |
+| DEN7  | View list of categories                 |
+| DEN8  | View list of procedures of a category   |
+| DEN9  | View a patient's payment records        |
+| DEN10 | Create a prescription for a patient     |
+| DEN11 | View a patient's prescription           |
+| DEN12 | Update a patient's prescription         |
+| DEN13 | Delete a patient's prescription         |
+| DEN14 | View list of drugs                      |
 
 ## Patient
 
@@ -112,8 +112,43 @@ Below are the "considered-essential" transactions of the database.
 - PAT3: Patients schedule a new appointment
 - STA6: Staff views list of available dentists for an appointment (examination session) of a patient
 - STA4: Staff schedules a new appointment (examination session) for patient
-- **DEN6: Dentist creates a new treatment session for a patient** [^1]
+- STA24: Dentist creates a new treatment session for a patient
 - STA5: Staff schedules a new re-examination session for patient
-- 
+- STA3: Staff checks if a patient has done a session before
+- STA14: Staff creates a new payment record for a patient
+- STA15: Staff updates a payment record for a patient
 
-[^1]: **TODO:** Decide if this adding a new session is a functionality of the dentist or the staff
+# Cross-Reference Matrix
+
+| Transaction/Table  | PAT3 |     |     |     | STA6 |     |     |     | STA4 |     |     |     |
+| ------------------ | ---- | --- | --- | --- | ---- | --- | --- | --- | ---- | --- | --- | --- |
+|                    | I    | U   | D   | R   | I    | U   | D   | R   | I    | U   | D   | R   |
+| AppointmentRequest | x    |     |     |     |      |     |     | x   |      |     |     |     |
+| Schedule           |      |     |     |     |      |     |     | x   |      |     |     |     |
+| Dentist            |      |     |     |     |      |     |     | x   |      |     |     |     |
+| Patient            |      |     |     |     |      |     |     |     | x    |     |     |     |
+| Session            |      |     |     |     |      |     |     |     | x    |     |     |     |
+| ExaminationSession |      |     |     |     |      |     |     |     | x    |     |     |     |
+| Room               |      |     |     |     |      |     |     |     |      |     |     | x   |
+
+| Transaction/Table    | STA5 |     |     |     | STA3 |     |     |     | STA14 |     |     |     |
+| -------------------- | ---- | --- | --- | --- | ---- | --- | --- | --- | ----- | --- | --- | --- |
+|                      | I    | U   | D   | R   | I    | U   | D   | R   | I     | U   | D   | R   |
+| Session              | x    |     |     |     |      |     |     | x   |       |     |     |     |
+| ReExaminationSession | x    |     |     |     |      |     |     |     |       |     |     |     |
+| ExaminationSession   |      |     |     |     |      |     |     |     |       |     |     |     |
+| PaymentRecord        |      |     |     |     |      |     |     |     | x     |     |     |     |
+| Room                 |      |     |     | x   |      |     |     |     |       |     |     |     |
+
+# Frequency Information
+
+We estimated some frequency information of the database based on the information given in the requirements overview document, and have decided to use the following assumptions:
+
+- The database will be used by a medium-to-large dental clinic, with around **80-100** patients per day.
+- The clinic will be open from **8:00 to 12:00 and 13:00 to 17:00**, Monday to Saturday.
+- The clinic will have around **8-12** dentists (including assistants), **10-15** staffs, and **10-15** rooms.
+- A patient will have a minimum of **1** re-examination session, and no more than **5** re-examination sessions.
+- A patient will have a maximum of **10** treatment sessions, with **2-3** treatment sessions per week.
+- An examination will take around **30** minutes, and a treatment will take around **1-2** hour(s).
+- With the above assumptions, we estimated that there will be on average **8-9** patients per room per day.
+
