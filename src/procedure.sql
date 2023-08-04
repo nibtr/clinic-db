@@ -12,7 +12,7 @@ go
 
 -- PROC FOR ADMIN:
 -- ADM29: Update account details
--- ADM30: View account details 
+-- ADM30: View account details  
 
 -- PROC FOR PATIENT:
 -- PAT1: View list of categories 
