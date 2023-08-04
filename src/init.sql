@@ -29,7 +29,7 @@ CREATE TABLE [dbo].[Personnel] (
     [dob] DATE,
     [gender] CHAR(1),
 	[phone]	CHAR(10) UNIQUE NOT NULL,
-    [age] INT,
+    [age] INT AS (DATEDIFF( YEAR, [dob], GETDATE())) PERSISTED,
 	[type] CHAR(3) NOT NULL,
 	CONSTRAINT [Personnel_pkey] PRIMARY KEY CLUSTERED ([id])
 );
@@ -44,17 +44,16 @@ CREATE TABLE [dbo].[Personnel] (
 -- SELECT DATEDIFF(YEAR, dob, GETDATE()) - CASE WHEN (MONTH(dob) > MONTH(GETDATE())) OR (MONTH(dob) = MONTH(GETDATE()) AND DAY(dob) > DAY(GETDATE())) THEN 1 ELSE 0 END
 -- ```
 
-
 CREATE TABLE [dbo].[Patient] (
     [id] INT,
     [drugContraindication] NVARCHAR(500),
     [allergyStatus] NVARCHAR(255),
     [nationalID] CHAR(12) UNIQUE NOT NULL,
     [name] NVARCHAR(50) NOT NULL,
-    [dob] DATE,
+    [dob] DATE ,
     [gender] CHAR(1),
     [phone] CHAR(10) UNIQUE,
-    [age] INT,
+    [age] INT AS (DATEDIFF( YEAR, [dob], GETDATE())) PERSISTED,
     CONSTRAINT [Patient_pkey] PRIMARY KEY CLUSTERED ([id])
 );
 
@@ -62,8 +61,8 @@ CREATE TABLE [dbo].[PaymentRecord] (
     [id] INT NOT NULL IDENTITY(1,1),
     [date] DATE NOT NULL,
     [total] INT NOT NULL,
-    [paid] INT NOT NULL DEFAULT 0,
-	[change] INT NOT NULL DEFAULT 0,
+    [paid] INT NOT NULL,
+	[change] INT NOT NULL,
 	[method] CHAR(1),
 	[patientID] INT NOT NULL,
 	[treatmentSessionID] INT UNIQUE NOT NULL,
@@ -207,8 +206,6 @@ CREATE TABLE [dbo].[Day] (
 	[day] CHAR(3) UNIQUE NOT NULL,
 	CONSTRAINT [Day_pkey] PRIMARY KEY CLUSTERED ([id])
 );
-
-
 -- - The day is a 3-character string that indicates the day of the week:
 --   - Sunday (SUN)
 --   - Monday (MON)
@@ -231,11 +228,13 @@ CREATE TABLE [dbo].[PersonnelSession](
     [assistantID] INT,
 	CONSTRAINT [PersonnelSession_pkey] PRIMARY KEY CLUSTERED ([id])
 )
+-- Constraint in table Account
+ALTER TABLE [dbo].[Account] ADD CONSTRAINT [FK_Account_Personnel] FOREIGN KEY ([personnelID]) REFERENCES [dbo].[Personnel]([id]) ON DELETE NO ACTION ON UPDATE CASCADE;
+
 -- Constraint in table PersonnelSession
 ALTER TABLE [dbo].[PersonnelSession] ADD CONSTRAINT [FK_PersonnelSession_Personnel_dentistID] FOREIGN KEY ([dentistID]) REFERENCES [dbo].[Personnel]([id]) ON DELETE NO ACTION ON UPDATE CASCADE;
 ALTER TABLE [dbo].[PersonnelSession] ADD CONSTRAINT [FK_PersonnelSession_Personnel_assistantID] FOREIGN KEY ([assistantID]) REFERENCES [dbo].[Personnel]([id]) ON DELETE NO ACTION ON UPDATE CASCADE;
 ALTER TABLE [dbo].[PersonnelSession] ADD CONSTRAINT [FK_PersonnelSession_Session] FOREIGN KEY ([sessionID]) REFERENCES [dbo].[Session]([id]) ON DELETE NO ACTION ON UPDATE CASCADE;
-
 
 -- Constraint in table Payment Record
 AlTER TABLE [dbo].[PaymentRecord] ADD CONSTRAINT [FK_PaymentRecord_Patient] FOREIGN KEY ([patientID]) REFERENCES [dbo].[Patient]([id]) ON DELETE NO ACTION ON UPDATE CASCADE;
@@ -273,7 +272,7 @@ AlTER TABLE [dbo].[Schedule] ADD CONSTRAINT [FK_Schedule_Dentist] FOREIGN KEY ([
 
 -- Init some basic table
 -- Personnel & Account for admin
-INSERT INTO [dbo].[Personnel](nationalID, name, dob, gender, phone, age, type) values('123456789123', 'Admin', '2002-06-01', 'M', '0777058016', 20, 'ADM')
+INSERT INTO [dbo].[Personnel](nationalID, name, dob, gender, phone, type) values('123456789123', 'Admin', '2002-06-01', 'M', '0777058016', 'ADM')
 INSERT INTO [dbo].[Account](username, password, email, personnelID) values('ADM-123456', '$2a$12$/k35hQ1YWbiBt3a0EAFFl.o4Ec2eHd1KqfAD3Sv3lyidWSxdEQy4i', 'admin@gmail.com', 1)
 
 -- Day
