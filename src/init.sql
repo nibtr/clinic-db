@@ -29,7 +29,7 @@ CREATE TABLE [dbo].[Personnel] (
     [dob] DATE,
     [gender] CHAR(1),
 	[phone]	CHAR(10) UNIQUE NOT NULL,
-    [age] INT AS (DATEDIFF( YEAR, [dob], GETDATE())) PERSISTED,
+    [age] AS (DATEDIFF( YEAR, [dob], GETDATE())) PERSISTED,
 	[type] CHAR(3) NOT NULL,
 	CONSTRAINT [Personnel_pkey] PRIMARY KEY CLUSTERED ([id])
 );
@@ -53,7 +53,7 @@ CREATE TABLE [dbo].[Patient] (
     [dob] DATE ,
     [gender] CHAR(1),
     [phone] CHAR(10) UNIQUE,
-    [age] INT AS (DATEDIFF( YEAR, [dob], GETDATE())) PERSISTED,
+    [age] AS (DATEDIFF( YEAR, [dob], GETDATE())) PERSISTED,
     CONSTRAINT [Patient_pkey] PRIMARY KEY CLUSTERED ([id])
 );
 
