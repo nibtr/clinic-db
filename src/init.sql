@@ -29,6 +29,7 @@ CREATE TABLE [dbo].[Personnel] (
     [dob] DATE,
     [gender] CHAR(1),
 	[phone]	CHAR(10) UNIQUE NOT NULL,
+    [age] INT,
 	[type] CHAR(3) NOT NULL,
 	CONSTRAINT [Personnel_pkey] PRIMARY KEY CLUSTERED ([id])
 );
@@ -43,26 +44,17 @@ CREATE TABLE [dbo].[Personnel] (
 -- SELECT DATEDIFF(YEAR, dob, GETDATE()) - CASE WHEN (MONTH(dob) > MONTH(GETDATE())) OR (MONTH(dob) = MONTH(GETDATE()) AND DAY(dob) > DAY(GETDATE())) THEN 1 ELSE 0 END
 -- ```
 
-CREATE TABLE [dbo].[Staff] (
-    [id] INT,
-	CONSTRAINT [Staff_pkey] PRIMARY KEY CLUSTERED ([id])
-);	
-
-CREATE TABLE [dbo].[Dentist] (
-    [id] INT,
-	CONSTRAINT [Dentist_pkey] PRIMARY KEY CLUSTERED ([id])
-);
-
-CREATE TABLE [dbo].[Assistant] (
-    [id] INT,
-	CONSTRAINT [Assistant_pkey] PRIMARY KEY CLUSTERED ([id])
-);	
 
 CREATE TABLE [dbo].[Patient] (
     [id] INT,
     [drugContraindication] NVARCHAR(500),
-    [oralHealthStatus] NVARCHAR(500),
     [allergyStatus] NVARCHAR(255),
+    [nationalID] CHAR(12) UNIQUE NOT NULL,
+    [name] NVARCHAR(50) NOT NULL,
+    [dob] DATE,
+    [gender] CHAR(1),
+    [phone] CHAR(10) UNIQUE,
+    [age] INT,
     CONSTRAINT [Patient_pkey] PRIMARY KEY CLUSTERED ([id])
 );
 
@@ -70,8 +62,8 @@ CREATE TABLE [dbo].[PaymentRecord] (
     [id] INT NOT NULL IDENTITY(1,1),
     [date] DATE NOT NULL,
     [total] INT NOT NULL,
-    [paid] INT DEFAULT 0,
-	[change] INT DEFAULT 0,
+    [paid] INT NOT NULL DEFAULT 0,
+	[change] INT NOT NULL DEFAULT 0,
 	[method] CHAR(1),
 	[patientID] INT NOT NULL,
 	[treatmentSessionID] INT UNIQUE NOT NULL,
@@ -87,8 +79,6 @@ CREATE TABLE [dbo].[Session] (
     [note] NVARCHAR(1000),
     [status] CHAR(3) DEFAULT 'SCH',
 	[patientID] INT NOT NULL,
-	[assistantID] INT,
-	[dentistID] INT NOT NULL,
 	[roomID] INT NOT NULL,
     [type] CHAR(3) NOT NULL,
 	CONSTRAINT [Session_pkey] PRIMARY KEY CLUSTERED ([id])
@@ -217,6 +207,8 @@ CREATE TABLE [dbo].[Day] (
 	[day] CHAR(3) UNIQUE NOT NULL,
 	CONSTRAINT [Day_pkey] PRIMARY KEY CLUSTERED ([id])
 );
+
+
 -- - The day is a 3-character string that indicates the day of the week:
 --   - Sunday (SUN)
 --   - Monday (MON)
@@ -232,17 +224,18 @@ CREATE TABLE [dbo].[Schedule] (
 	CONSTRAINT [Schedule_pkey] PRIMARY KEY CLUSTERED ([dayID],[dentistID])
 );	
 
--- Constraint in table Patient
-ALTER TABLE [dbo].[Patient] ADD CONSTRAINT [FK_Patient_Personnel] FOREIGN KEY ([id]) REFERENCES [dbo].[Personnel]([id]) ON DELETE NO ACTION ON UPDATE CASCADE;
+CREATE TABLE [dbo].[PersonnelSession](
+    [id] INT NOT NULL IDENTITY(1,1),
+    [dentistID] INT NOT NULL,
+    [roomID] INT NOT NULL,
+    [assistantID] INT,
+	CONSTRAINT [PersonnelSession_pkey] PRIMARY KEY CLUSTERED ([id])
+)
+-- Constraint in table PersonnelSession
+ALTER TABLE [dbo].[PersonnelSession] ADD CONSTRAINT [FK_PersonnelSession_Personnel_dentistID] FOREIGN KEY ([dentistID]) REFERENCES [dbo].[Personnel]([id]) ON DELETE NO ACTION ON UPDATE CASCADE;
+ALTER TABLE [dbo].[PersonnelSession] ADD CONSTRAINT [FK_PersonnelSession_Personnel_assistantID] FOREIGN KEY ([assistantID]) REFERENCES [dbo].[Personnel]([id]) ON DELETE NO ACTION ON UPDATE CASCADE;
+ALTER TABLE [dbo].[PersonnelSession] ADD CONSTRAINT [FK_PersonnelSession_Session] FOREIGN KEY ([sessionID]) REFERENCES [dbo].[Session]([id]) ON DELETE NO ACTION ON UPDATE CASCADE;
 
--- Constraint in table Account
-ALTER TABLE [dbo].[Account] ADD CONSTRAINT [FK_Account_Personnel] FOREIGN KEY ([personnelID]) REFERENCES [dbo].[Personnel]([id]) ON DELETE NO ACTION ON UPDATE CASCADE;
-
--- Constraint in table Staff
-AlTER TABLE [dbo].[Staff] ADD CONSTRAINT [FK_Staff_Personnel] FOREIGN KEY ([id]) REFERENCES [dbo].[Personnel]([id]) ON DELETE NO ACTION ON UPDATE CASCADE;
-
--- Constraint in table Dentist
-AlTER TABLE [dbo].[Dentist] ADD CONSTRAINT [FK_Dentist_Personnel] FOREIGN KEY ([id]) REFERENCES [dbo].[Personnel]([id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- Constraint in table Payment Record
 AlTER TABLE [dbo].[PaymentRecord] ADD CONSTRAINT [FK_PaymentRecord_Patient] FOREIGN KEY ([patientID]) REFERENCES [dbo].[Patient]([id]) ON DELETE NO ACTION ON UPDATE CASCADE;
@@ -251,8 +244,6 @@ AlTER TABLE [dbo].[PaymentRecord] ADD CONSTRAINT [FK_PaymentRecord_TreatmentSess
 -- Constraint in table Session
 AlTER TABLE [dbo].[Session] ADD CONSTRAINT [FK_Session_Room] FOREIGN KEY ([roomID]) REFERENCES [dbo].[Room]([id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
 AlTER TABLE [dbo].[Session] ADD CONSTRAINT [FK_Session_Patient] FOREIGN KEY ([patientID]) REFERENCES [dbo].[Patient]([id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
-AlTER TABLE [dbo].[Session] ADD CONSTRAINT [FK_Session_Assistant] FOREIGN KEY ([assistantID]) REFERENCES [dbo].[Assistant]([id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
-AlTER TABLE [dbo].[Session] ADD CONSTRAINT [FK_Session_Dentist] FOREIGN KEY ([dentistID]) REFERENCES [dbo].[Dentist]([Id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- Constraint in table Treatment Session
 AlTER TABLE [dbo].[TreatmentSession] ADD CONSTRAINT [FK_TreatmentSession_Session] FOREIGN KEY ([id]) REFERENCES [dbo].[Session]([id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
@@ -276,16 +267,13 @@ AlTER TABLE [dbo].[ExaminationSession] ADD CONSTRAINT [FK_ExaminationSession_Ses
 AlTER TABLE [dbo].[ReExaminationSession] ADD CONSTRAINT [FK_ReExaminationSession_Session] FOREIGN KEY ([id]) REFERENCES [dbo].[Session]([id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
 AlTER TABLE [dbo].[ReExaminationSession] ADD CONSTRAINT [FK_ReExaminationSession_ExaminationSession] FOREIGN KEY ([relatedExaminationID]) REFERENCES [dbo].[ExaminationSession]([id]) ON DELETE CASCADE ON UPDATE NO ACTION;
 
--- Constraint in table Assistant
-AlTER TABLE [dbo].[Assistant] ADD CONSTRAINT [FK_Assistant_Dentist] FOREIGN KEY ([id]) REFERENCES [dbo].[Dentist]([id]) ON DELETE CASCADE ON UPDATE NO ACTION;
-
 -- Constraint in table Schedule
 AlTER TABLE [dbo].[Schedule] ADD CONSTRAINT [FK_Schedule_Day] FOREIGN KEY ([dayID]) REFERENCES [dbo].[Day]([id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
 AlTER TABLE [dbo].[Schedule] ADD CONSTRAINT [FK_Schedule_Dentist] FOREIGN KEY ([dentistID]) REFERENCES [dbo].[Dentist]([id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- Init some basic table
 -- Personnel & Account for admin
-INSERT INTO [dbo].[Personnel](nationalID, name, dob, gender, phone, type) values('123456789123', 'Admin', '2002-06-01', 'M', '0777058016', 'ADM')
+INSERT INTO [dbo].[Personnel](nationalID, name, dob, gender, phone, age, type) values('123456789123', 'Admin', '2002-06-01', 'M', '0777058016', 20, 'ADM')
 INSERT INTO [dbo].[Account](username, password, email, personnelID) values('ADM-123456', '$2a$12$/k35hQ1YWbiBt3a0EAFFl.o4Ec2eHd1KqfAD3Sv3lyidWSxdEQy4i', 'admin@gmail.com', 1)
 
 -- Day
