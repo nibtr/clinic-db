@@ -225,7 +225,7 @@ CREATE TABLE [dbo].[PersonnelSession](
     [roomID] INT NOT NULL,
     [assistantID] INT,
 	CONSTRAINT [PersonnelSession_pkey] PRIMARY KEY CLUSTERED ([id])
-)
+);
 -- Constraint in table Account
 ALTER TABLE [dbo].[Account] ADD CONSTRAINT [FK_Account_Personnel] FOREIGN KEY ([personnelID]) REFERENCES [dbo].[Personnel]([id]) ON DELETE NO ACTION ON UPDATE CASCADE;
 
