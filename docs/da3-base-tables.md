@@ -44,7 +44,7 @@ For example: `sta-123456` will result in a hashed version `$2a$12$gEy/fBApnlR7CY
   - `ADM`: Administrator
   - `DEN`: Dentist
   - `STA`: Staff
-  - `PAT`: Patient
+  - `AST`: Assistant
 - `gender` is:
   - `M` for Male
   - `F` for Female
