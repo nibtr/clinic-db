@@ -231,7 +231,7 @@ ALTER TABLE [dbo].[Account] ADD CONSTRAINT [FK_Account_Personnel] FOREIGN KEY ([
 
 -- Constraint in table PersonnelSession
 ALTER TABLE [dbo].[PersonnelSession] ADD CONSTRAINT [FK_PersonnelSession_Personnel_dentistID] FOREIGN KEY ([dentistID]) REFERENCES [dbo].[Personnel]([id]) ON DELETE NO ACTION ON UPDATE CASCADE;
-ALTER TABLE [dbo].[PersonnelSession] ADD CONSTRAINT [FK_PersonnelSession_Personnel_assistantID] FOREIGN KEY ([assistantID]) REFERENCES [dbo].[Personnel]([id]) ON DELETE NO ACTION ON UPDATE CASCADE;
+ALTER TABLE [dbo].[PersonnelSession] ADD CONSTRAINT [FK_PersonnelSession_Personnel_assistantID] FOREIGN KEY ([assistantID]) REFERENCES [dbo].[Personnel]([id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
 ALTER TABLE [dbo].[PersonnelSession] ADD CONSTRAINT [FK_PersonnelSession_Session] FOREIGN KEY ([sessionID]) REFERENCES [dbo].[Session]([id]) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 -- Constraint in table Payment Record
