@@ -112,6 +112,7 @@ Below are the "considered-essential" transactions of the database.
 - PAT3: Patients schedule a new appointment
 - STA3: Staff checks if a patient has done a session before
 - STA4: Staff schedules a new appointment (examination session) for patient
+- STA24: Staff creates a new treatment session for a patient
 - STA5: Staff schedules a new re-examination session for patient
 - STA6: Staff views list of available dentists for an appointment (examination session) of a patient
 - STA14: Staff creates a new payment record for a patient

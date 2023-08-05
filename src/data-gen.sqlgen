@@ -19,7 +19,7 @@ Version:4.5.2.4316-->
       <TableType>Generated</TableType>
       <PopulationDetails version="2" type="PopulationDetails">
         <PopulationType>RowCount</PopulationType>
-        <RowCount>100000</RowCount>
+        <RowCount>30</RowCount>
         <ProportionTableExists>False</ProportionTableExists>
         <Proportion>0</Proportion>
         <TimeToPopulate>0</TimeToPopulate>
@@ -208,7 +208,7 @@ Version:4.5.2.4316-->
               </element>
               <element>
                 <key type="string">SQLQuery</key>
-                <value type="string">SELECT id FROM Personnel where type='DEN' or type='STA'</value>
+                <value type="string">SELECT id FROM Personnel where type='DEN' or type='STA' or type='AST'</value>
               </element>
               <element>
                 <key type="string">ShuffleData</key>
@@ -423,11 +423,11 @@ Version:4.5.2.4316-->
               </element>
               <element>
                 <key type="string">MinValue</key>
-                <value type="string">637134336000000000</value>
+                <value type="string">637134624000000000</value>
               </element>
               <element>
                 <key type="string">MaxValue</key>
-                <value type="string">638080416000000000</value>
+                <value type="string">638081046000000000</value>
               </element>
               <element>
                 <key type="string">UseColumnOffset</key>
@@ -643,63 +643,6 @@ Version:4.5.2.4316-->
         </value>
       </Fields>
       <ForeignKeyProperties type="List&lt;ForeignKeyProperty&gt;" version="1" />
-    </value>
-    <value version="3" type="SDGTable">
-      <TableType>Generated</TableType>
-      <PopulationDetails version="2" type="PopulationDetails">
-        <PopulationType>RowCount</PopulationType>
-        <RowCount>10000</RowCount>
-        <ProportionTableExists>False</ProportionTableExists>
-        <Proportion>0</Proportion>
-        <TimeToPopulate>0</TimeToPopulate>
-      </PopulationDetails>
-      <InvalidRowBehaviour>SkipRow</InvalidRowBehaviour>
-      <Included>False</Included>
-      <Append>False</Append>
-      <Name>Assistant</Name>
-      <Schema>dbo</Schema>
-      <IsTemporal>False</IsTemporal>
-      <IdentityInsert>True</IdentityInsert>
-      <Fields type="List&lt;SDGField&gt;" version="1">
-        <value version="1" type="SDGField">
-          <Name>id</Name>
-          <FieldType>Generated</FieldType>
-          <PrimaryKey>True</PrimaryKey>
-          <ForeignKey>True</ForeignKey>
-          <Unique>True</Unique>
-          <AllowsNulls>False</AllowsNulls>
-          <SqlType>Integer32</SqlType>
-          <Precision>10</Precision>
-          <Scale>0</Scale>
-          <DefinedSize>4</DefinedSize>
-          <Generator version="1" type="GeneratorDetails">
-            <GeneratorTypeName>RedGate.SQLDataGenerator.Generators.Others.FKInternalGenerator</GeneratorTypeName>
-            <DisplayName>Foreign Key (automatic)</DisplayName>
-            <Description>Reference Foreign Key $FK for column $FKField</Description>
-            <CategoryName>SQL Type</CategoryName>
-            <GeneratorProperties type="Dictionary&lt;string, object&gt;" version="1">
-              <element>
-                <key type="string">Unique</key>
-                <value type="string">True</value>
-              </element>
-            </GeneratorProperties>
-          </Generator>
-        </value>
-      </Fields>
-      <ForeignKeyProperties type="List&lt;ForeignKeyProperty&gt;" version="1">
-        <value version="2" type="ForeignKeyProperty">
-          <Fields type="List&lt;string&gt;" version="1">
-            <value type="string">id</value>
-          </Fields>
-          <ForeignKeyFillMethod>Unique</ForeignKeyFillMethod>
-          <MaxBuckets>1000</MaxBuckets>
-          <Seed>0</Seed>
-          <MinRepeats>1</MinRepeats>
-          <MaxRepeats>10</MaxRepeats>
-          <NullsAllowed>False</NullsAllowed>
-          <NullProportion>0.01</NullProportion>
-        </value>
-      </ForeignKeyProperties>
     </value>
     <value version="3" type="SDGTable">
       <TableType>Generated</TableType>
@@ -945,101 +888,7 @@ Version:4.5.2.4316-->
       <TableType>Generated</TableType>
       <PopulationDetails version="2" type="PopulationDetails">
         <PopulationType>RowCount</PopulationType>
-        <RowCount>100000</RowCount>
-        <ProportionTableExists>False</ProportionTableExists>
-        <Proportion>0</Proportion>
-        <TimeToPopulate>0</TimeToPopulate>
-      </PopulationDetails>
-      <InvalidRowBehaviour>SkipRow</InvalidRowBehaviour>
-      <Included>False</Included>
-      <Append>False</Append>
-      <Name>Dentist</Name>
-      <Schema>dbo</Schema>
-      <IsTemporal>False</IsTemporal>
-      <IdentityInsert>True</IdentityInsert>
-      <Fields type="List&lt;SDGField&gt;" version="1">
-        <value version="1" type="SDGField">
-          <Name>id</Name>
-          <FieldType>Generated</FieldType>
-          <PrimaryKey>True</PrimaryKey>
-          <ForeignKey>True</ForeignKey>
-          <Unique>True</Unique>
-          <AllowsNulls>False</AllowsNulls>
-          <SqlType>Integer32</SqlType>
-          <Precision>10</Precision>
-          <Scale>0</Scale>
-          <DefinedSize>4</DefinedSize>
-          <Generator version="1" type="GeneratorDetails">
-            <GeneratorTypeName>RedGate.SQLDataGenerator.Generators.SQL.SQLColumnGenerator</GeneratorTypeName>
-            <DisplayName>SQL Statement</DisplayName>
-            <Description>Imports data using a SELECT statement</Description>
-            <CategoryName>Generic</CategoryName>
-            <GeneratorProperties type="Dictionary&lt;string, object&gt;" version="1">
-              <element>
-                <key type="string">LiveDatabaseSource</key>
-                <value version="4" type="LiveDatabaseSource">
-                  <ServerName>(local)\SQLEXPRESS</ServerName>
-                  <DatabaseName>DentalClinicDev</DatabaseName>
-                  <Username />
-                  <SavePassword>False</SavePassword>
-                  <Password />
-                  <ScriptFolderLocation />
-                  <MigrationsFolderLocation />
-                  <AuthenticationType>WindowsIntegrated</AuthenticationType>
-                </value>
-              </element>
-              <element>
-                <key type="string">SQLQuery</key>
-                <value type="string">SELECT id from Personnel where type='DEN'</value>
-              </element>
-              <element>
-                <key type="string">ShuffleData</key>
-                <value type="string">True</value>
-              </element>
-              <element>
-                <key type="string">ShuffleRows</key>
-                <value type="string">1000</value>
-              </element>
-              <element>
-                <key type="string">LoopQuery</key>
-                <value type="string">False</value>
-              </element>
-              <element>
-                <key type="string">NullsAllowed</key>
-                <value type="string">False</value>
-              </element>
-              <element>
-                <key type="string">NullProportion</key>
-                <value type="string">0.01</value>
-              </element>
-              <element>
-                <key type="string">Seed</key>
-                <value type="string">5120</value>
-              </element>
-            </GeneratorProperties>
-          </Generator>
-        </value>
-      </Fields>
-      <ForeignKeyProperties type="List&lt;ForeignKeyProperty&gt;" version="1">
-        <value version="2" type="ForeignKeyProperty">
-          <Fields type="List&lt;string&gt;" version="1">
-            <value type="string">id</value>
-          </Fields>
-          <ForeignKeyFillMethod>Unique</ForeignKeyFillMethod>
-          <MaxBuckets>1000</MaxBuckets>
-          <Seed>0</Seed>
-          <MinRepeats>1</MinRepeats>
-          <MaxRepeats>10</MaxRepeats>
-          <NullsAllowed>False</NullsAllowed>
-          <NullProportion>0.01</NullProportion>
-        </value>
-      </ForeignKeyProperties>
-    </value>
-    <value version="3" type="SDGTable">
-      <TableType>Generated</TableType>
-      <PopulationDetails version="2" type="PopulationDetails">
-        <PopulationType>RowCount</PopulationType>
-        <RowCount>250</RowCount>
+        <RowCount>100</RowCount>
         <ProportionTableExists>False</ProportionTableExists>
         <Proportion>0</Proportion>
         <TimeToPopulate>0</TimeToPopulate>
@@ -1259,7 +1108,7 @@ Version:4.5.2.4316-->
       <TableType>Generated</TableType>
       <PopulationDetails version="2" type="PopulationDetails">
         <PopulationType>RowCount</PopulationType>
-        <RowCount>100000</RowCount>
+        <RowCount>200000</RowCount>
         <ProportionTableExists>False</ProportionTableExists>
         <Proportion>0</Proportion>
         <TimeToPopulate>0</TimeToPopulate>
@@ -1353,7 +1202,7 @@ Version:4.5.2.4316-->
       <TableType>Generated</TableType>
       <PopulationDetails version="2" type="PopulationDetails">
         <PopulationType>RowCount</PopulationType>
-        <RowCount>100000</RowCount>
+        <RowCount>30000</RowCount>
         <ProportionTableExists>False</ProportionTableExists>
         <Proportion>0</Proportion>
         <TimeToPopulate>0</TimeToPopulate>
@@ -1370,7 +1219,7 @@ Version:4.5.2.4316-->
           <Name>id</Name>
           <FieldType>Generated</FieldType>
           <PrimaryKey>True</PrimaryKey>
-          <ForeignKey>True</ForeignKey>
+          <ForeignKey>False</ForeignKey>
           <Unique>True</Unique>
           <AllowsNulls>False</AllowsNulls>
           <SqlType>Integer32</SqlType>
@@ -1378,38 +1227,33 @@ Version:4.5.2.4316-->
           <Scale>0</Scale>
           <DefinedSize>4</DefinedSize>
           <Generator version="1" type="GeneratorDetails">
-            <GeneratorTypeName>RedGate.SQLDataGenerator.Generators.SQL.SQLColumnGenerator</GeneratorTypeName>
-            <DisplayName>SQL Statement</DisplayName>
-            <Description>Imports data using a SELECT statement</Description>
-            <CategoryName>Generic</CategoryName>
+            <GeneratorTypeName>RedGate.SQLDataGenerator.Generators.Number.Int32Generator</GeneratorTypeName>
+            <DisplayName>IDs</DisplayName>
+            <Description>1,2,3,4,5,6....</Description>
+            <CategoryName>Business</CategoryName>
             <GeneratorProperties type="Dictionary&lt;string, object&gt;" version="1">
               <element>
-                <key type="string">LiveDatabaseSource</key>
-                <value version="4" type="LiveDatabaseSource">
-                  <ServerName>(local)\SQLEXPRESS</ServerName>
-                  <DatabaseName>DentalClinicDev</DatabaseName>
-                  <Username />
-                  <SavePassword>False</SavePassword>
-                  <Password />
-                  <ScriptFolderLocation />
-                  <MigrationsFolderLocation />
-                  <AuthenticationType>WindowsIntegrated</AuthenticationType>
-                </value>
+                <key type="string">Increment</key>
+                <value type="string">1</value>
               </element>
               <element>
-                <key type="string">SQLQuery</key>
-                <value type="string">SELECT id from Personnel WHERE type='PAT'</value>
-              </element>
-              <element>
-                <key type="string">ShuffleData</key>
+                <key type="string">UseSequence</key>
                 <value type="string">True</value>
               </element>
               <element>
-                <key type="string">ShuffleRows</key>
-                <value type="string">1000</value>
+                <key type="string">Unique</key>
+                <value type="string">True</value>
               </element>
               <element>
-                <key type="string">LoopQuery</key>
+                <key type="string">MinValue</key>
+                <value type="string">1</value>
+              </element>
+              <element>
+                <key type="string">MaxValue</key>
+                <value type="string">2147483647</value>
+              </element>
+              <element>
+                <key type="string">UseColumnOffset</key>
                 <value type="string">False</value>
               </element>
               <element>
@@ -1422,7 +1266,7 @@ Version:4.5.2.4316-->
               </element>
               <element>
                 <key type="string">Seed</key>
-                <value type="string">8192</value>
+                <value type="string">8196</value>
               </element>
             </GeneratorProperties>
           </Generator>
@@ -1472,50 +1316,6 @@ Version:4.5.2.4316-->
           </Generator>
         </value>
         <value version="1" type="SDGField">
-          <Name>oralHealthStatus</Name>
-          <FieldType>Generated</FieldType>
-          <PrimaryKey>False</PrimaryKey>
-          <ForeignKey>False</ForeignKey>
-          <Unique>False</Unique>
-          <AllowsNulls>True</AllowsNulls>
-          <SqlType>NVarchar</SqlType>
-          <Precision>0</Precision>
-          <Scale>0</Scale>
-          <DefinedSize>500</DefinedSize>
-          <Generator version="1" type="GeneratorDetails">
-            <GeneratorTypeName>RedGate.SQLDataGenerator.DescriptionGenerators.TextGenerator</GeneratorTypeName>
-            <DisplayName>Description</DisplayName>
-            <Description>Id eudis quo</Description>
-            <CategoryName>Shopping</CategoryName>
-            <GeneratorProperties type="Dictionary&lt;string, object&gt;" version="1">
-              <element>
-                <key type="string">InputText</key>
-                <value type="string">Id eudis quo linguens imaginator pars fecit.  Et quad estis vobis homo, si quad fecit, non apparens vantis. Sed quad ut novum vobis regit, et nomen novum eggredior.  Longam, e gravis et pladior venit.  Tam quo, et bono quorum glavans e funem.  Quad rarendum habitatio quoque plorum fecundio, et quis gravis delerium.  Versus esset in dolorum cognitio, travissimantor quantare sed quartu manifestum egreddior estum.  Multum gravum et plurissimum parte brevens, non quo plorum in volcans essit.  Pro linguens non trepicandor si nomen transit.</value>
-              </element>
-              <element>
-                <key type="string">MinLen</key>
-                <value type="string">100</value>
-              </element>
-              <element>
-                <key type="string">MaxLen</key>
-                <value type="string">500</value>
-              </element>
-              <element>
-                <key type="string">NullsAllowed</key>
-                <value type="string">True</value>
-              </element>
-              <element>
-                <key type="string">NullProportion</key>
-                <value type="string">0.01</value>
-              </element>
-              <element>
-                <key type="string">Seed</key>
-                <value type="string">8194</value>
-              </element>
-            </GeneratorProperties>
-          </Generator>
-        </value>
-        <value version="1" type="SDGField">
           <Name>allergyStatus</Name>
           <FieldType>Generated</FieldType>
           <PrimaryKey>False</PrimaryKey>
@@ -1559,27 +1359,273 @@ Version:4.5.2.4316-->
             </GeneratorProperties>
           </Generator>
         </value>
-      </Fields>
-      <ForeignKeyProperties type="List&lt;ForeignKeyProperty&gt;" version="1">
-        <value version="2" type="ForeignKeyProperty">
-          <Fields type="List&lt;string&gt;" version="1">
-            <value type="string">id</value>
-          </Fields>
-          <ForeignKeyFillMethod>Unique</ForeignKeyFillMethod>
-          <MaxBuckets>1000</MaxBuckets>
-          <Seed>0</Seed>
-          <MinRepeats>1</MinRepeats>
-          <MaxRepeats>10</MaxRepeats>
-          <NullsAllowed>False</NullsAllowed>
-          <NullProportion>0.01</NullProportion>
+        <value version="1" type="SDGField">
+          <Name>nationalID</Name>
+          <FieldType>Generated</FieldType>
+          <PrimaryKey>False</PrimaryKey>
+          <ForeignKey>False</ForeignKey>
+          <Unique>True</Unique>
+          <AllowsNulls>False</AllowsNulls>
+          <SqlType>Char</SqlType>
+          <Precision>0</Precision>
+          <Scale>0</Scale>
+          <DefinedSize>12</DefinedSize>
+          <Generator version="1" type="GeneratorDetails">
+            <GeneratorTypeName>RedGate.SQLDataGenerator.ExpressionGenerators.Regexp.RegexpGenerator</GeneratorTypeName>
+            <DisplayName>5 Digit IDs</DisplayName>
+            <Description>67815,98234, 71333, 89620, 04231...</Description>
+            <CategoryName>Business</CategoryName>
+            <GeneratorProperties type="Dictionary&lt;string, object&gt;" version="1">
+              <element>
+                <key type="string">Expression</key>
+                <value type="string">\d{12}</value>
+              </element>
+              <element>
+                <key type="string">UseSequence</key>
+                <value type="string">False</value>
+              </element>
+              <element>
+                <key type="string">NullsAllowed</key>
+                <value type="string">False</value>
+              </element>
+              <element>
+                <key type="string">NullProportion</key>
+                <value type="string">0.01</value>
+              </element>
+              <element>
+                <key type="string">Seed</key>
+                <value type="string">8197</value>
+              </element>
+              <element>
+                <key type="string">Unique</key>
+                <value type="string">True</value>
+              </element>
+            </GeneratorProperties>
+          </Generator>
         </value>
-      </ForeignKeyProperties>
+        <value version="1" type="SDGField">
+          <Name>name</Name>
+          <FieldType>Generated</FieldType>
+          <PrimaryKey>False</PrimaryKey>
+          <ForeignKey>False</ForeignKey>
+          <Unique>False</Unique>
+          <AllowsNulls>False</AllowsNulls>
+          <SqlType>NVarchar</SqlType>
+          <Precision>0</Precision>
+          <Scale>0</Scale>
+          <DefinedSize>50</DefinedSize>
+          <Generator version="1" type="GeneratorDetails">
+            <GeneratorTypeName>RedGate.SQLDataGenerator.ExpressionGenerators.Regexp.RegexpGenerator</GeneratorTypeName>
+            <DisplayName>Nick Name</DisplayName>
+            <Description>Mike124, Chris1, Tom78, Jenny39, Amy12, Mel54...</Description>
+            <CategoryName>Personal</CategoryName>
+            <GeneratorProperties type="Dictionary&lt;string, object&gt;" version="1">
+              <element>
+                <key type="string">Expression</key>
+                <value type="string">($"NamesFirst.txt")[0-9]{0,3}</value>
+              </element>
+              <element>
+                <key type="string">UseSequence</key>
+                <value type="string">False</value>
+              </element>
+              <element>
+                <key type="string">NullsAllowed</key>
+                <value type="string">False</value>
+              </element>
+              <element>
+                <key type="string">NullProportion</key>
+                <value type="string">0.01</value>
+              </element>
+              <element>
+                <key type="string">Seed</key>
+                <value type="string">6148</value>
+              </element>
+              <element>
+                <key type="string">Unique</key>
+                <value type="string">False</value>
+              </element>
+            </GeneratorProperties>
+          </Generator>
+        </value>
+        <value version="1" type="SDGField">
+          <Name>dob</Name>
+          <FieldType>Generated</FieldType>
+          <PrimaryKey>False</PrimaryKey>
+          <ForeignKey>False</ForeignKey>
+          <Unique>False</Unique>
+          <AllowsNulls>True</AllowsNulls>
+          <SqlType>Date</SqlType>
+          <Precision>10</Precision>
+          <Scale>0</Scale>
+          <DefinedSize>3</DefinedSize>
+          <Generator version="1" type="GeneratorDetails">
+            <GeneratorTypeName>RedGate.SQLDataGenerator.Generators.DateTime.DateGenerator</GeneratorTypeName>
+            <DisplayName>date</DisplayName>
+            <Description>Generates date values</Description>
+            <CategoryName>SQL Type</CategoryName>
+            <GeneratorProperties type="Dictionary&lt;string, object&gt;" version="1">
+              <element>
+                <key type="string">RandomTimeZone</key>
+                <value type="string">False</value>
+              </element>
+              <element>
+                <key type="string">ConstantTimeZone</key>
+                <value type="string">00:00:00</value>
+              </element>
+              <element>
+                <key type="string">RandomizeTime</key>
+                <value type="string">True</value>
+              </element>
+              <element>
+                <key type="string">BaseColumn</key>
+              </element>
+              <element>
+                <key type="string">MinOffset</key>
+                <value type="string">00:00:00</value>
+              </element>
+              <element>
+                <key type="string">MaxOffset</key>
+                <value type="string">7.00:00:00</value>
+              </element>
+              <element>
+                <key type="string">DateTimeGeneratorType</key>
+                <value type="string">MinMax</value>
+              </element>
+              <element>
+                <key type="string">Increment</key>
+                <value type="string">1.00:00:00</value>
+              </element>
+              <element>
+                <key type="string">UseSequence</key>
+                <value type="string">False</value>
+              </element>
+              <element>
+                <key type="string">Unique</key>
+                <value type="string">False</value>
+              </element>
+              <element>
+                <key type="string">MinValue</key>
+                <value type="string">615991392000000000</value>
+              </element>
+              <element>
+                <key type="string">MaxValue</key>
+                <value type="string">636502752000000000</value>
+              </element>
+              <element>
+                <key type="string">UseColumnOffset</key>
+                <value type="string">False</value>
+              </element>
+              <element>
+                <key type="string">NullsAllowed</key>
+                <value type="string">True</value>
+              </element>
+              <element>
+                <key type="string">NullProportion</key>
+                <value type="string">0.01</value>
+              </element>
+              <element>
+                <key type="string">Seed</key>
+                <value type="string">8199</value>
+              </element>
+            </GeneratorProperties>
+          </Generator>
+        </value>
+        <value version="1" type="SDGField">
+          <Name>gender</Name>
+          <FieldType>Generated</FieldType>
+          <PrimaryKey>False</PrimaryKey>
+          <ForeignKey>False</ForeignKey>
+          <Unique>False</Unique>
+          <AllowsNulls>True</AllowsNulls>
+          <SqlType>Char</SqlType>
+          <Precision>0</Precision>
+          <Scale>0</Scale>
+          <DefinedSize>1</DefinedSize>
+          <Generator version="1" type="GeneratorDetails">
+            <GeneratorTypeName>RedGate.SQLDataGenerator.ExpressionGenerators.Regexp.RegexpGenerator</GeneratorTypeName>
+            <DisplayName>Regex Generator</DisplayName>
+            <Description>Generates data from a Regular Expression</Description>
+            <CategoryName>Generic</CategoryName>
+            <GeneratorProperties type="Dictionary&lt;string, object&gt;" version="1">
+              <element>
+                <key type="string">Expression</key>
+                <value type="string">M|F</value>
+              </element>
+              <element>
+                <key type="string">UseSequence</key>
+                <value type="string">False</value>
+              </element>
+              <element>
+                <key type="string">NullsAllowed</key>
+                <value type="string">True</value>
+              </element>
+              <element>
+                <key type="string">NullProportion</key>
+                <value type="string">0.01</value>
+              </element>
+              <element>
+                <key type="string">Seed</key>
+                <value type="string">8200</value>
+              </element>
+              <element>
+                <key type="string">Unique</key>
+                <value type="string">False</value>
+              </element>
+            </GeneratorProperties>
+          </Generator>
+        </value>
+        <value version="1" type="SDGField">
+          <Name>phone</Name>
+          <FieldType>Generated</FieldType>
+          <PrimaryKey>False</PrimaryKey>
+          <ForeignKey>False</ForeignKey>
+          <Unique>True</Unique>
+          <AllowsNulls>False</AllowsNulls>
+          <SqlType>Char</SqlType>
+          <Precision>0</Precision>
+          <Scale>0</Scale>
+          <DefinedSize>10</DefinedSize>
+          <Generator version="1" type="GeneratorDetails">
+            <GeneratorTypeName>RedGate.SQLDataGenerator.ExpressionGenerators.Regexp.RegexpGenerator</GeneratorTypeName>
+            <DisplayName>Phone Number (short)</DisplayName>
+            <Description>476-391-0239, 114-479-4304, 829-310-4824...</Description>
+            <CategoryName>Personal</CategoryName>
+            <GeneratorProperties type="Dictionary&lt;string, object&gt;" version="1">
+              <element>
+                <key type="string">Expression</key>
+                <value type="string">0\d{9}</value>
+              </element>
+              <element>
+                <key type="string">UseSequence</key>
+                <value type="string">False</value>
+              </element>
+              <element>
+                <key type="string">NullsAllowed</key>
+                <value type="string">False</value>
+              </element>
+              <element>
+                <key type="string">NullProportion</key>
+                <value type="string">0.01</value>
+              </element>
+              <element>
+                <key type="string">Seed</key>
+                <value type="string">8201</value>
+              </element>
+              <element>
+                <key type="string">Unique</key>
+                <value type="string">True</value>
+              </element>
+            </GeneratorProperties>
+          </Generator>
+        </value>
+      </Fields>
+      <ForeignKeyProperties type="List&lt;ForeignKeyProperty&gt;" version="1" />
     </value>
     <value version="3" type="SDGTable">
       <TableType>Generated</TableType>
       <PopulationDetails version="2" type="PopulationDetails">
         <PopulationType>RowCount</PopulationType>
-        <RowCount>100000</RowCount>
+        <RowCount>200000</RowCount>
         <ProportionTableExists>False</ProportionTableExists>
         <Proportion>0</Proportion>
         <TimeToPopulate>0</TimeToPopulate>
@@ -1749,7 +1795,7 @@ Version:4.5.2.4316-->
           <PrimaryKey>False</PrimaryKey>
           <ForeignKey>False</ForeignKey>
           <Unique>False</Unique>
-          <AllowsNulls>True</AllowsNulls>
+          <AllowsNulls>False</AllowsNulls>
           <SqlType>Integer32</SqlType>
           <Precision>10</Precision>
           <Scale>0</Scale>
@@ -1786,7 +1832,7 @@ Version:4.5.2.4316-->
               </element>
               <element>
                 <key type="string">NullsAllowed</key>
-                <value type="string">True</value>
+                <value type="string">False</value>
               </element>
               <element>
                 <key type="string">NullProportion</key>
@@ -1805,7 +1851,7 @@ Version:4.5.2.4316-->
           <PrimaryKey>False</PrimaryKey>
           <ForeignKey>False</ForeignKey>
           <Unique>False</Unique>
-          <AllowsNulls>True</AllowsNulls>
+          <AllowsNulls>False</AllowsNulls>
           <SqlType>Integer32</SqlType>
           <Precision>10</Precision>
           <Scale>0</Scale>
@@ -1842,7 +1888,7 @@ Version:4.5.2.4316-->
               </element>
               <element>
                 <key type="string">NullsAllowed</key>
-                <value type="string">True</value>
+                <value type="string">False</value>
               </element>
               <element>
                 <key type="string">NullProportion</key>
@@ -1979,7 +2025,7 @@ Version:4.5.2.4316-->
       <TableType>Generated</TableType>
       <PopulationDetails version="2" type="PopulationDetails">
         <PopulationType>RowCount</PopulationType>
-        <RowCount>100000</RowCount>
+        <RowCount>200000</RowCount>
         <ProportionTableExists>False</ProportionTableExists>
         <Proportion>0</Proportion>
         <TimeToPopulate>0</TimeToPopulate>
@@ -2116,7 +2162,7 @@ Version:4.5.2.4316-->
       <TableType>Generated</TableType>
       <PopulationDetails version="2" type="PopulationDetails">
         <PopulationType>RowCount</PopulationType>
-        <RowCount>500</RowCount>
+        <RowCount>100</RowCount>
         <ProportionTableExists>False</ProportionTableExists>
         <Proportion>0</Proportion>
         <TimeToPopulate>0</TimeToPopulate>
@@ -2160,7 +2206,7 @@ Version:4.5.2.4316-->
             <GeneratorProperties type="Dictionary&lt;string, object&gt;" version="1">
               <element>
                 <key type="string">Expression</key>
-                <value type="string">[A-Z][0-9]*</value>
+                <value type="string">[A-Z][A-Z][0-9]</value>
               </element>
               <element>
                 <key type="string">UseSequence</key>
@@ -2220,7 +2266,7 @@ Version:4.5.2.4316-->
               </element>
               <element>
                 <key type="string">Seed</key>
-                <value type="string">12290</value>
+                <value type="string">9218</value>
               </element>
               <element>
                 <key type="string">Unique</key>
@@ -2268,7 +2314,7 @@ Version:4.5.2.4316-->
               </element>
               <element>
                 <key type="string">Seed</key>
-                <value type="string">12291</value>
+                <value type="string">9219</value>
               </element>
             </GeneratorProperties>
           </Generator>
@@ -2324,7 +2370,7 @@ Version:4.5.2.4316-->
               </element>
               <element>
                 <key type="string">Seed</key>
-                <value type="string">12292</value>
+                <value type="string">9220</value>
               </element>
             </GeneratorProperties>
           </Generator>
@@ -2373,7 +2419,7 @@ Version:4.5.2.4316-->
       <TableType>Generated</TableType>
       <PopulationDetails version="2" type="PopulationDetails">
         <PopulationType>RowCount</PopulationType>
-        <RowCount>100000</RowCount>
+        <RowCount>200000</RowCount>
         <ProportionTableExists>False</ProportionTableExists>
         <Proportion>0</Proportion>
         <TimeToPopulate>0</TimeToPopulate>
@@ -2623,7 +2669,7 @@ Version:4.5.2.4316-->
       <TableType>Generated</TableType>
       <PopulationDetails version="2" type="PopulationDetails">
         <PopulationType>RowCount</PopulationType>
-        <RowCount>100000</RowCount>
+        <RowCount>300</RowCount>
         <ProportionTableExists>False</ProportionTableExists>
         <Proportion>0</Proportion>
         <TimeToPopulate>0</TimeToPopulate>
@@ -2672,14 +2718,51 @@ Version:4.5.2.4316-->
           <Scale>0</Scale>
           <DefinedSize>4</DefinedSize>
           <Generator version="1" type="GeneratorDetails">
-            <GeneratorTypeName>RedGate.SQLDataGenerator.Generators.Others.FKInternalGenerator</GeneratorTypeName>
-            <DisplayName>Foreign Key (automatic)</DisplayName>
-            <Description>Reference Foreign Key $FK for column $FKField</Description>
-            <CategoryName>SQL Type</CategoryName>
+            <GeneratorTypeName>RedGate.SQLDataGenerator.Generators.SQL.SQLColumnGenerator</GeneratorTypeName>
+            <DisplayName>SQL Statement</DisplayName>
+            <Description>Imports data using a SELECT statement</Description>
+            <CategoryName>Generic</CategoryName>
             <GeneratorProperties type="Dictionary&lt;string, object&gt;" version="1">
               <element>
-                <key type="string">Unique</key>
+                <key type="string">LiveDatabaseSource</key>
+                <value version="4" type="LiveDatabaseSource">
+                  <ServerName>(local)\SQLEXPRESS</ServerName>
+                  <DatabaseName>DentalClinicDev</DatabaseName>
+                  <Username />
+                  <SavePassword>False</SavePassword>
+                  <Password />
+                  <ScriptFolderLocation />
+                  <MigrationsFolderLocation />
+                  <AuthenticationType>WindowsIntegrated</AuthenticationType>
+                </value>
+              </element>
+              <element>
+                <key type="string">SQLQuery</key>
+                <value type="string">SELECT id FROM Personnel WHERE type='DEN'</value>
+              </element>
+              <element>
+                <key type="string">ShuffleData</key>
                 <value type="string">True</value>
+              </element>
+              <element>
+                <key type="string">ShuffleRows</key>
+                <value type="string">1000</value>
+              </element>
+              <element>
+                <key type="string">LoopQuery</key>
+                <value type="string">False</value>
+              </element>
+              <element>
+                <key type="string">NullsAllowed</key>
+                <value type="string">False</value>
+              </element>
+              <element>
+                <key type="string">NullProportion</key>
+                <value type="string">0.01</value>
+              </element>
+              <element>
+                <key type="string">Seed</key>
+                <value type="string">12289</value>
               </element>
             </GeneratorProperties>
           </Generator>
@@ -2716,7 +2799,7 @@ Version:4.5.2.4316-->
       <TableType>Generated</TableType>
       <PopulationDetails version="2" type="PopulationDetails">
         <PopulationType>RowCount</PopulationType>
-        <RowCount>100000</RowCount>
+        <RowCount>200000</RowCount>
         <ProportionTableExists>False</ProportionTableExists>
         <Proportion>0</Proportion>
         <TimeToPopulate>0</TimeToPopulate>
@@ -2799,11 +2882,11 @@ Version:4.5.2.4316-->
               </element>
               <element>
                 <key type="string">MinValue</key>
-                <value type="string">636503616000000000</value>
+                <value type="string">636503904000000000</value>
               </element>
               <element>
                 <key type="string">MaxValue</key>
-                <value type="string">638395776000000000</value>
+                <value type="string">638396406000000000</value>
               </element>
               <element>
                 <key type="string">UseColumnOffset</key>
@@ -2937,12 +3020,12 @@ Version:4.5.2.4316-->
           </Generator>
         </value>
         <value version="1" type="SDGField">
-          <Name>assistantID</Name>
+          <Name>roomID</Name>
           <FieldType>Generated</FieldType>
           <PrimaryKey>False</PrimaryKey>
           <ForeignKey>True</ForeignKey>
           <Unique>False</Unique>
-          <AllowsNulls>True</AllowsNulls>
+          <AllowsNulls>False</AllowsNulls>
           <SqlType>Integer32</SqlType>
           <Precision>10</Precision>
           <Scale>0</Scale>
@@ -2972,38 +3055,112 @@ Version:4.5.2.4316-->
           <Scale>0</Scale>
           <DefinedSize>4</DefinedSize>
           <Generator version="1" type="GeneratorDetails">
-            <GeneratorTypeName>RedGate.SQLDataGenerator.Generators.Others.FKInternalGenerator</GeneratorTypeName>
-            <DisplayName>Foreign Key (automatic)</DisplayName>
-            <Description>Reference Foreign Key $FK for column $FKField</Description>
-            <CategoryName>SQL Type</CategoryName>
+            <GeneratorTypeName>RedGate.SQLDataGenerator.Generators.SQL.SQLColumnGenerator</GeneratorTypeName>
+            <DisplayName>SQL Statement</DisplayName>
+            <Description>Imports data using a SELECT statement</Description>
+            <CategoryName>Generic</CategoryName>
             <GeneratorProperties type="Dictionary&lt;string, object&gt;" version="1">
               <element>
-                <key type="string">Unique</key>
+                <key type="string">LiveDatabaseSource</key>
+                <value version="4" type="LiveDatabaseSource">
+                  <ServerName>(local)\SQLEXPRESS</ServerName>
+                  <DatabaseName>DentalClinicDev</DatabaseName>
+                  <Username />
+                  <SavePassword>False</SavePassword>
+                  <Password />
+                  <ScriptFolderLocation />
+                  <MigrationsFolderLocation />
+                  <AuthenticationType>WindowsIntegrated</AuthenticationType>
+                </value>
+              </element>
+              <element>
+                <key type="string">SQLQuery</key>
+                <value type="string">SELECT id FROM Personnel WHERE type='DEN'</value>
+              </element>
+              <element>
+                <key type="string">ShuffleData</key>
+                <value type="string">True</value>
+              </element>
+              <element>
+                <key type="string">ShuffleRows</key>
+                <value type="string">1000</value>
+              </element>
+              <element>
+                <key type="string">LoopQuery</key>
+                <value type="string">True</value>
+              </element>
+              <element>
+                <key type="string">NullsAllowed</key>
                 <value type="string">False</value>
+              </element>
+              <element>
+                <key type="string">NullProportion</key>
+                <value type="string">0.01</value>
+              </element>
+              <element>
+                <key type="string">Seed</key>
+                <value type="string">13318</value>
               </element>
             </GeneratorProperties>
           </Generator>
         </value>
         <value version="1" type="SDGField">
-          <Name>roomID</Name>
+          <Name>assistantID</Name>
           <FieldType>Generated</FieldType>
           <PrimaryKey>False</PrimaryKey>
           <ForeignKey>True</ForeignKey>
           <Unique>False</Unique>
-          <AllowsNulls>False</AllowsNulls>
+          <AllowsNulls>True</AllowsNulls>
           <SqlType>Integer32</SqlType>
           <Precision>10</Precision>
           <Scale>0</Scale>
           <DefinedSize>4</DefinedSize>
           <Generator version="1" type="GeneratorDetails">
-            <GeneratorTypeName>RedGate.SQLDataGenerator.Generators.Others.FKInternalGenerator</GeneratorTypeName>
-            <DisplayName>Foreign Key (automatic)</DisplayName>
-            <Description>Reference Foreign Key $FK for column $FKField</Description>
-            <CategoryName>SQL Type</CategoryName>
+            <GeneratorTypeName>RedGate.SQLDataGenerator.Generators.SQL.SQLColumnGenerator</GeneratorTypeName>
+            <DisplayName>SQL Statement</DisplayName>
+            <Description>Imports data using a SELECT statement</Description>
+            <CategoryName>Generic</CategoryName>
             <GeneratorProperties type="Dictionary&lt;string, object&gt;" version="1">
               <element>
-                <key type="string">Unique</key>
-                <value type="string">False</value>
+                <key type="string">LiveDatabaseSource</key>
+                <value version="4" type="LiveDatabaseSource">
+                  <ServerName>(local)\SQLEXPRESS</ServerName>
+                  <DatabaseName>DentalClinicDev</DatabaseName>
+                  <Username />
+                  <SavePassword>False</SavePassword>
+                  <Password />
+                  <ScriptFolderLocation />
+                  <MigrationsFolderLocation />
+                  <AuthenticationType>WindowsIntegrated</AuthenticationType>
+                </value>
+              </element>
+              <element>
+                <key type="string">SQLQuery</key>
+                <value type="string">SELECT id FROM Personnel WHERE type='AST'</value>
+              </element>
+              <element>
+                <key type="string">ShuffleData</key>
+                <value type="string">True</value>
+              </element>
+              <element>
+                <key type="string">ShuffleRows</key>
+                <value type="string">1000</value>
+              </element>
+              <element>
+                <key type="string">LoopQuery</key>
+                <value type="string">True</value>
+              </element>
+              <element>
+                <key type="string">NullsAllowed</key>
+                <value type="string">True</value>
+              </element>
+              <element>
+                <key type="string">NullProportion</key>
+                <value type="string">0.4</value>
+              </element>
+              <element>
+                <key type="string">Seed</key>
+                <value type="string">13319</value>
               </element>
             </GeneratorProperties>
           </Generator>
@@ -3056,30 +3213,6 @@ Version:4.5.2.4316-->
       <ForeignKeyProperties type="List&lt;ForeignKeyProperty&gt;" version="1">
         <value version="2" type="ForeignKeyProperty">
           <Fields type="List&lt;string&gt;" version="1">
-            <value type="string">assistantID</value>
-          </Fields>
-          <ForeignKeyFillMethod>RepeatForever</ForeignKeyFillMethod>
-          <MaxBuckets>1000</MaxBuckets>
-          <Seed>0</Seed>
-          <MinRepeats>1</MinRepeats>
-          <MaxRepeats>10</MaxRepeats>
-          <NullsAllowed>True</NullsAllowed>
-          <NullProportion>0.01</NullProportion>
-        </value>
-        <value version="2" type="ForeignKeyProperty">
-          <Fields type="List&lt;string&gt;" version="1">
-            <value type="string">dentistID</value>
-          </Fields>
-          <ForeignKeyFillMethod>RepeatForever</ForeignKeyFillMethod>
-          <MaxBuckets>1000</MaxBuckets>
-          <Seed>0</Seed>
-          <MinRepeats>1</MinRepeats>
-          <MaxRepeats>10</MaxRepeats>
-          <NullsAllowed>False</NullsAllowed>
-          <NullProportion>0.01</NullProportion>
-        </value>
-        <value version="2" type="ForeignKeyProperty">
-          <Fields type="List&lt;string&gt;" version="1">
             <value type="string">patientID</value>
           </Fields>
           <ForeignKeyFillMethod>RepeatForever</ForeignKeyFillMethod>
@@ -3102,93 +3235,23 @@ Version:4.5.2.4316-->
           <NullsAllowed>False</NullsAllowed>
           <NullProportion>0.01</NullProportion>
         </value>
-      </ForeignKeyProperties>
-    </value>
-    <value version="3" type="SDGTable">
-      <TableType>Generated</TableType>
-      <PopulationDetails version="2" type="PopulationDetails">
-        <PopulationType>RowCount</PopulationType>
-        <RowCount>100000</RowCount>
-        <ProportionTableExists>False</ProportionTableExists>
-        <Proportion>0</Proportion>
-        <TimeToPopulate>0</TimeToPopulate>
-      </PopulationDetails>
-      <InvalidRowBehaviour>SkipRow</InvalidRowBehaviour>
-      <Included>False</Included>
-      <Append>False</Append>
-      <Name>Staff</Name>
-      <Schema>dbo</Schema>
-      <IsTemporal>False</IsTemporal>
-      <IdentityInsert>True</IdentityInsert>
-      <Fields type="List&lt;SDGField&gt;" version="1">
-        <value version="1" type="SDGField">
-          <Name>id</Name>
-          <FieldType>Generated</FieldType>
-          <PrimaryKey>True</PrimaryKey>
-          <ForeignKey>True</ForeignKey>
-          <Unique>True</Unique>
-          <AllowsNulls>False</AllowsNulls>
-          <SqlType>Integer32</SqlType>
-          <Precision>10</Precision>
-          <Scale>0</Scale>
-          <DefinedSize>4</DefinedSize>
-          <Generator version="1" type="GeneratorDetails">
-            <GeneratorTypeName>RedGate.SQLDataGenerator.Generators.SQL.SQLColumnGenerator</GeneratorTypeName>
-            <DisplayName>SQL Statement</DisplayName>
-            <Description>Imports data using a SELECT statement</Description>
-            <CategoryName>Generic</CategoryName>
-            <GeneratorProperties type="Dictionary&lt;string, object&gt;" version="1">
-              <element>
-                <key type="string">LiveDatabaseSource</key>
-                <value version="4" type="LiveDatabaseSource">
-                  <ServerName>(local)\SQLEXPRESS</ServerName>
-                  <DatabaseName>DentalClinicDev</DatabaseName>
-                  <Username />
-                  <SavePassword>False</SavePassword>
-                  <Password />
-                  <ScriptFolderLocation />
-                  <MigrationsFolderLocation />
-                  <AuthenticationType>WindowsIntegrated</AuthenticationType>
-                </value>
-              </element>
-              <element>
-                <key type="string">SQLQuery</key>
-                <value type="string">SELECT id from Personnel where type='STA'</value>
-              </element>
-              <element>
-                <key type="string">ShuffleData</key>
-                <value type="string">True</value>
-              </element>
-              <element>
-                <key type="string">ShuffleRows</key>
-                <value type="string">1000</value>
-              </element>
-              <element>
-                <key type="string">LoopQuery</key>
-                <value type="string">False</value>
-              </element>
-              <element>
-                <key type="string">NullsAllowed</key>
-                <value type="string">False</value>
-              </element>
-              <element>
-                <key type="string">NullProportion</key>
-                <value type="string">0.01</value>
-              </element>
-              <element>
-                <key type="string">Seed</key>
-                <value type="string">17408</value>
-              </element>
-            </GeneratorProperties>
-          </Generator>
-        </value>
-      </Fields>
-      <ForeignKeyProperties type="List&lt;ForeignKeyProperty&gt;" version="1">
         <value version="2" type="ForeignKeyProperty">
           <Fields type="List&lt;string&gt;" version="1">
-            <value type="string">id</value>
+            <value type="string">assistantID</value>
           </Fields>
-          <ForeignKeyFillMethod>Unique</ForeignKeyFillMethod>
+          <ForeignKeyFillMethod>RepeatForever</ForeignKeyFillMethod>
+          <MaxBuckets>1000</MaxBuckets>
+          <Seed>0</Seed>
+          <MinRepeats>1</MinRepeats>
+          <MaxRepeats>10</MaxRepeats>
+          <NullsAllowed>True</NullsAllowed>
+          <NullProportion>0.01</NullProportion>
+        </value>
+        <value version="2" type="ForeignKeyProperty">
+          <Fields type="List&lt;string&gt;" version="1">
+            <value type="string">dentistID</value>
+          </Fields>
+          <ForeignKeyFillMethod>RepeatForever</ForeignKeyFillMethod>
           <MaxBuckets>1000</MaxBuckets>
           <Seed>0</Seed>
           <MinRepeats>1</MinRepeats>
@@ -3322,7 +3385,7 @@ Version:4.5.2.4316-->
       <TableType>Generated</TableType>
       <PopulationDetails version="2" type="PopulationDetails">
         <PopulationType>RowCount</PopulationType>
-        <RowCount>100000</RowCount>
+        <RowCount>200000</RowCount>
         <ProportionTableExists>False</ProportionTableExists>
         <Proportion>0</Proportion>
         <TimeToPopulate>0</TimeToPopulate>
@@ -3471,7 +3534,7 @@ Version:4.5.2.4316-->
       <TableType>Generated</TableType>
       <PopulationDetails version="2" type="PopulationDetails">
         <PopulationType>RowCount</PopulationType>
-        <RowCount>100000</RowCount>
+        <RowCount>200000</RowCount>
         <ProportionTableExists>False</ProportionTableExists>
         <Proportion>0</Proportion>
         <TimeToPopulate>0</TimeToPopulate>
@@ -3689,7 +3752,7 @@ Version:4.5.2.4316-->
       <TableType>Generated</TableType>
       <PopulationDetails version="2" type="PopulationDetails">
         <PopulationType>RowCount</PopulationType>
-        <RowCount>100000</RowCount>
+        <RowCount>30</RowCount>
         <ProportionTableExists>False</ProportionTableExists>
         <Proportion>0</Proportion>
         <TimeToPopulate>0</TimeToPopulate>
@@ -3860,11 +3923,11 @@ Version:4.5.2.4316-->
               </element>
               <element>
                 <key type="string">MinValue</key>
-                <value type="string">615991392000000000</value>
+                <value type="string">619778304000000000</value>
               </element>
               <element>
                 <key type="string">MaxValue</key>
-                <value type="string">636502752000000000</value>
+                <value type="string">629559648000000000</value>
               </element>
               <element>
                 <key type="string">UseColumnOffset</key>
@@ -3992,7 +4055,7 @@ Version:4.5.2.4316-->
             <GeneratorProperties type="Dictionary&lt;string, object&gt;" version="1">
               <element>
                 <key type="string">Expression</key>
-                <value type="string">DEN|STA|PAT</value>
+                <value type="string">DEN|STA|AST</value>
               </element>
               <element>
                 <key type="string">UseSequence</key>

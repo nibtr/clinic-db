@@ -36,9 +36,8 @@ go
 CREATE VIEW VIEW_PATIENT_INFO
 as
 SELECT *
-FROM [dbo].[Patient], [dbo].[Personnel], [dbo].[PaymentRecord]
+FROM [dbo].[Patient], [dbo].[PaymentRecord]
 WHERE [dbo].[Patient].[id] = @PATIENT_ID 
-	AND [dbo].[Patient].[id] = [dbo].[Personnel].[id] 
 	AND [dbo].[Patient].[id] = [dbo].[PaymentRecord].[patientID] 
 go
 
@@ -46,16 +45,16 @@ go
 CREATE VIEW VIEW_DENTIST_INFO
 as
 SELECT *
-FROM [dbo].[Dentist], [dbo].[Personnel]
+FROM [dbo].[Personnel]
 WHERE [dbo].[Dentist].[id] = @DENTIST_ID 
-	AND [dbo].[Personnel].[id] = [dbo].[Dentist].[id]
 go
 
 CREATE VIEW VIEW_SESSION_INFO
 as
 SELECT *
-FROM [dbo].[Session], [dbo].[TreatmentSession]
-WHERE [dbo].[Session].[dentistID] = @DENTIST_ID 
+FROM [dbo].[Session], [dbo].[TreatmentSession], [dbo].[PersonnelSession]
+WHERE [dbo].[PersonnelSession].[dentistID] = @DENTIST_ID 
+	AND [dbo].[PersonnelSession].[sessionID] = [dbo].[Session].[id]
 	AND [dbo].[Session].[id] = [dbo].[TreatmentSession].[id]
 go
 
@@ -76,10 +75,7 @@ GRANT SELECT,UPDATE,INSERT ON [dbo].[TOOTH] TO STAFF;
 GRANT SELECT,UPDATE,INSERT ON [dbo].[TOOTHSESSION] TO STAFF;
 GRANT SELECT,UPDATE,INSERT ON [dbo].[EXAMINATIONSESSION] TO STAFF;
 GRANT SELECT,UPDATE,INSERT ON [dbo].[RE[EXAMINATIONSESSION]] TO STAFF;
-GRANT UPDATE ON [dbo].[PATIENT](DRUGCONTRAINDICATION) TO STAFF;
-GRANT UPDATE ON [dbo].[PATIENT](ORALHEALTHSTATUS) TO STAFF;
-GRANT UPDATE ON [dbo].[PATIENT](ALLERGYSTATUS) TO STAFF;
-GRANT SELECT ON [dbo].[PATIENT] TO STAFF;
+GRANT SELECT,UPDATE,INSERT ON [dbo].[PATIENT] TO STAFF;
 GRANT ALL PRIVILEGES ON [dbo].[PAYMENTRECORD] TO STAFF;
 
 -- GRANT PRIVILEGE TO DENTIST
