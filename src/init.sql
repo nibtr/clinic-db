@@ -222,7 +222,7 @@ CREATE TABLE [dbo].[Schedule] (
 CREATE TABLE [dbo].[PersonnelSession](
     [id] INT NOT NULL IDENTITY(1,1),
     [dentistID] INT NOT NULL,
-    [sessionID] INT,
+    [sessionID] INT NOT NULL,
     [assistantID] INT,
 	CONSTRAINT [PersonnelSession_pkey] PRIMARY KEY CLUSTERED ([id])
 );
@@ -230,7 +230,7 @@ CREATE TABLE [dbo].[PersonnelSession](
 ALTER TABLE [dbo].[Account] ADD CONSTRAINT [FK_Account_Personnel] FOREIGN KEY ([personnelID]) REFERENCES [dbo].[Personnel]([id]) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 -- Constraint in table PersonnelSession
-ALTER TABLE [dbo].[PersonnelSession] ADD CONSTRAINT [FK_PersonnelSession_Personnel_dentistID] FOREIGN KEY ([dentistID]) REFERENCES [dbo].[Personnel]([id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE [dbo].[PersonnelSession] ADD CONSTRAINT [FK_PersonnelSession_Personnel_dentistID] FOREIGN KEY ([dentistID]) REFERENCES [dbo].[Personnel]([id]) ON DELETE NO ACTION ON UPDATE CASCADE;
 ALTER TABLE [dbo].[PersonnelSession] ADD CONSTRAINT [FK_PersonnelSession_Personnel_assistantID] FOREIGN KEY ([assistantID]) REFERENCES [dbo].[Personnel]([id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
 ALTER TABLE [dbo].[PersonnelSession] ADD CONSTRAINT [FK_PersonnelSession_Session] FOREIGN KEY ([sessionID]) REFERENCES [dbo].[Session]([id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
@@ -266,7 +266,7 @@ AlTER TABLE [dbo].[ReExaminationSession] ADD CONSTRAINT [FK_ReExaminationSession
 
 -- Constraint in table Schedule
 AlTER TABLE [dbo].[Schedule] ADD CONSTRAINT [FK_Schedule_Day] FOREIGN KEY ([dayID]) REFERENCES [dbo].[Day]([id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
-AlTER TABLE [dbo].[Schedule] ADD CONSTRAINT [FK_Schedule_Dentist] FOREIGN KEY ([dentistID]) REFERENCES [dbo].[Personnel]([id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
+AlTER TABLE [dbo].[Schedule] ADD CONSTRAINT [FK_Schedule_Dentist] FOREIGN KEY ([dentistID]) REFERENCES [dbo].[Personnel]([id]) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 -- Init some basic table
 -- Personnel & Account for admin
@@ -322,7 +322,7 @@ BEGIN CATCH
 END CATCH;
 
 --Use for drop the database
-use master
-go
-alter database DentalClinicDev set single_user with rollback immediate
-drop database DentalClinicDev
+--use master
+--go
+--alter database DentalClinicDev set single_user with rollback immediate
+--drop database DentalClinicDev
