@@ -13,7 +13,6 @@ go
 -- STA17: View a patient's payment records 
 -- STA24: creates a new treatment session for a patient
 
-
 -- PROC FOR DENTIST:
 -- DEN12: Update a patient's prescription
 
@@ -25,10 +24,6 @@ go
 -- PAT1: View list of categories 
 -- PAT2: View list of procedures of a category
 -- PAT3: Schedule a new appointment
-
-
-
-
 
 -- PROC OF STAFF
 CREATE PROCEDURE STA1
@@ -159,12 +154,16 @@ BEGIN
 		BEGIN TRY
 			DECLARE @PatientID INT;
 			DECLARE @SessionID INT;
+			DECLARE @Time DATETIME2;
 
 			IF EXISTS (SELECT * FROM [dbo].[Patient] WHERE [dbo].[Patient].name = @patientName AND [dbo].[Patient].phone = @patientPhone)
 			BEGIN
 				SELECT @PatientID = id FROM [dbo].[Patient] WHERE [dbo].[Patient].name = @patientName AND [dbo].[Patient].phone = @patientPhone;
-				SELECT @SessionID = id FROM [dbo].[Session] WHERE [patientID] = @PatientID AND [type] = 'EXA';
-				SELECT * FROM [dbo].[PersonnelSession], [dbo].[Personnel] WHERE [sessionID] = @SessionID AND [dbo].[PersonnelSession].dentistID = [dbo].[Personnel].id
+				SELECT @SessionID = id , @Time = time FROM [dbo].[Session] WHERE [patientID] = @PatientID AND [type] = 'EXA';
+				SELECT P.id, P.name FROM [dbo].[Session] S INNER JOIN [dbo].[Personnel] P ON S.[dentistID] = P.[id]
+				WHERE S.[time] >= DATEADD(DAY, DATEDIFF(DAY, 0, GETDATE()), 0) -- Today's start
+						AND S.[time] < DATEADD(DAY, DATEDIFF(DAY, 0, GETDATE()) + 1, 0) -- Tomorrow's start
+						AND DATEDIFF(minute, S.[time], GETDATE()) > 30;
 			END
 			COMMIT TRAN
 		END TRY
@@ -298,7 +297,6 @@ BEGIN
 		BEGIN TRY
 			IF EXISTS (SELECT * FROM [dbo].[Account] WHERE [dbo].[Account].username = @username 
 															AND [dbo].[Account].password = @oldPass
-															AND [dbo].[Account].personnelID = [dbo].[Personnel].id
 															AND [dbo].[Personnel].type = @role)
 			BEGIN
 				UPDATE [dbo].[Account]
@@ -401,17 +399,16 @@ AS
 BEGIN
 	BEGIN TRAN
 		BEGIN TRY
-			IF EXISTS (SELECT * FROM [dbo].[PersonnelSession] PS INNER JOIN [dbo].[Session] S ON S.[id] = PS.[SessionID] WHERE PS.[dentistID] = @dentistID
-																														AND S.[patientID] = @patientID)
+			IF EXISTS (SELECT * FROM [dbo].[Session] S WHERE S.[dentistID] = @dentistID
+															AND S.[patientID] = @patientID)
 			BEGIN
 				UPDATE P
 				SET P.[note] = @newNote
 				FROM [dbo].[Prescription] P
 				INNER JOIN [dbo].[TreatmentSession] TS ON P.[treatmentSessionID] = TS.[id]
 				INNER JOIN [dbo].[Session] S ON TS.[id] = S.[id]
-				INNER JOIN [dbo].[PersonnelSession] PS ON S.[id] = PS.[sessionID]
 				WHERE S.[patientID] = @patientID
-				AND PS.[dentistID] = @dentistID
+				AND S.[dentistID] = @dentistID
 			END
 			COMMIT TRAN
 		END TRY
