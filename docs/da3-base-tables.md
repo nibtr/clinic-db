@@ -96,15 +96,17 @@ For the method, there are 2 options:
 
 ## Session Table
 
-| Field Name  | Data Type        | Constraints             | Domain       | Default |
-| ----------- | ---------------- | ----------------------- | ------------ | ------- |
-| `id`        | `int`            | `PRIMARY KEY`           | n > 0        | x       |
-| `time`      | `datetime2`      | `NOT NULL`              | x            | x       |
-| `note`      | `nvarchar(1000)` | `X`                     | 0 < n < 1001 | x       |
-| `status`    | `char(3)`        | `NOT NULL`              | x            | `SCH`   |
-| `type`      | `char(3)`        | `NOT NULL`              | x            | `EXA `  |
-| `patientID` | `int`            | `FOREIGN KEY, NOT NULL` | n > 0        | x       |
-| `roomID`    | `int`            | `FOREIGN KEY, NOT NULL` | n > 0        | x       |
+| Field Name    | Data Type        | Constraints             | Domain       | Default |
+| ------------- | ---------------- | ----------------------- | ------------ | ------- |
+| `id`          | `int`            | `PRIMARY KEY`           | n > 0        | x       |
+| `time`        | `datetime2`      | `NOT NULL`              | x            | x       |
+| `note`        | `nvarchar(1000)` | `X`                     | 0 < n < 1001 | x       |
+| `status`      | `char(3)`        | `NOT NULL`              | x            | `SCH`   |
+| `type`        | `char(3)`        | `NOT NULL`              | x            | `EXA `  |
+| `patientID`   | `int`            | `FOREIGN KEY, NOT NULL` | n > 0        | x       |
+| `roomID`      | `int`            | `FOREIGN KEY, NOT NULL` | n > 0        | x       |
+| `dentistID`   | `int`            | `FOREIGN KEY, NOT NULL` | n > 0        | x       |
+| `assistantID` | `int`            | `FOREIGN KEY`           | n > 0        | x       |
 
 - `status` is a 3-character string that indicates the status of the session:
   - `SCH`: Scheduled
@@ -264,12 +266,3 @@ For the method, there are 2 options:
 | ----------- | --------- | ----------------------- | ------ | ------- |
 | `dayID`     | `int`     | `FOREIGN KEY, NOT NULL` | n > 0  | x       |
 | `dentistID` | `int`     | `FOREIGN KEY, NOT NULL` | n > 0  | x       |
-
-## Personnel_Session Table
-
-| Field Name    | Data Type | Constraints             | Domain | Default |
-| ------------- | --------- | ----------------------- | ------ | ------- |
-| `id`          | `int`     | `PRIMARY KEY`           | n > 0  | x       |
-| `dentistID`   | `int`     | `FOREIGN KEY, NOT NULL` | n > 0  | x       |
-| `sessionID`   | `int`     | `FOREIGN KEY, NOT NULL` | n > 0  | x       |
-| `assistantID` | `int`     | `FOREIGN KEY`           | n > 0  | x       |
