@@ -5,14 +5,21 @@ go
 -- STA1: View patient's appointment requests
 -- STA2: Delete patient's appointment requests
 -- STA3: Check if a patient has done a session before 
+-- STA4: Staff schedules a new appointment (examination session) for patient
+-- STA5: Staff schedules a new re-examination session for patient
+-- STA6: Staff views list of available dentists for an appointment (examination session) of a patient
+-- STA14: Staff creates a new payment record for a patient
+-- STA15: Staff updates a payment record for a patient
 -- STA17: View a patient's payment records 
+-- STA24: creates a new treatment session for a patient
+
 
 -- PROC FOR DENTIST:
 -- DEN12: Update a patient's prescription
 
 -- PROC FOR ADMIN:
 -- ADM29: Update account details
--- ADM30: View account details  
+-- ADM30: View account details 
 
 -- PROC FOR PATIENT:
 -- PAT1: View list of categories 
@@ -87,7 +94,150 @@ BEGIN
 END
 GO
 
+CREATE PROCEDURE STA4
+@patientName VARCHAR(50),
+@patientPhone CHAR(10),
+@note VARCHAR(1000)
+AS
+BEGIN
+	BEGIN TRAN
+		BEGIN TRY
+			DECLARE @PatientID INT;
+			DECLARE @SessionID INT;
+			IF EXISTS (SELECT * FROM [dbo].[Patient] WHERE [dbo].[Patient].name = @patientName AND [dbo].[Patient].phone = @patientPhone)
+			BEGIN
+				SELECT @PatientID = id FROM [dbo].[Patient] WHERE [dbo].[Patient].name = @patientName AND [dbo].[Patient].phone = @patientPhone;
+				DECLARE @InsertedIDs TABLE (ID INT);
+				INSERT INTO [dbo].[Session](time, patientID, note, type) OUTPUT inserted.id INTO @InsertedIDs VALUES (GETDATE(), @PatientID, @note, 'EXA');
+				SELECT @SessionID = ID FROM @InsertedIDs;
+				INSERT INTO [dbo].[ExaminationSession] (id) VALUES (@SessionID)
+			END
+			COMMIT TRAN
+		END TRY
+		BEGIN CATCH
+			ROLLBACK TRAN
+		END CATCH
+	COMMIT TRAN
+END
+GO
 
+CREATE PROCEDURE STA5
+@patientName VARCHAR(50),
+@patientPhone CHAR(10),
+@note VARCHAR(1000)
+AS 
+BEGIN
+	BEGIN TRAN
+		BEGIN TRY
+			DECLARE @PatientID INT;
+			DECLARE @examSessionID INT;
+			DECLARE @SessionID INT;
+			IF EXISTS (SELECT * FROM [dbo].[Patient] WHERE [dbo].[Patient].name = @patientName AND [dbo].[Patient].phone = @patientPhone)
+			BEGIN
+				SELECT @PatientID = id FROM [dbo].[Patient] WHERE [dbo].[Patient].name = @patientName AND [dbo].[Patient].phone = @patientPhone;
+				SELECT @examSessionID = id FROM [dbo].[Session] WHERE [dbo].[Session].patientID = @PatientID AND [dbo].[Session].type = 'EXA';
+				DECLARE @InsertedIDs TABLE (ID INT);
+				INSERT INTO [dbo].[Session](time, patientID, note) OUTPUT inserted.id INTO @InsertedIDs VALUES (GETDATE(), @PatientID, @note);
+				SELECT @SessionID = ID FROM @InsertedIDs;
+				INSERT INTO [dbo].[ReExaminationSession] (id,relatedExaminationID) VALUES (@SessionID, @examSessionID);
+			END
+			COMMIT TRAN
+		END TRY
+		BEGIN CATCH
+			ROLLBACK TRAN
+		END CATCH
+	COMMIT TRAN
+END
+GO
+
+CREATE PROCEDURE STA6
+@patientName VARCHAR(50),
+@patientPhone CHAR(10)
+AS 
+BEGIN
+	BEGIN TRAN
+		BEGIN TRY
+			DECLARE @PatientID INT;
+			DECLARE @SessionID INT;
+
+			IF EXISTS (SELECT * FROM [dbo].[Patient] WHERE [dbo].[Patient].name = @patientName AND [dbo].[Patient].phone = @patientPhone)
+			BEGIN
+				SELECT @PatientID = id FROM [dbo].[Patient] WHERE [dbo].[Patient].name = @patientName AND [dbo].[Patient].phone = @patientPhone;
+				SELECT @SessionID = id FROM [dbo].[Session] WHERE [patientID] = @PatientID AND [type] = 'EXA';
+				SELECT * FROM [dbo].[PersonnelSession], [dbo].[Personnel] WHERE [sessionID] = @SessionID AND [dbo].[PersonnelSession].dentistID = [dbo].[Personnel].id
+			END
+			COMMIT TRAN
+		END TRY
+		BEGIN CATCH
+			ROLLBACK TRAN
+		END CATCH
+	COMMIT TRAN
+END
+GO
+
+CREATE PROCEDURE STA14
+@patientName VARCHAR(50),
+@patientPhone CHAR(10)
+AS 
+BEGIN
+	BEGIN TRAN
+		BEGIN TRY
+			DECLARE @PatientID INT;
+			DECLARE @SessionID INT;
+			DECLARE @TotalFee INT;
+			IF EXISTS (SELECT * FROM [dbo].[Patient] WHERE [dbo].[Patient].name = @patientName AND [dbo].[Patient].phone = @patientPhone)
+			BEGIN
+				SELECT @PatientID = id FROM [dbo].[Patient] WHERE [dbo].[Patient].name = @patientName AND [dbo].[Patient].phone = @patientPhone;
+				SELECT @SessionID = id FROM [dbo].[Session] WHERE [patientID] = @PatientID AND [type] = 'EXA';
+				SELECT @TotalFee = SUM(P.[fee])
+					FROM [dbo].[Procedure] P
+					INNER JOIN [dbo].[Category] C ON P.[categoryID] = C.[id]
+					INNER JOIN [dbo].[TreatmentSession] TS ON C.[id] = TS.[categoryID]
+					INNER JOIN [dbo].[Session] S ON TS.[id] = S.[id]
+					WHERE S.[patientID] = @PatientID
+					  AND S.[id] = @SessionID;
+				INSERT INTO [dbo].[PaymentRecord](date, total, patientID, treatmentSessionID) VALUES (GETDATE(), @TotalFee, @PatientID, @SessionID)
+			END
+			COMMIT TRAN
+		END TRY
+		BEGIN CATCH
+			ROLLBACK TRAN
+		END CATCH
+	COMMIT TRAN
+END
+GO
+
+CREATE PROCEDURE STA15
+@patientName VARCHAR(50),
+@patientPhone CHAR(10),
+@paid INT,
+@change INT,
+@method CHAR(1)
+AS 
+BEGIN
+	BEGIN TRAN
+		BEGIN TRY
+			DECLARE @PatientID INT;
+			DECLARE @SessionID INT;
+			DECLARE @TotalFee INT;
+			IF EXISTS (SELECT * FROM [dbo].[Patient] WHERE [dbo].[Patient].name = @patientName AND [dbo].[Patient].phone = @patientPhone)
+			BEGIN
+				SELECT @PatientID = id FROM [dbo].[Patient] WHERE [dbo].[Patient].name = @patientName AND [dbo].[Patient].phone = @patientPhone;
+				UPDATE [dbo].[PaymentRecord]
+				SET [dbo].[PaymentRecord].[paid] = @paid,
+				[dbo].[PaymentRecord].[change] = @change,
+				[dbo].[PaymentRecord].[method] = @method,
+				[dbo].[PaymentRecord].[date] = GETDATE()
+				WHERE [patientID] = @PatientID
+			END
+			COMMIT TRAN
+		END TRY
+		BEGIN CATCH
+			ROLLBACK TRAN
+		END CATCH
+	COMMIT TRAN
+END
+GO
 
 CREATE PROCEDURE STA17
 @patientID INT
@@ -98,6 +248,33 @@ BEGIN
 			IF EXISTS (SELECT * FROM [dbo].[PaymentRecord] WHERE [dbo].[PaymentRecord].patientID = @patientID)
 			BEGIN
 				SELECT * FROM [dbo].[PaymentRecord] WHERE [dbo].[PaymentRecord].patientID = @patientID
+			END
+			COMMIT TRAN
+		END TRY
+		BEGIN CATCH
+			ROLLBACK TRAN
+		END CATCH
+	COMMIT TRAN
+END
+GO
+
+CREATE PROCEDURE STA24
+@patientName VARCHAR(50),
+@patientPhone CHAR(10),
+@note VARCHAR(1000)
+AS
+BEGIN
+	BEGIN TRAN
+		BEGIN TRY
+			DECLARE @PatientID INT;
+			DECLARE @SessionID INT;
+			IF EXISTS (SELECT * FROM [dbo].[Patient] WHERE [dbo].[Patient].name = @patientName AND [dbo].[Patient].phone = @patientPhone)
+			BEGIN
+				SELECT @PatientID = id FROM [dbo].[Patient] WHERE [dbo].[Patient].name = @patientName AND [dbo].[Patient].phone = @patientPhone;
+				DECLARE @InsertedIDs TABLE (ID INT);
+				INSERT INTO [dbo].[Session](time, patientID, note, type) OUTPUT inserted.id INTO @InsertedIDs VALUES (GETDATE(), @PatientID, @note, 'TRE');
+				SELECT @SessionID = ID FROM @InsertedIDs;
+				INSERT INTO [dbo].[ExaminationSession] (id) VALUES (@SessionID)
 			END
 			COMMIT TRAN
 		END TRY
@@ -224,8 +401,8 @@ AS
 BEGIN
 	BEGIN TRAN
 		BEGIN TRY
-			IF EXISTS (SELECT * FROM [dbo].[Personnel] PS INNER JOIN [dbo].[Session] S ON S.[id] = PS.[SessionID] WHERE PS.[dentistID] = @dentistID
-																														AND S.[patientID] = @patientID;)
+			IF EXISTS (SELECT * FROM [dbo].[PersonnelSession] PS INNER JOIN [dbo].[Session] S ON S.[id] = PS.[SessionID] WHERE PS.[dentistID] = @dentistID
+																														AND S.[patientID] = @patientID)
 			BEGIN
 				UPDATE P
 				SET P.[note] = @newNote
