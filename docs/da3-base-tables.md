@@ -271,5 +271,5 @@ For the method, there are 2 options:
 | ------------- | --------- | ----------------------- | ------ | ------- |
 | `id`          | `int`     | `PRIMARY KEY`           | n > 0  | x       |
 | `dentistID`   | `int`     | `FOREIGN KEY, NOT NULL` | n > 0  | x       |
-| `roomID`      | `int`     | `FOREIGN KEY, NOT NULL` | n > 0  | x       |
+| `sessionID`   | `int`     | `FOREIGN KEY, NOT NULL` | n > 0  | x       |
 | `assistantID` | `int`     | `FOREIGN KEY`           | n > 0  | x       |

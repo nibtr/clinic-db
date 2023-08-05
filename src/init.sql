@@ -222,7 +222,7 @@ CREATE TABLE [dbo].[Schedule] (
 CREATE TABLE [dbo].[PersonnelSession](
     [id] INT NOT NULL IDENTITY(1,1),
     [dentistID] INT NOT NULL,
-    [roomID] INT NOT NULL,
+    [sessionID] INT NOT NULL,
     [assistantID] INT,
 	CONSTRAINT [PersonnelSession_pkey] PRIMARY KEY CLUSTERED ([id])
 );
@@ -231,8 +231,8 @@ ALTER TABLE [dbo].[Account] ADD CONSTRAINT [FK_Account_Personnel] FOREIGN KEY ([
 
 -- Constraint in table PersonnelSession
 ALTER TABLE [dbo].[PersonnelSession] ADD CONSTRAINT [FK_PersonnelSession_Personnel_dentistID] FOREIGN KEY ([dentistID]) REFERENCES [dbo].[Personnel]([id]) ON DELETE NO ACTION ON UPDATE CASCADE;
-ALTER TABLE [dbo].[PersonnelSession] ADD CONSTRAINT [FK_PersonnelSession_Personnel_assistantID] FOREIGN KEY ([assistantID]) REFERENCES [dbo].[Personnel]([id]) ON DELETE NO ACTION ON UPDATE CASCADE;
-ALTER TABLE [dbo].[PersonnelSession] ADD CONSTRAINT [FK_PersonnelSession_Session] FOREIGN KEY ([sessionID]) REFERENCES [dbo].[Session]([id]) ON DELETE NO ACTION ON UPDATE CASCADE;
+ALTER TABLE [dbo].[PersonnelSession] ADD CONSTRAINT [FK_PersonnelSession_Personnel_assistantID] FOREIGN KEY ([assistantID]) REFERENCES [dbo].[Personnel]([id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE [dbo].[PersonnelSession] ADD CONSTRAINT [FK_PersonnelSession_Session] FOREIGN KEY ([sessionID]) REFERENCES [dbo].[Session]([id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- Constraint in table Payment Record
 AlTER TABLE [dbo].[PaymentRecord] ADD CONSTRAINT [FK_PaymentRecord_Patient] FOREIGN KEY ([patientID]) REFERENCES [dbo].[Patient]([id]) ON DELETE NO ACTION ON UPDATE CASCADE;
@@ -266,7 +266,7 @@ AlTER TABLE [dbo].[ReExaminationSession] ADD CONSTRAINT [FK_ReExaminationSession
 
 -- Constraint in table Schedule
 AlTER TABLE [dbo].[Schedule] ADD CONSTRAINT [FK_Schedule_Day] FOREIGN KEY ([dayID]) REFERENCES [dbo].[Day]([id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
-AlTER TABLE [dbo].[Schedule] ADD CONSTRAINT [FK_Schedule_Dentist] FOREIGN KEY ([dentistID]) REFERENCES [dbo].[Dentist]([id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
+AlTER TABLE [dbo].[Schedule] ADD CONSTRAINT [FK_Schedule_Dentist] FOREIGN KEY ([dentistID]) REFERENCES [dbo].[Personnel]([id]) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 -- Init some basic table
 -- Personnel & Account for admin
