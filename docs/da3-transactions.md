@@ -146,9 +146,7 @@ We estimated some frequency information of the database based on the information
 
 - The database will be used by a medium-to-large dental clinic, with around **80-100** patients per day.
 - The clinic will be open from **8:00 to 12:00 and 13:00 to 17:00**, Monday to Saturday.
-- The clinic will have around **8-12** dentists (including assistants), **10-15** staffs, and **10-15** rooms.
-- A patient will have a minimum of **1** re-examination session, and no more than **5** re-examination sessions.
-- A patient will have a maximum of **10** treatment sessions, with **2-3** treatment sessions per week.
+- On average, there will be around **20-25** appointment requests per day.
+- The clinic will have around **15-20** dentists (including assistants), **8-12** staffs, and **12-15** rooms.
 - An examination will take around **30** minutes, and a treatment will take around **1-2** hour(s).
 - With the above assumptions, we estimated that there will be on average **8-9** patients per room per day.
-
