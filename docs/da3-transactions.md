@@ -131,6 +131,7 @@ Below are the "considered-essential" transactions of the database.
 | ExaminationSession |      |     |     |     |      |     |     |     |   x  |     |     |     |
 | Room               |      |     |     |     |      |     |     |     |      |     |     |  x  |
 
+
 | Transaction/Table    | STA5 |     |     |     | STA3 |     |     |     | STA14 |     |     |     |
 | -------------------- | ---- | --- | --- | --- | ---- | --- | --- | --- | ----- | --- | --- | --- |
 |                      | I    |  U  |  D  |  R  |  I   |  U  |  D  |  R  |   I   |  U  |  D  |  R  |
@@ -139,6 +140,7 @@ Below are the "considered-essential" transactions of the database.
 | ExaminationSession   |      |     |     |     |      |     |     |     |       |     |     |     |
 | PaymentRecord        |      |     |     |     |      |     |     |     |   x   |     |     |     |
 | Room                 |      |     |     |  x  |      |     |     |     |       |     |     |     |
+
 
 | Transaction/Table    | STA24 |     |     |     | STA15 |     |     |     |  404  |     |     |     |
 | -------------------- | ----- | --- | --- | --- | ----- | --- | --- | --- | ----- | --- | --- | --- |
@@ -163,3 +165,54 @@ We estimated some frequency information of the database based on the information
 - An examination will take around **30** minutes, and a treatment will take around **1-2** hour(s).
 - With the above assumptions, we estimated that there will be on average **8-9** patients per room per day.
 
+
+- PAT3 :  Patients schedule a new appointment
+- STA6 :  Staff views list of available dentists for an appointment (examination session) of a patient
+- STA4 :  Staff schedules a new appointment (examination session) for patient
+
+| Transaction/Table  | PAT3 |     |     |     | STA6 |     |     |     | STA4 |     |     |     |
+| ------------------ | ---- | --- | --- | --- | ---- | --- | --- | --- | ---- | --- | --- | --- |
+|                    |  I   |  U  |  D  |  R  |   I  |  U  |  D  |  R  |   I  |  U  |  D  |  R  |
+| AppointmentRequest |  x   |     |     |     |      |     |     |  x  |      |     |     |  x  |
+| Schedule           |      |     |     |     |      |     |     |  x  |      |     |     |     |
+| Dentist            |      |     |     |     |      |     |     |  x  |      |     |     |  x  |
+| Personnel          |      |     |     |     |      |     |     |     |   x  |     |     |     |
+| Patient            |      |     |     |     |      |     |     |     |   x  |     |     |     |
+| Session            |      |     |     |     |      |     |     |     |   x  |     |     |     |
+| ExaminationSession |      |     |     |     |      |     |     |     |   x  |     |     |     |
+| Room               |      |     |     |     |      |     |     |     |      |     |     |  x  |
+
+- STA5 :  Staff schedules a new re-examination session for patient
+- STA3 :  Staff checks if a patient has done a session before
+- STA14:  Staff creates a new payment record for a patient
+
+| Transaction/Table    | STA5 |     |     |     | STA3 |     |     |     | STA14 |     |     |     |
+| -------------------- | ---- | --- | --- | --- | ---- | --- | --- | --- | ----- | --- | --- | --- |
+|                      | I    |  U  |  D  |  R  |  I   |  U  |  D  |  R  |   I   |  U  |  D  |  R  |
+| AppointmentRequest   |      |     |     |  x  |      |     |     |     |       |     |     |  x  |
+| Schedule             |      |     |     |  x  |      |     |     |     |       |     |     |     |
+| Dentist              |      |     |     |  x  |      |     |     |     |       |     |     |     |
+| Patient              |      |     |     |  x  |      |     |     |  x  |       |     |     |  x  |
+| Session              | x    |     |     |     |      |     |     |  x  |       |     |     |     |
+| ReExaminationSession | x    |     |     |     |      |     |     |     |       |     |     |     |
+| ExaminationSession   |      |     |     |     |      |     |     |     |       |     |     |     |
+| TreatmentSession     |      |     |     |  x  |      |     |     |     |       |     |     |  x  |
+| PaymentRecord        |      |     |     |     |      |     |     |     |   x   |     |     |     |
+| Room                 |      |     |     |  x  |      |     |     |     |       |     |     |     |
+
+- STA24:  Staff creates a new treatment session for a patient
+- STA15:  Staff updates a payment record for a patient
+
+| Transaction/Table    | STA24 |     |     |     | STA15 |     |     |     |  404  |     |     |     |
+| -------------------- | ----- | --- | --- | --- | ----- | --- | --- | --- | ----- | --- | --- | --- |
+|                      |   I   |  U  |  D  |  R  |   I   |  U  |  D  |  R  |   I   |  U  |  D  |  R  |
+| AppointmentRequest   |       |     |     |  x  |       |     |     |     |       |     |     |     |
+| Schedule             |       |     |     |  x  |       |     |     |     |       |     |     |     |
+| Dentist              |       |     |     |  x  |       |     |     |     |       |     |     |     |
+| Patient              |       |     |     |  x  |       |     |     |  x  |       |     |     |     |
+| Session              |   x   |     |     |     |       |     |     |     |       |     |     |     |
+| ReExaminationSession |       |     |     |     |       |     |     |     |       |     |     |     |
+| ExaminationSession   |       |     |     |     |       |     |     |     |       |     |     |     |
+| TreatmentSession     |   x   |     |     |     |       |     |     |     |       |     |     |     |
+| PaymentRecord        |       |     |     |     |       |  x  |     |     |       |     |     |     |
+| Room                 |       |     |     |  x  |       |     |     |     |       |     |     |     |
