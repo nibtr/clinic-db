@@ -427,3 +427,4 @@ Below are the "considered-essential" transactions of the database, which account
 |       |               |                 | Per transaction  | Avg per hour | Peak per hour |
 | STA15 | PaymentRecord | U               | 1                | 20-30        | 40-50         |
 | Total |               |                 | 1                | 20-30        | 40-50         |
+

@@ -66,6 +66,9 @@ CREATE TABLE [dbo].[PaymentRecord] (
 	[treatmentSessionID] INT UNIQUE NOT NULL,
 	CONSTRAINT [PaymentRecord_pkey] PRIMARY KEY CLUSTERED ([id])
 );
+
+CREATE INDEX idx_payment_record ON [dbo].[PaymentRecord] (patientID);
+
 -- For the method, there are 2 options: 
 -- - Cash: denoted by `C`
 -- - Online: denoted by `O`
@@ -82,6 +85,12 @@ CREATE TABLE [dbo].[Session] (
     [type] CHAR(3) NOT NULL,
 	CONSTRAINT [Session_pkey] PRIMARY KEY CLUSTERED ([id])
 );
+
+CREATE INDEX idx_session_time ON [dbo].[Session] (time);
+CREATE INDEX idx_session_patient_id ON [dbo].[Session] (patientID);
+CREATE INDEX idx_session_time_dentist_id ON [dbo].[Session] (dentistID);
+CREATE INDEX idx_session_type ON [dbo].[Session] (type);
+
 -- - `status` is a 3-character string that indicates the status of the session:
 --   - `SCH`: Scheduled
 --   - `CAN`: Cancelled
@@ -201,6 +210,9 @@ CREATE TABLE [dbo].[AppointmentRequest] (
 	CONSTRAINT [AppointmentRequest_pkey] PRIMARY KEY CLUSTERED ([id])
 );	
 
+CREATE INDEX idx_appointment_req_appointment_time ON [dbo].[AppointmentRequest] (appointmentTime);
+CREATE INDEX idx_appointment_req_request_time ON [dbo].[AppointmentRequest] (requestTime);
+
 CREATE TABLE [dbo].[Day] (
     [id] INT NOT NULL IDENTITY(1,1),
 	[day] CHAR(3) UNIQUE NOT NULL,
@@ -314,7 +326,5 @@ BEGIN CATCH
 END CATCH;
 
 --Use for drop the database
---use master
---go
 --alter database DentalClinicDev set single_user with rollback immediate
 --drop database DentalClinicDev
