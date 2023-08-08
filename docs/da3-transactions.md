@@ -125,18 +125,20 @@ Below are the "considered-essential" transactions of the database.
 |                    |  I   |  U  |  D  |  R  |   I  |  U  |  D  |  R  |   I  |  U  |  D  |  R  |
 | AppointmentRequest |  x   |     |     |     |      |     |     |  x  |      |     |     |     |
 | Schedule           |      |     |     |     |      |     |     |  x  |      |     |     |     |
-| Patient            |      |     |     |     |      |     |     |     |   x  |     |     |     |
-| Session            |      |     |     |     |      |     |     |     |   x  |     |     |     |
+| Patient            |      |     |     |     |      |     |     |  x  |   x  |     |     |     |
+| Session            |      |     |     |     |      |     |     |  x  |   x  |     |     |     |
 | ExaminationSession |      |     |     |     |      |     |     |     |   x  |     |     |     |
 | Room               |      |     |     |     |      |     |     |     |      |     |     |  x  |
 
 
 | Transaction/Table    | STA5 |     |     |     | STA3 |     |     |     | STA14 |     |     |     |
 | -------------------- | ---- | --- | --- | --- | ---- | --- | --- | --- | ----- | --- | --- | --- |
-|                      | I    |  U  |  D  |  R  |  I   |  U  |  D  |  R  |   I   |  U  |  D  |  R  |
-| Session              | x    |     |     |     |      |     |     |  x  |       |     |     |     |
-| ReExaminationSession | x    |     |     |     |      |     |     |     |       |     |     |     |
-| ExaminationSession   |      |     |     |     |      |     |     |     |       |     |     |     |
+|                      |  I   |  U  |  D  |  R  |  I   |  U  |  D  |  R  |   I   |  U  |  D  |  R  |
+| Patient              |      |     |     |  x  |      |     |     |  x  |       |     |     |  x  |
+| Procedure            |      |     |     |     |      |     |     |     |       |     |     |  x  |
+| Session              |  x   |     |     |     |      |     |     |  x  |       |     |     |  x  |
+| ReExaminationSession |  x   |     |     |     |      |     |     |     |       |     |     |     |
+| ExaminationSession   |      |     |     |  x  |      |     |     |     |       |     |     |     |
 | PaymentRecord        |      |     |     |     |      |     |     |     |   x   |     |     |     |
 | Room                 |      |     |     |  x  |      |     |     |     |       |     |     |     |
 
@@ -144,6 +146,7 @@ Below are the "considered-essential" transactions of the database.
 | Transaction/Table    | STA24 |     |     |     | STA15 |     |     |     |  404  |     |     |     |
 | -------------------- | ----- | --- | --- | --- | ----- | --- | --- | --- | ----- | --- | --- | --- |
 |                      |  I    |  U  |  D  |  R  |   I   |  U  |  D  |  R  |   I   |  U  |  D  |  R  |
+| Patient              |       |     |     |     |       |     |     |  x  |       |     |     |     |
 | Session              |  x    |     |     |     |       |     |     |     |       |     |     |     |
 | ReExaminationSession |       |     |     |     |       |     |     |     |       |     |     |     |
 | ExaminationSession   |       |     |     |     |       |     |     |     |       |     |     |     |
