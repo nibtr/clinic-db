@@ -109,52 +109,54 @@ Since the system is a clinic management system, transactions related to appointm
 
 Below are the "considered-essential" transactions of the database.
 
-- PAT3 :  Patients schedule a new appointment
-- STA6 :  Staff views list of available dentists for an appointment (examination session) of a patient
-- STA4 :  Staff schedules a new appointment (examination session) for patient
-- STA24:  Staff creates a new treatment session for a patient
-- STA5 :  Staff schedules a new re-examination session for patient
-- STA3 :  Staff checks if a patient has done a session before
-- STA14:  Staff creates a new payment record for a patient
-- STA15:  Staff updates a payment record for a patient
+- PAT3 : Patients schedule a new appointment
+- STA6 : Staff views list of available dentists for an appointment (examination session) of a patient
+- STA4 : Staff schedules a new appointment (examination session) for patient
+- STA24: Staff creates a new treatment session for a patient
+- STA5 : Staff schedules a new re-examination session for patient
+- STA3 : Staff checks if a patient has done a session before
+- STA14: Staff creates a new payment record for a patient
+- STA15: Staff updates a payment record for a patient
 
 # Cross-Reference Matrix
 
 | Transaction/Table  | PAT3 |     |     |     | STA6 |     |     |     | STA4 |     |     |     |
 | ------------------ | ---- | --- | --- | --- | ---- | --- | --- | --- | ---- | --- | --- | --- |
-|                    |  I   |  U  |  D  |  R  |   I  |  U  |  D  |  R  |   I  |  U  |  D  |  R  |
-| AppointmentRequest |  x   |     |     |     |      |     |     |  x  |      |     |     |     |
-| Schedule           |      |     |     |     |      |     |     |  x  |      |     |     |     |
-| Personnel          |      |     |     |     |      |     |     |  x  |      |     |     |     |
-| Patient            |      |     |     |     |      |     |     |     |   x  |     |     |     |
-| Session            |      |     |     |     |      |     |     |     |   x  |     |     |     |
-| ExaminationSession |      |     |     |     |      |     |     |     |   x  |     |     |     |
-| Room               |      |     |     |     |      |     |     |     |      |     |     |  x  |
-
+|                    | I    | U   | D   | R   | I    | U   | D   | R   | I    | U   | D   | R   |
+| AppointmentRequest | x    |     |     |     |      |     |     | x   |      |     |     |     |
+| Schedule           |      |     |     |     |      |     |     | x   |      |     |     |     |
+| Personnel          |      |     |     |     |      |     |     | x   |      |     |     |     |
+| Patient            |      |     |     |     |      |     |     |     | x    |     |     |     |
+| Session            |      |     |     |     |      |     |     |     | x    |     |     |     |
+| ExaminationSession |      |     |     |     |      |     |     |     | x    |     |     |     |
+| Room               |      |     |     |     |      |     |     |     |      |     |     | x   |
 
 | Transaction/Table    | STA5 |     |     |     | STA3 |     |     |     | STA14 |     |     |     |
 | -------------------- | ---- | --- | --- | --- | ---- | --- | --- | --- | ----- | --- | --- | --- |
-|                      |  I   |  U  |  D  |  R  |  I   |  U  |  D  |  R  |   I   |  U  |  D  |  R  |
-| Patient              |      |     |     |  x  |      |     |     |  x  |       |     |     |  x  |
-| Procedure            |      |     |     |     |      |     |     |     |       |     |     |  x  |
-| Session              |  x   |     |     |     |      |     |     |  x  |       |     |     |  x  |
-| ReExaminationSession |  x   |     |     |     |      |     |     |     |       |     |     |     |
-| ExaminationSession   |      |     |     |  x  |      |     |     |     |       |     |     |     |
-| PaymentRecord        |      |     |     |     |      |     |     |     |   x   |     |     |     |
-| Room                 |      |     |     |  x  |      |     |     |     |       |     |     |     |
+|                      | I    | U   | D   | R   | I    | U   | D   | R   | I     | U   | D   | R   |
+| Patient              |      |     |     | x   |      |     |     | x   |       |     |     | x   |
+| Procedure            |      |     |     |     |      |     |     |     |       |     |     | x   |
+| Session              | x    |     |     |     |      |     |     | x   |       |     |     | x   |
+| ReExaminationSession | x    |     |     |     |      |     |     |     |       |     |     |     |
+| ExaminationSession   |      |     |     | x   |      |     |     |     |       |     |     |     |
+| PaymentRecord        |      |     |     |     |      |     |     |     | x     |     |     |     |
+| Room                 |      |     |     | x   |      |     |     |     |       |     |     |     |
 
+| Transaction/Table    | STA24 |     |     |     | STA15 |     |     |     | 404 |     |     |     |
+| -------------------- | ----- | --- | --- | --- | ----- | --- | --- | --- | --- | --- | --- | --- |
+|                      | I     | U   | D   | R   | I     | U   | D   | R   | I   | U   | D   | R   |
+| Patient              |       |     |     |     |       |     |     |     |     |     |     |     |
+| Session              | x     |     |     |     |       |     |     |     |     |     |     |     |
+| ReExaminationSession |       |     |     |     |       |     |     |     |     |     |     |     |
+| ExaminationSession   |       |     |     |     |       |     |     |     |     |     |     |     |
+| TreatmentSession     | x     |     |     |     |       |     |     |     |     |     |     |     |
+| PaymentRecord        |       |     |     |     |       | x   |     |     |     |     |     |     |
+| Room                 |       |     |     | x   |       |     |     |     |     |     |     |     |
 
-| Transaction/Table    | STA24 |     |     |     | STA15 |     |     |     |  404  |     |     |     |
-| -------------------- | ----- | --- | --- | --- | ----- | --- | --- | --- | ----- | --- | --- | --- |
-|                      |  I    |  U  |  D  |  R  |   I   |  U  |  D  |  R  |   I   |  U  |  D  |  R  |
-| Patient              |       |     |     |     |       |     |     |     |       |     |     |     |
-| Session              |  x    |     |     |     |       |     |     |     |       |     |     |     |
-| ReExaminationSession |       |     |     |     |       |     |     |     |       |     |     |     |
-| ExaminationSession   |       |     |     |     |       |     |     |     |       |     |     |     |
-| TreatmentSession     |  x    |     |     |     |       |     |     |     |       |     |     |     |
-| PaymentRecord        |       |     |     |     |       |  x  |     |     |       |     |     |     |
-| Room                 |       |     |     |  x  |       |     |     |     |       |     |     |     |
-
+## Conclusions:
+- The `Patient` table is used by the `STA3`, `STA4`, `STA5`, `STA14` transactions, so it is considered essential.
+- The `Session` table is used by the `STA4`, `STA5`, `STA3`, `STA14`, `STA24` transactions, so it is considered essential.
+- The `Room` table is used by the `STA4`, `STA5`, `STA24` transactions, so it is considered essential.
 
 # Frequency Information
 
