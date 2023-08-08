@@ -125,6 +125,7 @@ Below are the "considered-essential" transactions of the database.
 |                    |  I   |  U  |  D  |  R  |   I  |  U  |  D  |  R  |   I  |  U  |  D  |  R  |
 | AppointmentRequest |  x   |     |     |     |      |     |     |  x  |      |     |     |     |
 | Schedule           |      |     |     |     |      |     |     |  x  |      |     |     |     |
+| Personnel          |      |     |     |     |      |     |     |  x  |      |     |     |     |
 | Patient            |      |     |     |     |      |     |     |  x  |   x  |     |     |     |
 | Session            |      |     |     |     |      |     |     |  x  |   x  |     |     |     |
 | ExaminationSession |      |     |     |     |      |     |     |     |   x  |     |     |     |
