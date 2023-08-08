@@ -126,8 +126,8 @@ Below are the "considered-essential" transactions of the database.
 | AppointmentRequest |  x   |     |     |     |      |     |     |  x  |      |     |     |     |
 | Schedule           |      |     |     |     |      |     |     |  x  |      |     |     |     |
 | Personnel          |      |     |     |     |      |     |     |  x  |      |     |     |     |
-| Patient            |      |     |     |     |      |     |     |  x  |   x  |     |     |     |
-| Session            |      |     |     |     |      |     |     |  x  |   x  |     |     |     |
+| Patient            |      |     |     |     |      |     |     |     |   x  |     |     |     |
+| Session            |      |     |     |     |      |     |     |     |   x  |     |     |     |
 | ExaminationSession |      |     |     |     |      |     |     |     |   x  |     |     |     |
 | Room               |      |     |     |     |      |     |     |     |      |     |     |  x  |
 
@@ -147,7 +147,7 @@ Below are the "considered-essential" transactions of the database.
 | Transaction/Table    | STA24 |     |     |     | STA15 |     |     |     |  404  |     |     |     |
 | -------------------- | ----- | --- | --- | --- | ----- | --- | --- | --- | ----- | --- | --- | --- |
 |                      |  I    |  U  |  D  |  R  |   I   |  U  |  D  |  R  |   I   |  U  |  D  |  R  |
-| Patient              |       |     |     |     |       |     |     |  x  |       |     |     |     |
+| Patient              |       |     |     |     |       |     |     |     |       |     |     |     |
 | Session              |  x    |     |     |     |       |     |     |     |       |     |     |     |
 | ReExaminationSession |       |     |     |     |       |     |     |     |       |     |     |     |
 | ExaminationSession   |       |     |     |     |       |     |     |     |       |     |     |     |
