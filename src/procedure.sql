@@ -26,17 +26,12 @@ go
 -- PAT3: Schedule a new appointment
 
 -- PROC OF STAFF
-CREATE PROCEDURE STA1
-@patientName NVARCHAR(50),
-@patientPhone CHAR(10)
+CREATE PROCEDURE viewAppointment			--STA1
 AS
 BEGIN
 	BEGIN TRAN
 		BEGIN TRY
-			IF EXISTS (SELECT * FROM [dbo].[AppointmentRequest] WHERE [dbo].[AppointmentRequest].patientName = @patientName AND [dbo].[AppointmentRequest].patientPhone = @patientPhone)
-			BEGIN
-				SELECT * FROM [dbo].[AppointmentRequest] WHERE [dbo].[AppointmentRequest].patientName = @patientName AND [dbo].[AppointmentRequest].patientPhone = @patientPhone
-			END
+			SELECT * FROM [dbo].[AppointmentRequest] 
 			COMMIT TRAN
 		END TRY
 		BEGIN CATCH
@@ -46,17 +41,20 @@ BEGIN
 END
 GO
 
-CREATE PROCEDURE STA2
-@patientName NVARCHAR(50),
-@patientPhone CHAR(10),
+CREATE PROCEDURE delAppoint					--STA2
+@patientID INT
 AS
 BEGIN
 	BEGIN TRAN
 		BEGIN TRY
-			IF EXISTS (SELECT * FROM [dbo].[AppointmentRequest] WHERE [dbo].[AppointmentRequest].patientName = @patientName AND [dbo].[AppointmentRequest].patientPhone = @patientPhone)
+			DECLARE @patientName NVARCHAR(50);
+			DECLARE @patientPhone CHAR(10);
+			IF EXISTS (SELECT [dbo].[AppointmentRequest].patientName, [dbo].[AppointmentRequest].patientPhone FROM [dbo].[AppointmentRequest] WHERE [dbo].[AppointmentRequest].id = @patientID)
 			BEGIN
+				SELECT @patientName = patientName, @patientPhone = patientPhone 
+				FROM [dbo].[AppointmentRequest] WHERE [dbo].[AppointmentRequest].id = @patientID
 				DELETE FROM [dbo].[AppointmentRequest] 
-				WHERE [dbo].[AppointmentRequest].patientPhone = @patientPhone
+				WHERE [dbo].[AppointmentRequest].patientPhone = @patientPhone AND [dbo].[AppointmentRequest].patientName = @patientName
 			END
 			COMMIT TRAN
 		END TRY
@@ -67,18 +65,16 @@ BEGIN
 END
 GO
 
-CREATE PROCEDURE STA3
-@patientName VARCHAR(50),
+CREATE PROCEDURE checkPreviousPatient			--STA3
 @patientPhone CHAR(10)
 AS
 BEGIN
 	BEGIN TRAN
 		BEGIN TRY
 			DECLARE @PatientID INT;
-			IF EXISTS (SELECT * FROM [dbo].[Patient] WHERE [dbo].[Patient].name = @patientName AND [dbo].[Patient].phone = @patientPhone)
+			IF EXISTS (SELECT P.name, P.phone FROM [dbo].[Patient] P WHERE P.phone = @patientPhone)
 			BEGIN
-				SELECT @PatientID = id FROM [dbo].[Patient] WHERE [dbo].[Patient].name = @patientName AND [dbo].[Patient].phone = @patientPhone
-				SELECT * FROM [dbo].[Session] WHERE [dbo].[Session].patientID = @PatientID
+				SELECT @PatientID = P.id FROM [dbo].[Patient] P INNER JOIN [dbo].[Session] S ON S.[patientID] = P.id WHERE P.phone = @patientPhone
 			END
 			COMMIT TRAN
 		END TRY
@@ -89,7 +85,7 @@ BEGIN
 END
 GO
 
-CREATE PROCEDURE STA4
+CREATE PROCEDURE createNewExam				--STA4
 @patientName VARCHAR(50),
 @patientPhone CHAR(10),
 @note VARCHAR(1000)
@@ -99,7 +95,7 @@ BEGIN
 		BEGIN TRY
 			DECLARE @PatientID INT;
 			DECLARE @SessionID INT;
-			IF EXISTS (SELECT * FROM [dbo].[Patient] WHERE [dbo].[Patient].name = @patientName AND [dbo].[Patient].phone = @patientPhone)
+			IF EXISTS (SELECT [dbo].[Patient].id, [dbo].[Patient].name FROM [dbo].[Patient] WHERE [dbo].[Patient].name = @patientName AND [dbo].[Patient].phone = @patientPhone)
 			BEGIN
 				SELECT @PatientID = id FROM [dbo].[Patient] WHERE [dbo].[Patient].name = @patientName AND [dbo].[Patient].phone = @patientPhone;
 				DECLARE @InsertedIDs TABLE (ID INT);
@@ -116,7 +112,7 @@ BEGIN
 END
 GO
 
-CREATE PROCEDURE STA5
+CREATE PROCEDURE createNewReExam			--STA5
 @patientName VARCHAR(50),
 @patientPhone CHAR(10),
 @note VARCHAR(1000)
@@ -127,7 +123,7 @@ BEGIN
 			DECLARE @PatientID INT;
 			DECLARE @examSessionID INT;
 			DECLARE @SessionID INT;
-			IF EXISTS (SELECT * FROM [dbo].[Patient] WHERE [dbo].[Patient].name = @patientName AND [dbo].[Patient].phone = @patientPhone)
+			IF EXISTS (SELECT [dbo].[Patient].id, [dbo].[Patient].name FROM [dbo].[Patient] WHERE [dbo].[Patient].name = @patientName AND [dbo].[Patient].phone = @patientPhone)
 			BEGIN
 				SELECT @PatientID = id FROM [dbo].[Patient] WHERE [dbo].[Patient].name = @patientName AND [dbo].[Patient].phone = @patientPhone;
 				SELECT @examSessionID = id FROM [dbo].[Session] WHERE [dbo].[Session].patientID = @PatientID AND [dbo].[Session].type = 'EXA';
@@ -145,7 +141,7 @@ BEGIN
 END
 GO
 
-CREATE PROCEDURE STA6
+CREATE PROCEDURE viewAvailDentist			--STA6
 @patientName VARCHAR(50),
 @patientPhone CHAR(10)
 AS 
@@ -156,7 +152,7 @@ BEGIN
 			DECLARE @SessionID INT;
 			DECLARE @Time DATETIME2;
 
-			IF EXISTS (SELECT * FROM [dbo].[Patient] WHERE [dbo].[Patient].name = @patientName AND [dbo].[Patient].phone = @patientPhone)
+			IF EXISTS (SELECT [dbo].[Patient].id, [dbo].[Patient].name FROM [dbo].[Patient] WHERE [dbo].[Patient].name = @patientName AND [dbo].[Patient].phone = @patientPhone)
 			BEGIN
 				SELECT @PatientID = id FROM [dbo].[Patient] WHERE [dbo].[Patient].name = @patientName AND [dbo].[Patient].phone = @patientPhone;
 				SELECT @SessionID = id , @Time = time FROM [dbo].[Session] WHERE [patientID] = @PatientID AND [type] = 'EXA';
@@ -174,7 +170,7 @@ BEGIN
 END
 GO
 
-CREATE PROCEDURE STA14
+CREATE PROCEDURE createNewPayment			--STA14
 @patientName VARCHAR(50),
 @patientPhone CHAR(10)
 AS 
@@ -184,7 +180,7 @@ BEGIN
 			DECLARE @PatientID INT;
 			DECLARE @SessionID INT;
 			DECLARE @TotalFee INT;
-			IF EXISTS (SELECT * FROM [dbo].[Patient] WHERE [dbo].[Patient].name = @patientName AND [dbo].[Patient].phone = @patientPhone)
+			IF EXISTS (SELECT [dbo].[Patient].id, [dbo].[Patient].name FROM [dbo].[Patient] WHERE [dbo].[Patient].name = @patientName AND [dbo].[Patient].phone = @patientPhone)
 			BEGIN
 				SELECT @PatientID = id FROM [dbo].[Patient] WHERE [dbo].[Patient].name = @patientName AND [dbo].[Patient].phone = @patientPhone;
 				SELECT @SessionID = id FROM [dbo].[Session] WHERE [patientID] = @PatientID AND [type] = 'EXA';
@@ -206,7 +202,7 @@ BEGIN
 END
 GO
 
-CREATE PROCEDURE STA15
+CREATE PROCEDURE updatePayment				--STA15
 @patientName VARCHAR(50),
 @patientPhone CHAR(10),
 @paid INT,
@@ -219,7 +215,7 @@ BEGIN
 			DECLARE @PatientID INT;
 			DECLARE @SessionID INT;
 			DECLARE @TotalFee INT;
-			IF EXISTS (SELECT * FROM [dbo].[Patient] WHERE [dbo].[Patient].name = @patientName AND [dbo].[Patient].phone = @patientPhone)
+			IF EXISTS (SELECT [dbo].[Patient].id, [dbo].[Patient].name FROM [dbo].[Patient] WHERE [dbo].[Patient].name = @patientName AND [dbo].[Patient].phone = @patientPhone)
 			BEGIN
 				SELECT @PatientID = id FROM [dbo].[Patient] WHERE [dbo].[Patient].name = @patientName AND [dbo].[Patient].phone = @patientPhone;
 				UPDATE [dbo].[PaymentRecord]
@@ -238,13 +234,13 @@ BEGIN
 END
 GO
 
-CREATE PROCEDURE STA17
+CREATE PROCEDURE viewPayment			--STA17
 @patientID INT
 AS
 BEGIN
 	BEGIN TRAN
 		BEGIN TRY
-			IF EXISTS (SELECT * FROM [dbo].[PaymentRecord] WHERE [dbo].[PaymentRecord].patientID = @patientID)
+			IF EXISTS (SELECT [dbo].[PaymentRecord].id, [dbo].[PaymentRecord].date FROM [dbo].[PaymentRecord] WHERE [dbo].[PaymentRecord].patientID = @patientID)
 			BEGIN
 				SELECT * FROM [dbo].[PaymentRecord] WHERE [dbo].[PaymentRecord].patientID = @patientID
 			END
@@ -257,8 +253,7 @@ BEGIN
 END
 GO
 
-CREATE PROCEDURE STA24
-@patientName VARCHAR(50),
+CREATE PROCEDURE createNewSession				--STA24
 @patientPhone CHAR(10),
 @note VARCHAR(1000)
 AS
@@ -267,9 +262,9 @@ BEGIN
 		BEGIN TRY
 			DECLARE @PatientID INT;
 			DECLARE @SessionID INT;
-			IF EXISTS (SELECT * FROM [dbo].[Patient] WHERE [dbo].[Patient].name = @patientName AND [dbo].[Patient].phone = @patientPhone)
+			IF EXISTS (SELECT [dbo].[Patient].id, [dbo].[Patient].name FROM [dbo].[Patient] WHERE [dbo].[Patient].phone = @patientPhone)
 			BEGIN
-				SELECT @PatientID = id FROM [dbo].[Patient] WHERE [dbo].[Patient].name = @patientName AND [dbo].[Patient].phone = @patientPhone;
+				SELECT @PatientID = id FROM [dbo].[Patient] WHERE [dbo].[Patient].phone = @patientPhone;
 				DECLARE @InsertedIDs TABLE (ID INT);
 				INSERT INTO [dbo].[Session](time, patientID, note, type) OUTPUT inserted.id INTO @InsertedIDs VALUES (GETDATE(), @PatientID, @note, 'TRE');
 				SELECT @SessionID = ID FROM @InsertedIDs;
@@ -286,7 +281,7 @@ GO
 
 -- PROC OF ADMIN
 
-CREATE PROCEDURE ADM29
+CREATE PROCEDURE updateAccDetail						--ADM29
 @username CHAR(10),
 @oldPass CHAR(60),
 @newPass CHAR(60),
@@ -295,9 +290,9 @@ AS
 BEGIN
 	BEGIN TRAN
 		BEGIN TRY
-			IF EXISTS (SELECT * FROM [dbo].[Account] WHERE [dbo].[Account].username = @username 
-															AND [dbo].[Account].password = @oldPass
-															AND [dbo].[Personnel].type = @role)
+			IF EXISTS (SELECT A.username FROM [dbo].[Account] A INNER JOIN [dbo].[Personnel] P ON p.id = A.personnelID WHERE A.username = @username 
+															AND A.password = @oldPass
+															AND P.type = @role)
 			BEGIN
 				UPDATE [dbo].[Account]
 				SET [password] = @newPass
@@ -312,13 +307,13 @@ BEGIN
 END
 GO
 
-CREATE PROCEDURE ADM30
+CREATE PROCEDURE viewAcc				--ADM30
 @personnelID INT
 AS
 BEGIN
 	BEGIN TRAN
 		BEGIN TRY
-			IF EXISTS (SELECT * FROM [dbo].[Account] WHERE [dbo].[Account].personnelID = @personnelID)
+			IF EXISTS (SELECT username FROM [dbo].[Account] WHERE [dbo].[Account].personnelID = @personnelID)
 			BEGIN
 				SELECT * FROM [dbo].[Account] WHERE [dbo].[Account].personnelID = @personnelID
 			END
@@ -334,7 +329,7 @@ GO
 
 -- PROC OF PATIENT
 
-CREATE PROCEDURE PAT1
+CREATE PROCEDURE viewCategories						--PAT1
 AS
 BEGIN
 	BEGIN TRAN
@@ -349,7 +344,7 @@ BEGIN
 END
 GO
 
-CREATE PROCEDURE PAT2
+CREATE PROCEDURE viewProcedures					--PAT2
 AS
 BEGIN
 	BEGIN TRAN
@@ -364,7 +359,7 @@ BEGIN
 END
 GO
 
-CREATE PROCEDURE PAT3
+CREATE PROCEDURE createNewAppointment						--PAT3
 @appointmentTime DATETIME2,
 @note NVARCHAR(255),
 @categoryName NVARCHAR(50),
@@ -374,7 +369,7 @@ AS
 BEGIN
 	BEGIN TRAN
 		BEGIN TRY
-			IF NOT EXISTS (SELECT * FROM [dbo].[AppointmentRequest] WHERE [dbo].[AppointmentRequest].patientName = @patientName AND [dbo].[AppointmentRequest].patientPhone = @patientPhone)
+			IF NOT EXISTS (SELECT patientName, patientPhone FROM [dbo].[AppointmentRequest] WHERE [dbo].[AppointmentRequest].patientPhone = @patientPhone)
 			BEGIN
 				INSERT INTO [dbo].[AppointmentRequest](appointmentTime, requestTime, note, patientName, patientPhone, categoryName)
 				values (@appointmentTime, GETDATE(), @note, @patientName, @patientPhone, @categoryName);
@@ -391,7 +386,7 @@ GO
 
 -- PROC OF DENTIST
 
-CREATE PROCEDURE DEN12
+CREATE PROCEDURE updatePrescription								 --DEN12
 @dentistID INT,
 @patientID INT,
 @newNote NVARCHAR(500)
