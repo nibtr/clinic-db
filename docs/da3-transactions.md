@@ -125,7 +125,6 @@ Below are the "considered-essential" transactions of the database.
 |                    |  I   |  U  |  D  |  R  |   I  |  U  |  D  |  R  |   I  |  U  |  D  |  R  |
 | AppointmentRequest |  x   |     |     |     |      |     |     |  x  |      |     |     |     |
 | Schedule           |      |     |     |     |      |     |     |  x  |      |     |     |     |
-| Dentist            |      |     |     |     |      |     |     |  x  |      |     |     |     |
 | Patient            |      |     |     |     |      |     |     |     |   x  |     |     |     |
 | Session            |      |     |     |     |      |     |     |     |   x  |     |     |     |
 | ExaminationSession |      |     |     |     |      |     |     |     |   x  |     |     |     |
@@ -175,7 +174,6 @@ We estimated some frequency information of the database based on the information
 |                    |  I   |  U  |  D  |  R  |   I  |  U  |  D  |  R  |   I  |  U  |  D  |  R  |
 | AppointmentRequest |  x   |     |     |     |      |     |     |  x  |      |     |     |  x  |
 | Schedule           |      |     |     |     |      |     |     |  x  |      |     |     |     |
-| Dentist            |      |     |     |     |      |     |     |  x  |      |     |     |  x  |
 | Personnel          |      |     |     |     |      |     |     |     |   x  |     |     |     |
 | Patient            |      |     |     |     |      |     |     |     |   x  |     |     |     |
 | Session            |      |     |     |     |      |     |     |     |   x  |     |     |     |
@@ -191,7 +189,6 @@ We estimated some frequency information of the database based on the information
 |                      | I    |  U  |  D  |  R  |  I   |  U  |  D  |  R  |   I   |  U  |  D  |  R  |
 | AppointmentRequest   |      |     |     |  x  |      |     |     |     |       |     |     |  x  |
 | Schedule             |      |     |     |  x  |      |     |     |     |       |     |     |     |
-| Dentist              |      |     |     |  x  |      |     |     |     |       |     |     |     |
 | Patient              |      |     |     |  x  |      |     |     |  x  |       |     |     |  x  |
 | Session              | x    |     |     |     |      |     |     |  x  |       |     |     |     |
 | ReExaminationSession | x    |     |     |     |      |     |     |     |       |     |     |     |
@@ -208,7 +205,6 @@ We estimated some frequency information of the database based on the information
 |                      |   I   |  U  |  D  |  R  |   I   |  U  |  D  |  R  |   I   |  U  |  D  |  R  |
 | AppointmentRequest   |       |     |     |  x  |       |     |     |     |       |     |     |     |
 | Schedule             |       |     |     |  x  |       |     |     |     |       |     |     |     |
-| Dentist              |       |     |     |  x  |       |     |     |     |       |     |     |     |
 | Patient              |       |     |     |  x  |       |     |     |  x  |       |     |     |     |
 | Session              |   x   |     |     |     |       |     |     |     |       |     |     |     |
 | ReExaminationSession |       |     |     |     |       |     |     |     |       |     |     |     |
