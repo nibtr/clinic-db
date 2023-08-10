@@ -19,6 +19,7 @@ For the overview of the business rules (requirements) of the project, please ref
 
 - All the script related to the database can be found in the `src` folder
 - Link for the .bak file: [Google Drive](https://drive.google.com/file/d/1-vlJT_vsHit6aUIhuMdOVcB8lmlcGFZT/view?usp=sharing)
+- Link for the master document (all the docs combined): [Microsoft Word](https://studenthcmusedu-my.sharepoint.com/:w:/g/personal/20126038_student_hcmus_edu_vn/EX75X6yCZBJJl8BJ9sE50eIB00rIrXb-2jooJzEpkflm0w?e=JnVk3e)
 
 ## Server
 
