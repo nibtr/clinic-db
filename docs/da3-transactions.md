@@ -164,7 +164,6 @@ Below are the "considered-essential" transactions of the database, which account
 | Patient            |      |     |     |     |      |     |     |     | x    |     |     |     |
 | Session            |      |     |     |     |      |     |     |     | x    |     |     |     |
 | ExaminationSession |      |     |     |     |      |     |     |     | x    |     |     |     |
-| Room               |      |     |     |     |      |     |     |     |      |     |     |     |
 
 | Transaction/Table    | STA5 |     |     |     | STA3 |     |     |     | STA14 |     |     |     |
 | -------------------- | ---- | --- | --- | --- | ---- | --- | --- | --- | ----- | --- | --- | --- |
@@ -175,7 +174,7 @@ Below are the "considered-essential" transactions of the database, which account
 | ReExaminationSession | x    |     |     |     |      |     |     |     |       |     |     |     |
 | ExaminationSession   |      |     |     | x   |      |     |     |     |       |     |     |     |
 | PaymentRecord        |      |     |     |     |      |     |     |     | x     |     |     |     |
-| Room                 |      |     |     |     |      |     |     |     |       |     |     |     |
+| Procedure            |      |     |     |     |      |     |     |     |       |     |     | x   |
 
 | Transaction/Table | STA24 |     |     |     | STA15 |     |     |     | 404 |     |     |     |
 | ----------------- | ----- | --- | --- | --- | ----- | --- | --- | --- | --- | --- | --- | --- |
@@ -183,7 +182,6 @@ Below are the "considered-essential" transactions of the database, which account
 | Session           | x     |     |     |     |       |     |     |     |     |     |     |     |
 | TreatmentSession  | x     |     |     |     |       |     |     |     |     |     |     |     |
 | PaymentRecord     |       |     |     |     |       | x   |     |     |     |     |     |     |
-| Room              |       |     |     | x   |       |     |     |     |     |     |     |     |
 
 <!-- Conclusion here -->
 
@@ -316,3 +314,116 @@ Below are the "considered-essential" transactions of the database, which account
 |       | Patient              | R               | 1                | 20-25        | 35-40         |
 |       | Session              | R               | 1                | 20-25        | 35-40         |
 | Total |                      |                 | 4                | 80-100       | 140-160       |
+
+#### STA3
+
+**Staff checks if a patient has done a session before (view list of sessions of a given patient)**
+
+- Transaction volume:
+  - Average: 10-15/hour
+  - Peak: 20-25/hour (on weekends, around 8:30 - 10:30 and 15:00 - 17:00)
+- Code:
+
+```sql
+-- code here
+```
+
+- Search condition: `Patient.[phone] = @patientPhone`
+- Check condition: `EXIST(Patient.[id])`
+- Join columns: `Session.[patientID] = Patient.[id]`
+- Ordering column: none
+- Grouping column: none
+- Built-in functions: none
+- Columns updated: none
+- Expected response time: < 1s
+
+| Trans | Relations | Types of access | No of references |              |               |
+| ----- | --------- | --------------- | ---------------- | ------------ | ------------- |
+|       |           |                 | Per transaction  | Avg per hour | Peak per hour |
+| STA3  | Session   | R               | 20-30            | 200-300      | 400-500       |
+|       | Patient   | R               | 1                | 10-15        | 20-25         |
+| Total |           |                 | 2                | 210-315      | 420-525       |
+
+#### STA14
+
+**Staff creates a new payment record for a patient**
+
+- Transaction volume:
+  - Average: 20-30/hour
+  - Peak: 40-50/hour (on weekends, around 8:30 - 10:30 and 15:00 - 17:00)
+- Code:
+
+```sql
+-- code here
+```
+
+- Search condition: `Procedure.[categoryId] = TreatmentSession.[categoryId]`
+- Check condition: `EXIST(Patient.[id])`
+- Join columns: 
+- Ordering column: none
+- Grouping column: none
+- Built-in functions: none
+- Columns updated: none
+- Expected response time: < 1s
+
+| Trans | Relations     | Types of access | No of references |              |               |
+| ----- | ------------- | --------------- | ---------------- | ------------ | ------------- |
+|       |               |                 | Per transaction  | Avg per hour | Peak per hour |
+| STA14 | PaymentRecord | I               | 1                | 20-30        | 40-50         |
+
+#### STA24
+
+**Staff creates a new treatment session for a patient**
+
+- Transaction volume:
+  - Average: 20-30/hour
+  - Peak: 40-50/hour (on weekends, around 8:30 - 10:30 and 15:00 - 17:00)
+- Code:
+
+```sql
+-- code here
+```
+
+- Search condition: none
+- Check condition: `EXIST(Patient.[id])`
+- Join columns: none
+- Ordering column: none
+- Grouping column: none
+- Built-in functions: none
+- Columns updated: none
+- Expected response time: < 1s
+
+| Trans | Relations        | Types of access | No of references |              |               |
+| ----- | ---------------- | --------------- | ---------------- | ------------ | ------------- |
+|       |                  |                 | Per transaction  | Avg per hour | Peak per hour |
+| STA24 | TreatmentSession | I               | 1                | 20-30        | 40-50         |
+|       | Session          | I               | 1                | 20-30        | 40-50         |
+| Total |                  |                 | 2                | 40-60        | 80-100        |
+
+#### STA15
+
+**Staff updates a payment record for a patient**
+
+- Transaction volume:
+  - Average: 20-30/hour
+  - Peak: 40-50/hour (on weekends, around 8:30 - 10:30 and 15:00 - 17:00)
+- Code:
+
+```sql
+-- code here
+```
+
+- Search condition: none
+- Check condition: `EXIST(Patient.[id])`
+- Join columns: none
+- Ordering column: none
+- Grouping column: none
+- Built-in functions: none
+- Columns updated: `PaymentRecord.[paid], PaymentRecord.[change] (if any), PaymentRecord.[method]`
+- Expected response time: < 1s
+
+| Trans | Relations     | Types of access | No of references |              |               |
+| ----- | ------------- | --------------- | ---------------- | ------------ | ------------- |
+|       |               |                 | Per transaction  | Avg per hour | Peak per hour |
+| STA15 | PaymentRecord | U               | 1                | 20-30        | 40-50         |
+| Total |               |                 | 1                | 20-30        | 40-50         |
