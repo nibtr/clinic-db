@@ -31,7 +31,7 @@ AS
 BEGIN
 	BEGIN TRAN
 		BEGIN TRY
-			SELECT * FROM [dbo].[AppointmentRequest] 
+			SELECT patientName, patientPhone FROM [dbo].[AppointmentRequest] 
 			COMMIT TRAN
 		END TRY
 		BEGIN CATCH
@@ -42,17 +42,16 @@ END
 GO
 
 CREATE PROCEDURE delAppoint					--STA2
-@patientID INT
+@patientPhone CHAR(10)
 AS
 BEGIN
 	BEGIN TRAN
 		BEGIN TRY
 			DECLARE @patientName NVARCHAR(50);
-			DECLARE @patientPhone CHAR(10);
-			IF EXISTS (SELECT [dbo].[AppointmentRequest].patientName, [dbo].[AppointmentRequest].patientPhone FROM [dbo].[AppointmentRequest] WHERE [dbo].[AppointmentRequest].id = @patientID)
+			IF EXISTS (SELECT [dbo].[AppointmentRequest].patientPhone FROM [dbo].[AppointmentRequest] WHERE [dbo].[AppointmentRequest].patientPhone = @patientPhone)
 			BEGIN
-				SELECT @patientName = patientName, @patientPhone = patientPhone 
-				FROM [dbo].[AppointmentRequest] WHERE [dbo].[AppointmentRequest].id = @patientID
+				SELECT @patientName = patientName
+				FROM [dbo].[AppointmentRequest] WHERE [dbo].[AppointmentRequest].patientPhone = @patientPhone
 				DELETE FROM [dbo].[AppointmentRequest] 
 				WHERE [dbo].[AppointmentRequest].patientPhone = @patientPhone AND [dbo].[AppointmentRequest].patientName = @patientName
 			END
@@ -65,7 +64,7 @@ BEGIN
 END
 GO
 
-CREATE PROCEDURE checkPreviousPatient			--STA3
+CREATE PROCEDURE checkPatientIsExamined			--STA3
 @patientPhone CHAR(10)
 AS
 BEGIN
@@ -85,7 +84,7 @@ BEGIN
 END
 GO
 
-CREATE PROCEDURE createNewExam				--STA4
+CREATE PROCEDURE createNewExaminationSesion				--STA4
 @patientName VARCHAR(50),
 @patientPhone CHAR(10),
 @note VARCHAR(1000)
@@ -112,7 +111,7 @@ BEGIN
 END
 GO
 
-CREATE PROCEDURE createNewReExam			--STA5
+CREATE PROCEDURE createNewReExaminationSession			--STA5
 @patientName VARCHAR(50),
 @patientPhone CHAR(10),
 @note VARCHAR(1000)
@@ -141,8 +140,7 @@ BEGIN
 END
 GO
 
-CREATE PROCEDURE viewAvailDentist			--STA6
-@patientName VARCHAR(50),
+CREATE PROCEDURE viewAvailableDentist			--STA6
 @patientPhone CHAR(10)
 AS 
 BEGIN
@@ -152,9 +150,9 @@ BEGIN
 			DECLARE @SessionID INT;
 			DECLARE @Time DATETIME2;
 
-			IF EXISTS (SELECT [dbo].[Patient].id, [dbo].[Patient].name FROM [dbo].[Patient] WHERE [dbo].[Patient].name = @patientName AND [dbo].[Patient].phone = @patientPhone)
+			IF EXISTS (SELECT [dbo].[Patient].id, [dbo].[Patient].name FROM [dbo].[Patient] WHERE [dbo].[Patient].phone = @patientPhone)
 			BEGIN
-				SELECT @PatientID = id FROM [dbo].[Patient] WHERE [dbo].[Patient].name = @patientName AND [dbo].[Patient].phone = @patientPhone;
+				SELECT @PatientID = id FROM [dbo].[Patient] WHERE [dbo].[Patient].phone = @patientPhone;
 				SELECT @SessionID = id , @Time = time FROM [dbo].[Session] WHERE [patientID] = @PatientID AND [type] = 'EXA';
 				SELECT P.id, P.name FROM [dbo].[Session] S INNER JOIN [dbo].[Personnel] P ON S.[dentistID] = P.[id]
 				WHERE S.[time] >= DATEADD(DAY, DATEDIFF(DAY, 0, GETDATE()), 0) -- Today's start
