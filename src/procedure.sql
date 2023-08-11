@@ -232,7 +232,7 @@ BEGIN
 END
 GO
 
-CREATE PROCEDURE viewPayment			--STA17
+CREATE PROCEDURE viewPaymentRecord			--STA17
 @patientID INT
 AS
 BEGIN
@@ -332,7 +332,7 @@ AS
 BEGIN
 	BEGIN TRAN
 		BEGIN TRY
-			SELECT * FROM [dbo].[Category]
+			SELECT name FROM [dbo].[Category]
 			COMMIT TRAN
 		END TRY
 		BEGIN CATCH
@@ -347,7 +347,7 @@ AS
 BEGIN
 	BEGIN TRAN
 		BEGIN TRY
-			SELECT * FROM [dbo].[Procedure] P JOIN [dbo].[Category] C ON P.[categoryID] = C.[id]
+			SELECT P.name FROM [dbo].[Procedure] P JOIN [dbo].[Category] C ON P.[categoryID] = C.[id]
 			COMMIT TRAN
 		END TRY
 		BEGIN CATCH
@@ -392,7 +392,7 @@ AS
 BEGIN
 	BEGIN TRAN
 		BEGIN TRY
-			IF EXISTS (SELECT * FROM [dbo].[Session] S WHERE S.[dentistID] = @dentistID
+			IF EXISTS (SELECT dentistID, patientID FROM [dbo].[Session] S WHERE S.[dentistID] = @dentistID
 															AND S.[patientID] = @patientID)
 			BEGIN
 				UPDATE P
