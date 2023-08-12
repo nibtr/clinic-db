@@ -130,6 +130,7 @@ We have estimated that the following tables:
 
 will hold the most data, which are also the most important tables of the system as they are related to the most frequent transactions of the database. In more details, we have estimated the following data volume for each of these tables:
 
+
 | Table                | No of records (to date) | No of records/day | No of records/month |
 | -------------------- | ----------------------- | ----------------- | ------------------- |
 | Patient              | ~30000                  | 80-100            | 1600-2000           |
@@ -152,6 +153,8 @@ Below are the "considered-essential" transactions of the database, which account
 - STA3 : Staff checks if a patient has done a session before
 - STA14: Staff creates a new payment record for a patient
 - STA15: Staff updates a payment record for a patient
+- STA24: Dentist creates a new treatment session for a patient
+
 
 ### Cross-Reference matrix
 
