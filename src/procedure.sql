@@ -48,7 +48,6 @@ AS
 BEGIN
 		BEGIN TRY
 			BEGIN TRAN
-			DECLARE @patientPhone CHAR(10);
 			BEGIN
 				DELETE FROM [dbo].[AppointmentRequest] 
 				WHERE [dbo].[AppointmentRequest].id = @appointmentID
@@ -68,10 +67,9 @@ BEGIN
 	BEGIN TRAN
 		BEGIN TRY
 			BEGIN TRAN
-			DECLARE @PatientID INT;
 			IF EXISTS (SELECT P.id FROM [dbo].[Patient] P WHERE P.phone = @patientPhone)
 			BEGIN
-				SELECT @PatientID = P.id FROM [dbo].[Patient] P INNER JOIN [dbo].[Session] S ON S.[patientID] = P.id WHERE P.phone = @patientPhone
+				SELECT P.id FROM [dbo].[Patient] P INNER JOIN [dbo].[Session] S ON S.[patientID] = P.id WHERE P.phone = @patientPhone
 			END
 			ELSE
 			BEGIN
