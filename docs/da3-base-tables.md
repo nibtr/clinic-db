@@ -82,7 +82,7 @@ SELECT DATEDIFF(YEAR, dob, GETDATE()) - CASE WHEN (MONTH(dob) > MONTH(GETDATE())
 | Field Name           | Data Type | Constraints             | Domain | Default |
 | -------------------- | --------- | ----------------------- | ------ | ------- |
 | `id`                 | `int`     | `PRIMARY KEY`           | n > 0  | x       |
-| `date`               | `date`    | `NOT NULL`              | x      | x       |
+| `createdDate`        | `date`    | `NOT NULL`              | x      | x       |
 | `total`              | `int`     | `NOT NULL`              | n > 0  | x       |
 | `paid`               | `int`     | `NOT NULL`              | n >= 0 | 0       |
 | `change`             | `int`     | `NOT NULL`              | n >= 0 | 0       |
