@@ -69,7 +69,7 @@ BEGIN
 			BEGIN TRAN
 			IF EXISTS (SELECT P.id FROM [dbo].[Patient] P WHERE P.phone = @patientPhone)
 			BEGIN
-				SELECT P.id FROM [dbo].[Patient] P INNER JOIN [dbo].[Session] S ON S.[patientID] = P.id WHERE P.phone = @patientPhone
+				SELECT S.id, S.dentistID, S.patientID, S.status, S.time, S.type FROM [dbo].[Patient] P INNER JOIN [dbo].[Session] S ON S.[patientID] = P.id WHERE P.phone = @patientPhone
 			END
 			ELSE
 			BEGIN
