@@ -17,11 +17,7 @@ We take into account the following tables for partitioning since they hold the m
 | TreatmentSession     | ~65000                  |
 | ExaminationSession   | ~60000                  |
 | ReExaminationSession | ~50000                  |
-| PaymentRecord        | ~200000                 |
-
-<!-- ## Use case 1:
-
-**PaymentRecord** table is partitioned by the `paid` column, which is of `int` value. The value of `paid` is either 0 by default, denoting unpaid, or the amount paid by the patient. The value of `paid` is updated to the amount paid by the patient when the patient pays for the treatment. Hence, we can partition the table by the value of `paid` to separate the paid and unpaid records. -->
+| PaymentRecord        | ~100000                 |
 
 ## Use case 1:
 
@@ -40,4 +36,3 @@ Special use case such as view the total number of sessions ever held can be slow
 
 ## Use case 2:
 
-**AppointmentRequest** table is partitioned by the `date` column, which is of `date` value. We partition the table by 1 year intervals, i.e. 1 partition for each year. This is useful for the following reasons:

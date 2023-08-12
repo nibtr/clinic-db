@@ -180,14 +180,14 @@ CREATE TABLE [dbo].[ToothSession] (
     [toothID] INT,
 	[treatmentSessionID] INT,
 	[order] INT,
-	CONSTRAINT [ToothSession_pkey] PRIMARY KEY CLUSTERED ([toothID],[treatmentSessionID],[order])
+	CONSTRAINT [ToothSession_pkey] PRIMARY KEY CLUSTERED ([treatmentSessionID], [toothID], [order])
 );	
 
 CREATE TABLE [dbo].[Prescription] (
 	[drugID] INT NOT NULL,
 	[treatmentSessionID] INT NOT NULL,
     [note] NVARCHAR(500),
-	CONSTRAINT [Prescription_pkey] PRIMARY KEY CLUSTERED ([drugID],[treatmentSessionID])
+	CONSTRAINT [Prescription_pkey] PRIMARY KEY CLUSTERED ([treatmentSessionID], [drugID])
 );	
 
 CREATE TABLE [dbo].[AppointmentRequest] (
