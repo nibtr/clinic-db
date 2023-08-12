@@ -43,7 +43,7 @@ END
 GO
 
 CREATE PROCEDURE delAppoint					--STA2
-@patientID CHAR(10)
+@appointmentID CHAR(10)
 AS
 BEGIN
 		BEGIN TRY
@@ -51,7 +51,7 @@ BEGIN
 			DECLARE @patientPhone CHAR(10);
 			BEGIN
 				DELETE FROM [dbo].[AppointmentRequest] 
-				WHERE [dbo].[AppointmentRequest].patientPhone IN (SELECT @patientPhone = phone FROM PATIENT WHERE id = @patientID)
+				WHERE [dbo].[AppointmentRequest].id = @appointmentID
 			END
 			COMMIT TRAN
 		END TRY
