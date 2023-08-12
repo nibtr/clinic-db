@@ -26,7 +26,7 @@ go
 -- PAT3: Schedule a new appointment
 
 -- PROC OF STAFF
-ALTER PROCEDURE viewAppointment			--STA1
+CREATE PROCEDURE viewAppointment			--STA1
 AS
 BEGIN
 	BEGIN TRAN
@@ -42,7 +42,7 @@ BEGIN
 END
 GO
 
-ALTER PROCEDURE delAppoint					--STA2
+CREATE PROCEDURE delAppoint					--STA2
 @patientPhone CHAR(10)
 AS
 BEGIN
@@ -64,7 +64,7 @@ BEGIN
 END
 GO
 
-ALTER PROCEDURE checkPatientIsExamined			--STA3
+CREATE PROCEDURE checkPatientIsExamined			--STA3
 @patientPhone CHAR(10)
 AS
 BEGIN
@@ -90,10 +90,11 @@ BEGIN
 END
 GO
 
-ALTER PROCEDURE createNewExaminationSesion				--STA4
+CREATE PROCEDURE createNewExaminationSesion				--STA4
 @patientPhone CHAR(10),
 @note VARCHAR(1000),
-@roomID INT
+@roomID INT,
+@dentistID INT
 AS
 BEGIN
 		BEGIN TRY
@@ -104,7 +105,7 @@ BEGIN
 			BEGIN
 				SELECT @PatientID = id FROM [dbo].[Patient] WHERE [dbo].[Patient].phone = @patientPhone;
 				DECLARE @InsertedIDs TABLE (ID INT);
-				INSERT INTO [dbo].[Session](time, patientID, note, type, roomID) OUTPUT inserted.id INTO @InsertedIDs VALUES (GETDATE(), @PatientID, @note, 'EXA', @roomID);
+				INSERT INTO [dbo].[Session](time, patientID, note, type, roomID, dentistID) OUTPUT inserted.id INTO @InsertedIDs VALUES (GETDATE(), @PatientID, @note, 'EXA', @roomID, @dentistID);
 				SELECT @SessionID = ID FROM @InsertedIDs;
 				INSERT INTO [dbo].[ExaminationSession](id) VALUES (@SessionID)
 			END
@@ -115,41 +116,25 @@ BEGIN
 		END CATCH
 END
 GO
-EXEC createNewExaminationSesion @patientPhone = '0488760133', @note = 'DMC'
-SELECT * FROM Session WHERE patientID = '0488760133'
-SELECT * FROM ROOM 
-SELECT CoUNT(*) FROM ExaminationSession 
 
-DECLARE @PatientID INT;
-DECLARE @SessionID INT;
-DECLARE @note VARCHAR(1000) = 'DMC';
-DECLARE @roomID INT = '1';
-DECLARE @dentistID INT = '1';
-SELECT @PatientID = id FROM [dbo].[Patient] WHERE [dbo].[Patient].phone = '0488760133';
-DECLARE @InsertedIDs TABLE (ID INT);
-INSERT INTO [dbo].[Session](time, patientID, note, type, roomID) OUTPUT inserted.id INTO @InsertedIDs VALUES (GETDATE(), @PatientID, @note, 'EXA', @roomID);
-SELECT @SessionID = ID FROM @InsertedIDs;
-INSERT INTO [dbo].[ExaminationSession](id) VALUES (@SessionID)
-
-GO
-66687
 CREATE PROCEDURE createNewReExaminationSession			--STA5
-@patientName VARCHAR(50),
 @patientPhone CHAR(10),
-@note VARCHAR(1000)
+@note VARCHAR(1000),
+@roomID INT,
+@dentistID INT
 AS 
 BEGIN
-	BEGIN TRAN
 		BEGIN TRY
+			BEGIN TRAN
 			DECLARE @PatientID INT;
 			DECLARE @examSessionID INT;
 			DECLARE @SessionID INT;
-			IF EXISTS (SELECT [dbo].[Patient].id, [dbo].[Patient].name FROM [dbo].[Patient] WHERE [dbo].[Patient].name = @patientName AND [dbo].[Patient].phone = @patientPhone)
+			IF EXISTS (SELECT [dbo].[Patient].id, [dbo].[Patient].name FROM [dbo].[Patient] WHERE [dbo].[Patient].phone = @patientPhone)
 			BEGIN
 				SELECT @PatientID = id FROM [dbo].[Patient] WHERE [dbo].[Patient].name = @patientName AND [dbo].[Patient].phone = @patientPhone;
 				SELECT @examSessionID = id FROM [dbo].[Session] WHERE [dbo].[Session].patientID = @PatientID AND [dbo].[Session].type = 'EXA';
 				DECLARE @InsertedIDs TABLE (ID INT);
-				INSERT INTO [dbo].[Session](time, patientID, note) OUTPUT inserted.id INTO @InsertedIDs VALUES (GETDATE(), @PatientID, @note);
+				INSERT INTO [dbo].[Session](time, patientID, note, type, roomID, dentistID) OUTPUT inserted.id INTO @InsertedIDs VALUES (GETDATE(), @PatientID, @note, 'EXA', @roomID, @dentistID);
 				SELECT @SessionID = ID FROM @InsertedIDs;
 				INSERT INTO [dbo].[ReExaminationSession] (id,relatedExaminationID) VALUES (@SessionID, @examSessionID);
 			END
@@ -158,7 +143,6 @@ BEGIN
 		BEGIN CATCH
 			ROLLBACK TRAN
 		END CATCH
-	COMMIT TRAN
 END
 GO
 
@@ -166,17 +150,16 @@ CREATE PROCEDURE viewAvailableDentist			--STA6
 @appointmentID INT
 AS 
 BEGIN
-	BEGIN TRAN
 		BEGIN TRY
+			BEGIN TRAN
 			DECLARE @PatientID INT;
 			DECLARE @SessionID INT;
 			DECLARE @Time DATETIME2;
-
 			IF EXISTS (SELECT [dbo].[AppointmentRequest].id FROM [dbo].[AppointmentRequest] WHERE [dbo].[AppointmentRequest].id = @appointmentID)
 			BEGIN
-				SELECT @PatientID = id FROM [dbo].[Patient] WHERE [dbo].[Patient].phone IN (SELECT * FROM [dbo].[AppointmentRequest] WHERE [dbo].[AppointmentRequest].id = @appointmentID)
+				SELECT @PatientID = id FROM [dbo].[Patient] WHERE [dbo].[Patient].phone IN (SELECT phone FROM [dbo].[AppointmentRequest] WHERE [dbo].[AppointmentRequest].id = @appointmentID);
 				SELECT @SessionID = id , @Time = time FROM [dbo].[Session] WHERE [patientID] = @PatientID AND [type] = 'EXA';
-				SELECT P.id, P.name FROM [dbo].[Session] S INNER JOIN [dbo].[Personnel] P ON S.[dentistID] = P.[id]
+				SELECT P.id AS dentistID, P.name AS dentistName FROM [dbo].[Session] S INNER JOIN [dbo].[Personnel] P ON S.[dentistID] = P.[id]
 				WHERE S.[time] >= DATEADD(DAY, DATEDIFF(DAY, 0, GETDATE()), 0) -- Today's start
 						AND S.[time] < DATEADD(DAY, DATEDIFF(DAY, 0, GETDATE()) + 1, 0) -- Tomorrow's start
 						AND DATEDIFF(minute, S.[time], GETDATE()) > 30;
@@ -186,71 +169,61 @@ BEGIN
 		BEGIN CATCH
 			ROLLBACK TRAN
 		END CATCH
-	COMMIT TRAN
 END
 GO
 
+
 CREATE PROCEDURE createNewPayment			--STA14
-@patientName VARCHAR(50),
-@patientPhone CHAR(10)
+@patientPhone CHAR(10),
+@total INT,
+@change INT,
+@paid INT,
+@SessionID INT
 AS 
 BEGIN
-	BEGIN TRAN
 		BEGIN TRY
+			BEGIN TRAN
 			DECLARE @PatientID INT;
-			DECLARE @SessionID INT;
-			DECLARE @TotalFee INT;
-			IF EXISTS (SELECT [dbo].[Patient].id, [dbo].[Patient].name FROM [dbo].[Patient] WHERE [dbo].[Patient].name = @patientName AND [dbo].[Patient].phone = @patientPhone)
+			IF EXISTS (SELECT [dbo].[Patient].id, [dbo].[Patient].name FROM [dbo].[Patient] WHERE [dbo].[Patient].phone = @patientPhone)
 			BEGIN
-				SELECT @PatientID = id FROM [dbo].[Patient] WHERE [dbo].[Patient].name = @patientName AND [dbo].[Patient].phone = @patientPhone;
-				SELECT @SessionID = id FROM [dbo].[Session] WHERE [patientID] = @PatientID AND [type] = 'EXA';
-				SELECT @TotalFee = SUM(P.[fee])
-					FROM [dbo].[Procedure] P
-					INNER JOIN [dbo].[Category] C ON P.[categoryID] = C.[id]
-					INNER JOIN [dbo].[TreatmentSession] TS ON C.[id] = TS.[categoryID]
-					INNER JOIN [dbo].[Session] S ON TS.[id] = S.[id]
-					WHERE S.[patientID] = @PatientID
-					  AND S.[id] = @SessionID;
-				INSERT INTO [dbo].[PaymentRecord](date, total, patientID, treatmentSessionID) VALUES (GETDATE(), @TotalFee, @PatientID, @SessionID)
+				SELECT @PatientID = id FROM [dbo].[Patient] WHERE [dbo].[Patient].phone = @patientPhone;
+				INSERT INTO [dbo].[PaymentRecord](date, total, paid, change, patientID, treatmentSessionID) VALUES (GETDATE(), @total, @paid, @change, @PatientID, @SessionID)
 			END
 			COMMIT TRAN
 		END TRY
 		BEGIN CATCH
 			ROLLBACK TRAN
 		END CATCH
-	COMMIT TRAN
 END
 GO
 
 CREATE PROCEDURE updatePayment				--STA15
-@patientName VARCHAR(50),
 @patientPhone CHAR(10),
 @paid INT,
 @change INT,
-@method CHAR(1)
+@method CHAR(1),
+@SessionID INT
 AS 
 BEGIN
-	BEGIN TRAN
 		BEGIN TRY
+			BEGIN TRAN
 			DECLARE @PatientID INT;
-			DECLARE @SessionID INT;
 			DECLARE @TotalFee INT;
-			IF EXISTS (SELECT [dbo].[Patient].id, [dbo].[Patient].name FROM [dbo].[Patient] WHERE [dbo].[Patient].name = @patientName AND [dbo].[Patient].phone = @patientPhone)
+			IF EXISTS (SELECT [dbo].[Patient].id, [dbo].[Patient].name FROM [dbo].[Patient] WHERE [dbo].[Patient].phone = @patientPhone)
 			BEGIN
-				SELECT @PatientID = id FROM [dbo].[Patient] WHERE [dbo].[Patient].name = @patientName AND [dbo].[Patient].phone = @patientPhone;
+				SELECT @PatientID = id FROM [dbo].[Patient] WHERE [dbo].[Patient].phone = @patientPhone;
 				UPDATE [dbo].[PaymentRecord]
 				SET [dbo].[PaymentRecord].[paid] = @paid,
 				[dbo].[PaymentRecord].[change] = @change,
 				[dbo].[PaymentRecord].[method] = @method,
 				[dbo].[PaymentRecord].[date] = GETDATE()
-				WHERE [patientID] = @PatientID
+				WHERE [patientID] = @PatientID AND [treatmentSessionID] = @SessionID
 			END
 			COMMIT TRAN
 		END TRY
 		BEGIN CATCH
 			ROLLBACK TRAN
 		END CATCH
-	COMMIT TRAN
 END
 GO
 
@@ -258,8 +231,8 @@ CREATE PROCEDURE viewPaymentRecord			--STA17
 @patientID INT
 AS
 BEGIN
-	BEGIN TRAN
 		BEGIN TRY
+			BEGIN TRAN
 			IF EXISTS (SELECT [dbo].[PaymentRecord].id, [dbo].[PaymentRecord].date FROM [dbo].[PaymentRecord] WHERE [dbo].[PaymentRecord].patientID = @patientID)
 			BEGIN
 				SELECT * FROM [dbo].[PaymentRecord] WHERE [dbo].[PaymentRecord].patientID = @patientID
@@ -269,7 +242,6 @@ BEGIN
 		BEGIN CATCH
 			ROLLBACK TRAN
 		END CATCH
-	COMMIT TRAN
 END
 GO
 
@@ -308,8 +280,8 @@ CREATE PROCEDURE updateAccDetail						--ADM29
 @role CHAR(3)
 AS
 BEGIN
-	BEGIN TRAN
 		BEGIN TRY
+		BEGIN TRAN
 			IF EXISTS (SELECT A.username FROM [dbo].[Account] A INNER JOIN [dbo].[Personnel] P ON p.id = A.personnelID WHERE A.username = @username 
 															AND A.password = @oldPass
 															AND P.type = @role)
@@ -323,7 +295,6 @@ BEGIN
 		BEGIN CATCH
 			ROLLBACK TRAN
 		END CATCH
-	COMMIT TRAN
 END
 GO
 
@@ -331,8 +302,8 @@ CREATE PROCEDURE viewAcc				--ADM30
 @personnelID INT
 AS
 BEGIN
-	BEGIN TRAN
 		BEGIN TRY
+			BEGIN TRAN
 			IF EXISTS (SELECT username FROM [dbo].[Account] WHERE [dbo].[Account].personnelID = @personnelID)
 			BEGIN
 				SELECT * FROM [dbo].[Account] WHERE [dbo].[Account].personnelID = @personnelID
@@ -342,7 +313,6 @@ BEGIN
 		BEGIN CATCH
 			ROLLBACK TRAN
 		END CATCH
-	COMMIT TRAN
 END
 GO
 
@@ -352,30 +322,29 @@ GO
 CREATE PROCEDURE viewCategories						--PAT1
 AS
 BEGIN
-	BEGIN TRAN
 		BEGIN TRY
+		BEGIN TRAN
 			SELECT name FROM [dbo].[Category]
 			COMMIT TRAN
 		END TRY
 		BEGIN CATCH
 			ROLLBACK TRAN
 		END CATCH
-	COMMIT TRAN
 END
 GO
+
 
 CREATE PROCEDURE viewProcedures					--PAT2
 AS
 BEGIN
-	BEGIN TRAN
 		BEGIN TRY
+		BEGIN TRAN
 			SELECT P.name FROM [dbo].[Procedure] P JOIN [dbo].[Category] C ON P.[categoryID] = C.[id]
 			COMMIT TRAN
 		END TRY
 		BEGIN CATCH
 			ROLLBACK TRAN
 		END CATCH
-	COMMIT TRAN
 END
 GO
 
@@ -387,8 +356,8 @@ CREATE PROCEDURE createNewAppointment						--PAT3
 @patientPhone CHAR(10)
 AS
 BEGIN
-	BEGIN TRAN
 		BEGIN TRY
+		BEGIN TRAN
 			IF NOT EXISTS (SELECT patientName, patientPhone FROM [dbo].[AppointmentRequest] WHERE [dbo].[AppointmentRequest].patientPhone = @patientPhone)
 			BEGIN
 				INSERT INTO [dbo].[AppointmentRequest](appointmentTime, requestTime, note, patientName, patientPhone, categoryName)
@@ -399,7 +368,6 @@ BEGIN
 		BEGIN CATCH
 			ROLLBACK TRAN
 		END CATCH
-	COMMIT TRAN
 END
 GO
 
@@ -412,8 +380,8 @@ CREATE PROCEDURE updatePrescription								 --DEN12
 @newNote NVARCHAR(500)
 AS
 BEGIN
-	BEGIN TRAN
 		BEGIN TRY
+		BEGIN TRAN
 			IF EXISTS (SELECT dentistID, patientID FROM [dbo].[Session] S WHERE S.[dentistID] = @dentistID
 															AND S.[patientID] = @patientID)
 			BEGIN
@@ -430,6 +398,5 @@ BEGIN
 		BEGIN CATCH
 			ROLLBACK TRAN
 		END CATCH
-	COMMIT TRAN
 END
 GO
