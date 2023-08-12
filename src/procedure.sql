@@ -26,11 +26,12 @@ go
 -- PAT3: Schedule a new appointment
 
 -- PROC OF STAFF
-CREATE PROCEDURE viewAppointment			--STA1
+ALTER PROCEDURE viewAppointment			--STA1
 AS
 BEGIN
 	BEGIN TRAN
 		BEGIN TRY
+			BEGIN TRAN
 			SELECT patientName, patientPhone FROM [dbo].[AppointmentRequest] 
 			COMMIT TRAN
 		END TRY
@@ -41,12 +42,13 @@ BEGIN
 END
 GO
 
-CREATE PROCEDURE delAppoint					--STA2
+ALTER PROCEDURE delAppoint					--STA2
 @patientPhone CHAR(10)
 AS
 BEGIN
 	BEGIN TRAN
 		BEGIN TRY
+			BEGIN TRAN
 			DECLARE @patientName NVARCHAR(50);
 			IF EXISTS (SELECT [dbo].[AppointmentRequest].patientPhone FROM [dbo].[AppointmentRequest] WHERE [dbo].[AppointmentRequest].patientPhone = @patientPhone)
 			BEGIN
@@ -62,16 +64,22 @@ BEGIN
 END
 GO
 
-CREATE PROCEDURE checkPatientIsExamined			--STA3
+ALTER PROCEDURE checkPatientIsExamined			--STA3
 @patientPhone CHAR(10)
 AS
 BEGIN
 	BEGIN TRAN
 		BEGIN TRY
+			BEGIN TRAN
 			DECLARE @PatientID INT;
 			IF EXISTS (SELECT P.id FROM [dbo].[Patient] P WHERE P.phone = @patientPhone)
 			BEGIN
 				SELECT @PatientID = P.id FROM [dbo].[Patient] P INNER JOIN [dbo].[Session] S ON S.[patientID] = P.id WHERE P.phone = @patientPhone
+				SELECT @PatientID AS 'PatientID'
+			END
+			ELSE
+			BEGIN
+				RAISERROR('Patient not found.',16,1)
 			END
 			COMMIT TRAN
 		END TRY
@@ -82,33 +90,49 @@ BEGIN
 END
 GO
 
-CREATE PROCEDURE createNewExaminationSesion				--STA4
-@patientName VARCHAR(50),
+ALTER PROCEDURE createNewExaminationSesion				--STA4
 @patientPhone CHAR(10),
-@note VARCHAR(1000)
+@note VARCHAR(1000),
+@roomID INT
 AS
 BEGIN
-	BEGIN TRAN
 		BEGIN TRY
+			BEGIN TRAN
 			DECLARE @PatientID INT;
 			DECLARE @SessionID INT;
-			IF EXISTS (SELECT [dbo].[Patient].id, [dbo].[Patient].name FROM [dbo].[Patient] WHERE [dbo].[Patient].name = @patientName AND [dbo].[Patient].phone = @patientPhone)
+			IF EXISTS (SELECT [dbo].[Patient].id, [dbo].[Patient].name FROM [dbo].[Patient] WHERE [dbo].[Patient].phone = @patientPhone)
 			BEGIN
-				SELECT @PatientID = id FROM [dbo].[Patient] WHERE [dbo].[Patient].name = @patientName AND [dbo].[Patient].phone = @patientPhone;
+				SELECT @PatientID = id FROM [dbo].[Patient] WHERE [dbo].[Patient].phone = @patientPhone;
 				DECLARE @InsertedIDs TABLE (ID INT);
-				INSERT INTO [dbo].[Session](time, patientID, note, type) OUTPUT inserted.id INTO @InsertedIDs VALUES (GETDATE(), @PatientID, @note, 'EXA');
+				INSERT INTO [dbo].[Session](time, patientID, note, type, roomID) OUTPUT inserted.id INTO @InsertedIDs VALUES (GETDATE(), @PatientID, @note, 'EXA', @roomID);
 				SELECT @SessionID = ID FROM @InsertedIDs;
-				INSERT INTO [dbo].[ExaminationSession] (id) VALUES (@SessionID)
+				INSERT INTO [dbo].[ExaminationSession](id) VALUES (@SessionID)
 			END
 			COMMIT TRAN
 		END TRY
 		BEGIN CATCH
 			ROLLBACK TRAN
 		END CATCH
-	COMMIT TRAN
 END
 GO
+EXEC createNewExaminationSesion @patientPhone = '0488760133', @note = 'DMC'
+SELECT * FROM Session WHERE patientID = '0488760133'
+SELECT * FROM ROOM 
+SELECT CoUNT(*) FROM ExaminationSession 
 
+DECLARE @PatientID INT;
+DECLARE @SessionID INT;
+DECLARE @note VARCHAR(1000) = 'DMC';
+DECLARE @roomID INT = '1';
+DECLARE @dentistID INT = '1';
+SELECT @PatientID = id FROM [dbo].[Patient] WHERE [dbo].[Patient].phone = '0488760133';
+DECLARE @InsertedIDs TABLE (ID INT);
+INSERT INTO [dbo].[Session](time, patientID, note, type, roomID) OUTPUT inserted.id INTO @InsertedIDs VALUES (GETDATE(), @PatientID, @note, 'EXA', @roomID);
+SELECT @SessionID = ID FROM @InsertedIDs;
+INSERT INTO [dbo].[ExaminationSession](id) VALUES (@SessionID)
+
+GO
+66687
 CREATE PROCEDURE createNewReExaminationSession			--STA5
 @patientName VARCHAR(50),
 @patientPhone CHAR(10),
