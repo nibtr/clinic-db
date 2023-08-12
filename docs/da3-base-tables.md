@@ -79,16 +79,15 @@ SELECT DATEDIFF(YEAR, dob, GETDATE()) - CASE WHEN (MONTH(dob) > MONTH(GETDATE())
 
 ## Payment Record Table
 
-| Field Name           | Data Type | Constraints             | Domain | Default |
-| -------------------- | --------- | ----------------------- | ------ | ------- |
-| `id`                 | `int`     | `PRIMARY KEY`           | n > 0  | x       |
-| `date`               | `date`    | `NOT NULL`              | x      | x       |
-| `total`              | `int`     | `NOT NULL`              | n > 0  | x       |
-| `paid`               | `int`     | `NOT NULL`              | n >= 0 | 0       |
-| `change`             | `int`     | `NOT NULL`              | n >= 0 | 0       |
-| `method`             | `char(1)` | `X`                     | x      | x       |
-| `patientID`          | `int`     | `FOREIGN KEY, NOT NULL` | n > 0  | x       |
-| `treatmentSessionID` | `int`     | `FOREIGN KEY, NOT NULL` | n > 0  | x       |
+| Field Name  | Data Type | Constraints             | Domain | Default |
+| ----------- | --------- | ----------------------- | ------ | ------- |
+| `id`        | `int`     | `PRIMARY KEY`           | n > 0  | x       |
+| `date`      | `date`    | `NOT NULL`              | x      | x       |
+| `total`     | `int`     | `NOT NULL`              | n > 0  | x       |
+| `paid`      | `int`     | `NOT NULL`              | n >= 0 | 0       |
+| `change`    | `int`     | `NOT NULL`              | n >= 0 | 0       |
+| `method`    | `char(1)` | `X`                     | x      | x       |
+| `patientID` | `int`     | `FOREIGN KEY, NOT NULL` | n > 0  | x       |
 
 For the method, there are 2 options: 
 - Cash: denoted by `C`
@@ -122,12 +121,13 @@ For the method, there are 2 options:
 
 ## Treatment Session Table
 
-| Field Name    | Data Type         | Constraints                | Domain       | Default |
-| ------------- | ----------------- | -------------------------- | ------------ | ------- |
-| `id`          | `int`             | `PRIMARY KEY, FOREIGN KEY` | n > 0        | x       |
-| `health_note` | `nvarchar(1000)`* | `X`                        | 0 < n < 1001 | x       |
-| `description` | `nvarchar(1000)`* | `X`                        | 0 < n < 1001 | x       |
-| `categoryID`  | `int`             | `FOREIGN KEY, NOT NULL`    | n > 0        | x       |
+| Field Name        | Data Type         | Constraints                | Domain       | Default |
+| ----------------- | ----------------- | -------------------------- | ------------ | ------- |
+| `id`              | `int`             | `PRIMARY KEY, FOREIGN KEY` | n > 0        | x       |
+| `health_note`     | `nvarchar(1000)`* | `X`                        | 0 < n < 1001 | x       |
+| `description`     | `nvarchar(1000)`* | `X`                        | 0 < n < 1001 | x       |
+| `categoryID`      | `int`             | `FOREIGN KEY, NOT NULL`    | n > 0        | x       |
+| `paymentRecordID` | `int`             | `FOREIGN KEY`              | n > 0        | x       |
 
 ## Examination Session Table
 

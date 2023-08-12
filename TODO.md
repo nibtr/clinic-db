@@ -4,12 +4,12 @@
   - [x] Domain
   - [x] Default values 
 - [ ] File Organization
-  - [ ] Transactions Analysis:
+  - [x] Transactions Analysis:
     - Transactions that run frequently and will have a significant impact on the performance of the database
     - Transactions that are critical to the operation of the business
     - The times of day/week when there will be a high demand made on the database (peak load)
-  - [ ] Determine frequency information
-  - [ ] Data usage analysis
+  - [x] Determine frequency information
+  - [x] Data usage analysis (Doing)
   - [ ] Determine file organization:
     - Sequential
     - Indexed
