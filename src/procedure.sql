@@ -131,7 +131,7 @@ BEGIN
 			DECLARE @SessionID INT;
 			IF EXISTS (SELECT [dbo].[Patient].id, [dbo].[Patient].name FROM [dbo].[Patient] WHERE [dbo].[Patient].phone = @patientPhone)
 			BEGIN
-				SELECT @PatientID = id FROM [dbo].[Patient] WHERE [dbo].[Patient].name = @patientName AND [dbo].[Patient].phone = @patientPhone;
+				SELECT @PatientID = id FROM [dbo].[Patient] WHERE [dbo].[Patient].phone = @patientPhone;
 				SELECT @examSessionID = id FROM [dbo].[Session] WHERE [dbo].[Session].patientID = @PatientID AND [dbo].[Session].type = 'EXA';
 				DECLARE @InsertedIDs TABLE (ID INT);
 				INSERT INTO [dbo].[Session](time, patientID, note, type, roomID, dentistID) OUTPUT inserted.id INTO @InsertedIDs VALUES (GETDATE(), @PatientID, @note, 'EXA', @roomID, @dentistID);
@@ -177,8 +177,7 @@ CREATE PROCEDURE createNewPayment			--STA14
 @patientPhone CHAR(10),
 @total INT,
 @change INT,
-@paid INT,
-@SessionID INT
+@paid INT
 AS 
 BEGIN
 		BEGIN TRY
@@ -187,7 +186,7 @@ BEGIN
 			IF EXISTS (SELECT [dbo].[Patient].id, [dbo].[Patient].name FROM [dbo].[Patient] WHERE [dbo].[Patient].phone = @patientPhone)
 			BEGIN
 				SELECT @PatientID = id FROM [dbo].[Patient] WHERE [dbo].[Patient].phone = @patientPhone;
-				INSERT INTO [dbo].[PaymentRecord](date, total, paid, change, patientID, treatmentSessionID) VALUES (GETDATE(), @total, @paid, @change, @PatientID, @SessionID)
+				INSERT INTO [dbo].[PaymentRecord](date, total, paid, change, patientID) VALUES (GETDATE(), @total, @paid, @change, @PatientID)
 			END
 			COMMIT TRAN
 		END TRY
@@ -201,8 +200,7 @@ CREATE PROCEDURE updatePayment				--STA15
 @patientPhone CHAR(10),
 @paid INT,
 @change INT,
-@method CHAR(1),
-@SessionID INT
+@method CHAR(1)
 AS 
 BEGIN
 		BEGIN TRY
@@ -217,7 +215,7 @@ BEGIN
 				[dbo].[PaymentRecord].[change] = @change,
 				[dbo].[PaymentRecord].[method] = @method,
 				[dbo].[PaymentRecord].[date] = GETDATE()
-				WHERE [patientID] = @PatientID AND [treatmentSessionID] = @SessionID
+				WHERE [patientID] = @PatientID
 			END
 			COMMIT TRAN
 		END TRY
