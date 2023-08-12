@@ -138,7 +138,7 @@ will hold the most data, which are also the most important tables of the system 
 | TreatmentSession     | ~65000                  | 35-50             | 700-1000            |
 | ExaminationSession   | ~60000                  | 25-35             | 600-800             |
 | ReExaminationSession | ~50000                  | 20-25             | 200-300             |
-| PaymentRecord        | ~200000                 | 35-50             | 700-1000            |
+| PaymentRecord        | ~100000                 | 35-50             | 700-1000            |
 
 ## Data Usage Assessment
 

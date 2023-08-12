@@ -224,6 +224,8 @@ For the method, there are 2 options:
 | `treatmentSessionID` | `int`     | `PRIMARY KEY, FOREIGN KEY` | n > 0  | x       |
 | `order`              | `int`     | `PRIMARY KEY`              | n > 0  | x       |
 
+Order of indexes: `treatmentSessionID` -> `toothID` -> `order`
+
 ## Prescription Table
 
 | Field Name           | Data Type        | Constraints             | Domain      | Default |
@@ -231,6 +233,8 @@ For the method, there are 2 options:
 | `drugID`             | `int`            | `FOREIGN KEY, NOT NULL` | n > 0       | x       |
 | `treatmentSessionID` | `int`            | `FOREIGN KEY, NOT NULL` | n > 0       | x       |
 | `note`               | `nvarchar(500)`* | `X`                     | 0 < n < 501 | x       |
+
+Order of indexes: `treatmentSessionID` -> `drugID`
 
 ## Appointment Request Table
 
@@ -266,3 +270,5 @@ For the method, there are 2 options:
 | ----------- | --------- | ----------------------- | ------ | ------- |
 | `dayID`     | `int`     | `FOREIGN KEY, NOT NULL` | n > 0  | x       |
 | `dentistID` | `int`     | `FOREIGN KEY, NOT NULL` | n > 0  | x       |
+
+Order of indexes: `dayID` -> `dentistID`
