@@ -46,21 +46,18 @@ CREATE PROCEDURE delAppoint					--STA2
 @patientID CHAR(10)
 AS
 BEGIN
-	BEGIN TRAN
 		BEGIN TRY
 			BEGIN TRAN
-			DECLARE @patientName NVARCHAR(50);
-			IF EXISTS (SELECT [dbo].[AppointmentRequest].patientPhone FROM [dbo].[AppointmentRequest] WHERE [dbo].[AppointmentRequest].patientPhone = @patientPhone)
+			DECLARE @patientPhone CHAR(10);
 			BEGIN
 				DELETE FROM [dbo].[AppointmentRequest] 
-				WHERE [dbo].[AppointmentRequest].patientPhone = @patientPhone
+				WHERE [dbo].[AppointmentRequest].patientPhone IN (SELECT @patientPhone = phone FROM PATIENT WHERE id = @patientID)
 			END
 			COMMIT TRAN
 		END TRY
 		BEGIN CATCH
 			ROLLBACK TRAN
 		END CATCH
-	COMMIT TRAN
 END
 GO
 
