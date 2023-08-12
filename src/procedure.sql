@@ -110,3 +110,59 @@ BEGIN
 		END CATCH
 END
 GO
+
+
+CREATE PROCEDURE createNewReExaminationSession			--STA5
+@patientPhone CHAR(10),
+@note VARCHAR(1000),
+@roomID INT,
+@dentistID INT
+AS 
+BEGIN
+		BEGIN TRY
+			BEGIN TRAN
+			DECLARE @PatientID INT;
+			DECLARE @examSessionID INT;
+			DECLARE @SessionID INT;
+			IF EXISTS (SELECT [dbo].[Patient].id, [dbo].[Patient].name FROM [dbo].[Patient] WHERE [dbo].[Patient].phone = @patientPhone)
+			BEGIN
+				SELECT @PatientID = id FROM [dbo].[Patient] WHERE [dbo].[Patient].phone = @patientPhone;
+				SELECT @examSessionID = id FROM [dbo].[Session] WHERE [dbo].[Session].patientID = @PatientID AND [dbo].[Session].type = 'EXA';
+				DECLARE @InsertedIDs TABLE (ID INT);
+				INSERT INTO [dbo].[Session](time, patientID, note, type, roomID, dentistID) OUTPUT inserted.id INTO @InsertedIDs VALUES (GETDATE(), @PatientID, @note, 'EXA', @roomID, @dentistID);
+				SELECT @SessionID = ID FROM @InsertedIDs;
+				INSERT INTO [dbo].[ReExaminationSession] (id,relatedExaminationID) VALUES (@SessionID, @examSessionID);
+			END
+			COMMIT TRAN
+		END TRY
+		BEGIN CATCH
+			ROLLBACK TRAN
+		END CATCH
+END
+GO
+
+CREATE PROCEDURE viewAvailableDentist			--STA7
+@appointmentID INT
+AS 
+BEGIN
+		BEGIN TRY
+			BEGIN TRAN
+			DECLARE @PatientID INT;
+			DECLARE @SessionID INT;
+			DECLARE @Time DATETIME2;
+			IF EXISTS (SELECT [dbo].[AppointmentRequest].id FROM [dbo].[AppointmentRequest] WHERE [dbo].[AppointmentRequest].id = @appointmentID)
+			BEGIN
+				SELECT @PatientID = id FROM [dbo].[Patient] WHERE [dbo].[Patient].phone IN (SELECT phone FROM [dbo].[AppointmentRequest] WHERE [dbo].[AppointmentRequest].id = @appointmentID);
+				SELECT @SessionID = id , @Time = time FROM [dbo].[Session] WHERE [patientID] = @PatientID AND [type] = 'EXA';
+				SELECT P.id AS dentistID, P.name AS dentistName FROM [dbo].[Session] S INNER JOIN [dbo].[Personnel] P ON S.[dentistID] = P.[id]
+				WHERE S.[time] >= DATEADD(DAY, DATEDIFF(DAY, 0, GETDATE()), 0) -- Today's start
+						AND S.[time] < DATEADD(DAY, DATEDIFF(DAY, 0, GETDATE()) + 1, 0) -- Tomorrow's start
+						AND DATEDIFF(minute, S.[time], GETDATE()) > 30;
+			END
+			COMMIT TRAN
+		END TRY
+		BEGIN CATCH
+			ROLLBACK TRAN
+		END CATCH
+END
+GO
