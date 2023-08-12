@@ -50,10 +50,8 @@ BEGIN
 			DECLARE @patientName NVARCHAR(50);
 			IF EXISTS (SELECT [dbo].[AppointmentRequest].patientPhone FROM [dbo].[AppointmentRequest] WHERE [dbo].[AppointmentRequest].patientPhone = @patientPhone)
 			BEGIN
-				SELECT @patientName = patientName
-				FROM [dbo].[AppointmentRequest] WHERE [dbo].[AppointmentRequest].patientPhone = @patientPhone
 				DELETE FROM [dbo].[AppointmentRequest] 
-				WHERE [dbo].[AppointmentRequest].patientPhone = @patientPhone AND [dbo].[AppointmentRequest].patientName = @patientName
+				WHERE [dbo].[AppointmentRequest].patientPhone = @patientPhone
 			END
 			COMMIT TRAN
 		END TRY
@@ -71,7 +69,7 @@ BEGIN
 	BEGIN TRAN
 		BEGIN TRY
 			DECLARE @PatientID INT;
-			IF EXISTS (SELECT P.name, P.phone FROM [dbo].[Patient] P WHERE P.phone = @patientPhone)
+			IF EXISTS (SELECT P.id FROM [dbo].[Patient] P WHERE P.phone = @patientPhone)
 			BEGIN
 				SELECT @PatientID = P.id FROM [dbo].[Patient] P INNER JOIN [dbo].[Session] S ON S.[patientID] = P.id WHERE P.phone = @patientPhone
 			END
@@ -141,7 +139,7 @@ END
 GO
 
 CREATE PROCEDURE viewAvailableDentist			--STA6
-@patientPhone CHAR(10)
+@appointmentID INT
 AS 
 BEGIN
 	BEGIN TRAN
@@ -150,9 +148,9 @@ BEGIN
 			DECLARE @SessionID INT;
 			DECLARE @Time DATETIME2;
 
-			IF EXISTS (SELECT [dbo].[Patient].id, [dbo].[Patient].name FROM [dbo].[Patient] WHERE [dbo].[Patient].phone = @patientPhone)
+			IF EXISTS (SELECT [dbo].[AppointmentRequest].id FROM [dbo].[AppointmentRequest] WHERE [dbo].[AppointmentRequest].id = @appointmentID)
 			BEGIN
-				SELECT @PatientID = id FROM [dbo].[Patient] WHERE [dbo].[Patient].phone = @patientPhone;
+				SELECT @PatientID = id FROM [dbo].[Patient] WHERE [dbo].[Patient].phone IN (SELECT * FROM [dbo].[AppointmentRequest] WHERE [dbo].[AppointmentRequest].id = @appointmentID)
 				SELECT @SessionID = id , @Time = time FROM [dbo].[Session] WHERE [patientID] = @PatientID AND [type] = 'EXA';
 				SELECT P.id, P.name FROM [dbo].[Session] S INNER JOIN [dbo].[Personnel] P ON S.[dentistID] = P.[id]
 				WHERE S.[time] >= DATEADD(DAY, DATEDIFF(DAY, 0, GETDATE()), 0) -- Today's start
