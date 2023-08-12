@@ -9,7 +9,7 @@
     - Transactions that are critical to the operation of the business
     - The times of day/week when there will be a high demand made on the database (peak load)
   - [x] Determine frequency information
-  - [ ] Data usage analysis
+  - [x] Data usage analysis (Doing)
   - [ ] Determine file organization:
     - Sequential
     - Indexed
