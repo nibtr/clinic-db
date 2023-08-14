@@ -63,7 +63,6 @@ CREATE TABLE [dbo].[PaymentRecord] (
 	[change] INT NOT NULL,
 	[method] CHAR(1),
 	[patientID] INT NOT NULL,
-	[treatmentSessionID] INT UNIQUE NOT NULL,
 	CONSTRAINT [PaymentRecord_pkey] PRIMARY KEY CLUSTERED ([id])
 );
 
@@ -107,6 +106,7 @@ CREATE TABLE [dbo].[TreatmentSession] (
     [healthNote] NVARCHAR(1000),
     [description] NVARCHAR(1000),
 	[categoryID] INT NOT NULL,
+    [PaymentRecordID] INT,
 	CONSTRAINT [TreatmentSession_pkey] PRIMARY KEY CLUSTERED ([id])
 );	
 
@@ -238,7 +238,7 @@ ALTER TABLE [dbo].[Account] ADD CONSTRAINT [FK_Account_Personnel] FOREIGN KEY ([
 
 -- Constraint in table Payment Record
 AlTER TABLE [dbo].[PaymentRecord] ADD CONSTRAINT [FK_PaymentRecord_Patient] FOREIGN KEY ([patientID]) REFERENCES [dbo].[Patient]([id]) ON DELETE NO ACTION ON UPDATE CASCADE;
-AlTER TABLE [dbo].[PaymentRecord] ADD CONSTRAINT [FK_PaymentRecord_TreatmentSession] FOREIGN KEY ([treatmentSessionID]) REFERENCES [dbo].[TreatmentSession]([id]) ON DELETE NO ACTION ON UPDATE CASCADE;
+
 
 -- Constraint in table Session
 AlTER TABLE [dbo].[Session] ADD CONSTRAINT [FK_Session_Room] FOREIGN KEY ([roomID]) REFERENCES [dbo].[Room]([id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
@@ -249,7 +249,7 @@ AlTER TABLE [dbo].[Session] ADD CONSTRAINT [FK_Session_Personnel_assistantID] FO
 -- Constraint in table Treatment Session
 AlTER TABLE [dbo].[TreatmentSession] ADD CONSTRAINT [FK_TreatmentSession_Session] FOREIGN KEY ([id]) REFERENCES [dbo].[Session]([id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
 AlTER TABLE [dbo].[TreatmentSession] ADD CONSTRAINT [FK_TreatmentSession_Category] FOREIGN KEY ([categoryID]) REFERENCES [dbo].[Category]([id]) ON DELETE NO ACTION ON UPDATE CASCADE;
-
+AlTER TABLE [dbo].[TreatmentSession] ADD CONSTRAINT [FK_TreatmentSession_PaymentRecord] FOREIGN KEY ([PaymentRecordID]) REFERENCES [dbo].[PaymentRecord]([id]) ON DELETE NO ACTION ON UPDATE CASCADE;
 -- Constraint in table Procedure
 AlTER TABLE [dbo].[Procedure] ADD CONSTRAINT [FK_Procedure_Category] FOREIGN KEY ([categoryID]) REFERENCES [dbo].[Category]([id]) ON DELETE CASCADE ON UPDATE CASCADE;
 
