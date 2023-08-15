@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <!--
+SQL Data Generator 4
 SQL Data Generator
-RedGate.SQLDataGenerator.UI
-Version:4.5.2.4316-->
+Version:4.4.3.3055-->
 <Project version="2" type="SDGProject">
   <DataSource version="4" type="LiveDatabaseSource">
     <ServerName>(local)\SQLEXPRESS</ServerName>
@@ -340,11 +340,11 @@ Version:4.5.2.4316-->
               </element>
               <element>
                 <key type="string">MinValue</key>
-                <value type="string">637134336000000000</value>
+                <value type="string">637134624000000000</value>
               </element>
               <element>
                 <key type="string">MaxValue</key>
-                <value type="string">638395776000000000</value>
+                <value type="string">638396406000000000</value>
               </element>
               <element>
                 <key type="string">UseColumnOffset</key>
@@ -423,11 +423,11 @@ Version:4.5.2.4316-->
               </element>
               <element>
                 <key type="string">MinValue</key>
-                <value type="string">637134624000000000</value>
+                <value type="string">637134336000000000</value>
               </element>
               <element>
                 <key type="string">MaxValue</key>
-                <value type="string">638081046000000000</value>
+                <value type="string">638080848000000000</value>
               </element>
               <element>
                 <key type="string">UseColumnOffset</key>
@@ -1557,7 +1557,7 @@ Version:4.5.2.4316-->
               </element>
               <element>
                 <key type="string">NullsAllowed</key>
-                <value type="string">True</value>
+                <value type="string">False</value>
               </element>
               <element>
                 <key type="string">NullProportion</key>
@@ -1625,7 +1625,7 @@ Version:4.5.2.4316-->
       <TableType>Generated</TableType>
       <PopulationDetails version="2" type="PopulationDetails">
         <PopulationType>RowCount</PopulationType>
-        <RowCount>200000</RowCount>
+        <RowCount>80000</RowCount>
         <ProportionTableExists>False</ProportionTableExists>
         <Proportion>0</Proportion>
         <TimeToPopulate>0</TimeToPopulate>
@@ -1965,30 +1965,6 @@ Version:4.5.2.4316-->
               <element>
                 <key type="string">Unique</key>
                 <value type="string">False</value>
-              </element>
-            </GeneratorProperties>
-          </Generator>
-        </value>
-        <value version="1" type="SDGField">
-          <Name>treatmentSessionID</Name>
-          <FieldType>Generated</FieldType>
-          <PrimaryKey>False</PrimaryKey>
-          <ForeignKey>True</ForeignKey>
-          <Unique>True</Unique>
-          <AllowsNulls>False</AllowsNulls>
-          <SqlType>Integer32</SqlType>
-          <Precision>10</Precision>
-          <Scale>0</Scale>
-          <DefinedSize>4</DefinedSize>
-          <Generator version="1" type="GeneratorDetails">
-            <GeneratorTypeName>RedGate.SQLDataGenerator.Generators.Others.FKInternalGenerator</GeneratorTypeName>
-            <DisplayName>Foreign Key (automatic)</DisplayName>
-            <Description>Reference Foreign Key $FK for column $FKField</Description>
-            <CategoryName>SQL Type</CategoryName>
-            <GeneratorProperties type="Dictionary&lt;string, object&gt;" version="1">
-              <element>
-                <key type="string">Unique</key>
-                <value type="string">True</value>
               </element>
             </GeneratorProperties>
           </Generator>
@@ -2978,7 +2954,7 @@ Version:4.5.2.4316-->
               </element>
               <element>
                 <key type="string">NullsAllowed</key>
-                <value type="string">True</value>
+                <value type="string">False</value>
               </element>
               <element>
                 <key type="string">NullProportion</key>
@@ -3391,7 +3367,7 @@ Version:4.5.2.4316-->
         <TimeToPopulate>0</TimeToPopulate>
       </PopulationDetails>
       <InvalidRowBehaviour>SkipRow</InvalidRowBehaviour>
-      <Included>False</Included>
+      <Included>True</Included>
       <Append>False</Append>
       <Name>ToothSession</Name>
       <Schema>dbo</Schema>
@@ -3720,6 +3696,30 @@ Version:4.5.2.4316-->
             </GeneratorProperties>
           </Generator>
         </value>
+        <value version="1" type="SDGField">
+          <Name>paymentRecordID</Name>
+          <FieldType>Generated</FieldType>
+          <PrimaryKey>False</PrimaryKey>
+          <ForeignKey>True</ForeignKey>
+          <Unique>False</Unique>
+          <AllowsNulls>True</AllowsNulls>
+          <SqlType>Integer32</SqlType>
+          <Precision>10</Precision>
+          <Scale>0</Scale>
+          <DefinedSize>4</DefinedSize>
+          <Generator version="1" type="GeneratorDetails">
+            <GeneratorTypeName>RedGate.SQLDataGenerator.Generators.Others.FKInternalGenerator</GeneratorTypeName>
+            <DisplayName>Foreign Key (automatic)</DisplayName>
+            <Description>Reference Foreign Key $FK for column $FKField</Description>
+            <CategoryName>SQL Type</CategoryName>
+            <GeneratorProperties type="Dictionary&lt;string, object&gt;" version="1">
+              <element>
+                <key type="string">Unique</key>
+                <value type="string">False</value>
+              </element>
+            </GeneratorProperties>
+          </Generator>
+        </value>
       </Fields>
       <ForeignKeyProperties type="List&lt;ForeignKeyProperty&gt;" version="1">
         <value version="2" type="ForeignKeyProperty">
@@ -3744,6 +3744,18 @@ Version:4.5.2.4316-->
           <MinRepeats>1</MinRepeats>
           <MaxRepeats>10</MaxRepeats>
           <NullsAllowed>False</NullsAllowed>
+          <NullProportion>0.01</NullProportion>
+        </value>
+        <value version="2" type="ForeignKeyProperty">
+          <Fields type="List&lt;string&gt;" version="1">
+            <value type="string">paymentRecordID</value>
+          </Fields>
+          <ForeignKeyFillMethod>RepeatForever</ForeignKeyFillMethod>
+          <MaxBuckets>1000</MaxBuckets>
+          <Seed>0</Seed>
+          <MinRepeats>1</MinRepeats>
+          <MaxRepeats>10</MaxRepeats>
+          <NullsAllowed>True</NullsAllowed>
           <NullProportion>0.01</NullProportion>
         </value>
       </ForeignKeyProperties>

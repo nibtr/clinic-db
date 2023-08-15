@@ -66,8 +66,6 @@ CREATE TABLE [dbo].[PaymentRecord] (
 	CONSTRAINT [PaymentRecord_pkey] PRIMARY KEY CLUSTERED ([id])
 );
 
-CREATE INDEX idx_payment_record ON [dbo].[PaymentRecord] (patientID);
-
 -- For the method, there are 2 options: 
 -- - Cash: denoted by `C`
 -- - Online: denoted by `O`
@@ -85,11 +83,6 @@ CREATE TABLE [dbo].[Session] (
 	CONSTRAINT [Session_pkey] PRIMARY KEY CLUSTERED ([id])
 );
 
-CREATE INDEX idx_session_time ON [dbo].[Session] (time);
-CREATE INDEX idx_session_patient_id ON [dbo].[Session] (patientID);
-CREATE INDEX idx_session_time_dentist_id ON [dbo].[Session] (dentistID);
-CREATE INDEX idx_session_type ON [dbo].[Session] (type);
-
 -- - `status` is a 3-character string that indicates the status of the session:
 --   - `SCH`: Scheduled
 --   - `CAN`: Cancelled
@@ -106,7 +99,7 @@ CREATE TABLE [dbo].[TreatmentSession] (
     [healthNote] NVARCHAR(1000),
     [description] NVARCHAR(1000),
 	[categoryID] INT NOT NULL,
-    [PaymentRecordID] INT,
+    [paymentRecordID] INT,
 	CONSTRAINT [TreatmentSession_pkey] PRIMARY KEY CLUSTERED ([id])
 );	
 
@@ -210,9 +203,6 @@ CREATE TABLE [dbo].[AppointmentRequest] (
 	CONSTRAINT [AppointmentRequest_pkey] PRIMARY KEY CLUSTERED ([id])
 );	
 
-CREATE INDEX idx_appointment_req_appointment_time ON [dbo].[AppointmentRequest] (appointmentTime);
-CREATE INDEX idx_appointment_req_request_time ON [dbo].[AppointmentRequest] (requestTime);
-
 CREATE TABLE [dbo].[Day] (
     [id] INT NOT NULL IDENTITY(1,1),
 	[day] CHAR(3) UNIQUE NOT NULL,
@@ -231,14 +221,24 @@ CREATE TABLE [dbo].[Schedule] (
     [dayID] INT NOT NULL,
     [dentistID] INT NOT NULL,
 	CONSTRAINT [Schedule_pkey] PRIMARY KEY CLUSTERED ([dayID],[dentistID])
-);	
+);
+
+-- Indexing
+CREATE INDEX idx_payment_record ON [dbo].[PaymentRecord]([patientID]);
+
+CREATE INDEX idx_appointment_req_appointment_time ON [dbo].[AppointmentRequest]([appointmentTime]);
+CREATE INDEX idx_appointment_req_request_time ON [dbo].[AppointmentRequest]([requestTime]);
+
+CREATE INDEX idx_session_time ON [dbo].[Session]([time]);
+CREATE INDEX idx_session_patient_id ON [dbo].[Session]([patientID]);
+CREATE INDEX idx_session_time_dentist_id ON [dbo].[Session]([dentistID]);
+CREATE INDEX idx_session_type ON [dbo].[Session]([type]);
 
 -- Constraint in table Account
 ALTER TABLE [dbo].[Account] ADD CONSTRAINT [FK_Account_Personnel] FOREIGN KEY ([personnelID]) REFERENCES [dbo].[Personnel]([id]) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 -- Constraint in table Payment Record
 AlTER TABLE [dbo].[PaymentRecord] ADD CONSTRAINT [FK_PaymentRecord_Patient] FOREIGN KEY ([patientID]) REFERENCES [dbo].[Patient]([id]) ON DELETE NO ACTION ON UPDATE CASCADE;
-
 
 -- Constraint in table Session
 AlTER TABLE [dbo].[Session] ADD CONSTRAINT [FK_Session_Room] FOREIGN KEY ([roomID]) REFERENCES [dbo].[Room]([id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
@@ -275,7 +275,7 @@ AlTER TABLE [dbo].[Schedule] ADD CONSTRAINT [FK_Schedule_Dentist] FOREIGN KEY ([
 -- Init some basic table
 -- Personnel & Account for admin
 INSERT INTO [dbo].[Personnel](nationalID, name, dob, gender, phone, type) values('123456789123', 'Admin', '2002-06-01', 'M', '0777058016', 'ADM')
-INSERT INTO [dbo].[Account](username, password, email, personnelID) values('ADM-123456', '$2a$12$/k35hQ1YWbiBt3a0EAFFl.o4Ec2eHd1KqfAD3Sv3lyidWSxdEQy4i', 'admin@gmail.com', 1)
+INSERT INTO [dbo].[Account](username, password, email, personnelID) values('ADM-123456', '$2a$12$kWJhMbTG8bPAtf0ZO4DO..mn4hE7cecT7vhnQKW.BjzFRIR1uL2O.', 'admin@gmail.com', 1)
 
 -- Day
 INSERT INTO [dbo].[Day] values('SUN')
@@ -326,5 +326,6 @@ BEGIN CATCH
 END CATCH;
 
 --Use for drop the database
+--use master
 --alter database DentalClinicDev set single_user with rollback immediate
 --drop database DentalClinicDev

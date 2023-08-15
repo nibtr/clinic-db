@@ -1,27 +1,49 @@
-# Indexing 
+---
+title: DA#3 - Indexing
+date-of-creation: 2023-08-15
+date-last-updated: 2023-08-15
+description: This document describes the indexing process of the database.
+---
 
-**Appointment Request** table: create non clustered index on `appointmentTime`, `requestTime` 
- - Appointment Request table là bảng có dữ liệu lớn  và được thêm mỗi ngày, các staff cũng cần phải query mỗi ngày để lên lịch khám cho các appointment request
- - Các staff sẽ dựa thường dựa vào `appointmentTime` của các appointment request để tạo lịch khám nên cần đánh index trên `appointmentTime`
- - Theo nghiệp vụ, mỗi ngày, các staff sẽ thường check các appointment request có trong ngày (`requestTime` = today) nên việc tạo index trên `request_time` là cần thiết khi tần suất query diễn ra hằng ngày
+## Indexing 
 
-**Payment Record** table: create non clustered index on `patientID`
- - Payment Record table là bảng có quan hệ one to one với Treatment Session nên dữ liệu của bảng này cũng rất lớn 
- - Việc đánh index trên các khóa ngoại `patient_id` sẽ làm tăng tốc độ truy vấn khi muốn lấy các thông tin liên quan về patient của 1 payment record, lấy các payment record của 1 patient, ...
-  <!-- hình minh chứng -->
+### Appointment Request Table: 
 
-**Session** table: 
- - create non clustered index on `time`, `patientID`, `dentistID`
-    - Session table là bảng với dữ liệu lớn (200000 rows) cùng với tần suất query lớn. 
-    - Các trường time, `patientID`, `dentistID` là các trường ít update
-    - Việc đánh index ở trường `time` nhằm giảm thiểu thời gian truy vấn các buổi khám, tái khám, buổi điều trị theo thời gian (theo  nghiệp vụ thì việc truy vấn các buổi đó theo thời gian thường được diễn ra mỗi ngày và việc update `time` thường không diễn ra thường xuyên)
-    - Đánh index ở trường `patientID` , `dentistID` nhằm giảm thiểu thời gian truy vấn khi join bảng `Session` với `Patient` hay `Personnel` cũng như truy vấn `Session` theo `patientID`, `dentistID`
- - create filter index on `type`
-    - Theo logic ban đầu, treatment secssion, examination, re-examination có bảng chung là Session. Khi muốn lấy data của các treatment session, examination, re-examination thì cần query bảng Session theo `type`. Vì vậy, việc tạo filter index trên `type` là cần thiết khi tần suất read data theo `type` là rất lớn 
+**Create a non clustered index on `appointmentTime` and `requestTime`**
+
+- *Appointment Request Table* is a large table with a lot of data and is added on a daily basis, staffs also need to query frequently to schedule appointments for patients.
+- Staffs will usually rely on the `appointmentTime` of an appointment request to create a schedule, that is why it is necessary to index on `appointmentTime`.
+- According to the business, every day, staffs will usually check the appointment requests made on the same day (`requestTime` = TODAY), so indexing on `requestTime` is necessary when the query frequency occurs daily.
+
+### Session Table:
+
+**Create non clustered index on `time`, `patientID`, `dentistID`**
+
+- *Session Table* is a large table (around 200000 rows) and is the most important table in the database. It is also the table that is queried the most frequently.
+- Fields such as `time`, `patientID`, `dentistID` are fields that are rarely updated once created. Because of this, we can indexing on these fields to reduce the query time:
+  - Indexing on `time` to reduce the query time of sessions, which include treatment sessions, examinations, re-examinations. According to the business, the query frequency of these sessions is very high and also occurs daily.
+  - Indexing on `patientID`, `dentistID` to reduce the query time when joining the `Session` table with the `Patient` or `Personnel` table, as well as querying the `Session` table by `patientID`, `dentistID`, some of which include searching for the sessions of a patient, the sessions of a dentist, etc.
+  - Create an index on `type` to reduce the query time when querying the `Session` table by `type`. By doing this, we can search for the type of a session (treatment session, examination, re-examination) faster. In addition, according to the database design, the *Treatment Session Table*, *Examination Table*, *Re-examination Table* are all inherited from the *Session Table*, so indexing on `type` is necessary when the query frequency of these tables is very high.
+
  <!-- hình minh chứng -->
 
-**Prescription** table: clustered index on `treatmentSessionID`, `drugID`
- - `treatmentSessionID`, `drugID` đã được đánh khóa chính nên đã có cluster index nhưng việc sắp xếp `treatmentSessionID` đứng trước đóng vai trò quan trọng trong việc tăng tốc độ truy vấn khi mà các câu điều kiện trong truy vấn đa số sử dụng `treatmentSessionID` để so sánh, tìm kiếm
+### Payment Record Table:
 
-**ToothSession** table: clustered index on `treatmentSessionID`, `toothID`
- - Tương tự như bảng Prescription, `treatmentSessionID`, `toothID` đã được đánh khóa chính nên đã có cluster index nhưng việc để  `treatmentSessionID` đứng trước đóng vai trò quan trọng khi mà đa số các câu điều kiện trong truy vấn đa số sử dụng `treatmentSessionID` để so sánh, tìm kiếm
+**Create a non clustered index on `patientID`**
+
+- *Payment Record Table* is a table with a 1-1 relationship with the *Treatment Session Table*, whose data is also very large.
+- Indexing on the foreign key `patientID` will speed up the query when we want to get information related to the patient of a payment record, get the payment records of a patient, etc.
+
+  <!-- hình minh chứng -->
+
+### Prescription Table:
+
+**Clustered index on `treatmentSessionID`, `drugID`**
+
+- `treatmentSessionID` together with `drugID` form a composite primary key, so they already have a clustered index. However, sorting `treatmentSessionID` first plays an important role in speeding up the query when most of the conditions in the query use `treatmentSessionID` to compare or to search.
+
+### ToothSession Table:
+
+**Clustered index on `treatmentSessionID`, `toothID`**
+
+Similar to the *Prescription Table*, `treatmentSessionID`, `toothID` have already been indexed as a composite primary key, but sorting `treatmentSessionID` first plays an important role when most of the conditions in the query use `treatmentSessionID` to compare or to search.
