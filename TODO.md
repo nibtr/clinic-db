@@ -14,9 +14,9 @@
     - Sequential
     - Indexed
     - Hashed
-  - [ ] Indexing
+  - [x] Indexing
 - [ ] User views
-- [ ] Security
+- [x] Security
 - [ ] Denormalization (if needed)
   - Combining 1-1 relationships
   - Duplicating non-key columns in 1-M relationships to reduce joins
