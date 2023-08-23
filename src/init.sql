@@ -223,17 +223,6 @@ CREATE TABLE [dbo].[Schedule] (
 	CONSTRAINT [Schedule_pkey] PRIMARY KEY CLUSTERED ([dayID],[dentistID])
 );
 
--- Indexing
-CREATE INDEX idx_payment_record ON [dbo].[PaymentRecord]([patientID]);
-
-CREATE INDEX idx_appointment_req_appointment_time ON [dbo].[AppointmentRequest]([appointmentTime]);
-CREATE INDEX idx_appointment_req_request_time ON [dbo].[AppointmentRequest]([requestTime]);
-
-CREATE INDEX idx_session_time ON [dbo].[Session]([time]);
-CREATE INDEX idx_session_patient_id ON [dbo].[Session]([patientID]);
-CREATE INDEX idx_session_time_dentist_id ON [dbo].[Session]([dentistID]);
-CREATE INDEX idx_session_type ON [dbo].[Session]([type]);
-
 -- Constraint in table Account
 ALTER TABLE [dbo].[Account] ADD CONSTRAINT [FK_Account_Personnel] FOREIGN KEY ([personnelID]) REFERENCES [dbo].[Personnel]([id]) ON DELETE NO ACTION ON UPDATE CASCADE;
 
