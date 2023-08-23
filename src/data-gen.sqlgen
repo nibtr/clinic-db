@@ -2001,13 +2001,13 @@ Version:4.4.3.3055-->
       <TableType>Generated</TableType>
       <PopulationDetails version="2" type="PopulationDetails">
         <PopulationType>RowCount</PopulationType>
-        <RowCount>200000</RowCount>
+        <RowCount>100000</RowCount>
         <ProportionTableExists>False</ProportionTableExists>
         <Proportion>0</Proportion>
         <TimeToPopulate>0</TimeToPopulate>
       </PopulationDetails>
       <InvalidRowBehaviour>SkipRow</InvalidRowBehaviour>
-      <Included>False</Included>
+      <Included>True</Included>
       <Append>False</Append>
       <Name>Prescription</Name>
       <Schema>dbo</Schema>

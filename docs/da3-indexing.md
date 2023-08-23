@@ -15,6 +15,21 @@ description: This document describes the indexing process of the database.
 - Staffs will usually rely on the `appointmentTime` of an appointment request to create a schedule, that is why it is necessary to index on `appointmentTime`.
 - According to the business, every day, staffs will usually check the appointment requests made on the same day (`requestTime` = TODAY), so indexing on `requestTime` is necessary when the query frequency occurs daily.
 
+Consider the following query. The query is used to find appointments that are requested on the same day. Although due to the randomness of the data, we change the year difference to 1 instead of 0:
+
+```sql
+select * from AppointmentRequest
+where DATEDIFF(YEAR, requestTime, GETDATE()) = 1
+```
+
+Without index, the execution plan is as follows:
+
+![Alt text](../assets/index-1.png)
+
+![Alt text](image.png)
+
+With index, the execution plan is as follows:
+
 ### Session Table:
 
 **Create non clustered index on `time`, `patientID`, `dentistID`**

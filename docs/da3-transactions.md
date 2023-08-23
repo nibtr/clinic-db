@@ -187,6 +187,13 @@ Below are the "considered-essential" transactions of the database, which account
 | PaymentRecord     |       |     |     |     |       | x   |     |     |     |     |     |     |
 
 <!-- Conclusion here -->
+Looking at the table we can see that:
+
+- *Session* table spans accors 6 transactions, which is the most among all tables. This is because the *Session* table is the main table of the system, and is related to many other tables.
+- *Patient* table spans across 4 transactions, which is the second most among all tables. This is because the *Patient* table is also the main table of the system, and is related to many other tables.
+- *TreatmentSession*, *ExaminationSession*, *ReExaminationSession* are also important since they are inherited from the *Session* table, and join queries are to be expected when accessing these tables.
+- *PaymentRecord* is also important since it is related to the most frequent transactions of the system.
+- *AppointmentRequest* might not span across many transactions, but it is still important since it holds a large amount of data and is expected to be accessed frequently.
 
 ### Estimated number of references:
 
