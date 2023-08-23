@@ -116,7 +116,8 @@ CREATE PROCEDURE createNewReExaminationSession			--STA5
 @patientPhone CHAR(10),
 @note VARCHAR(1000),
 @roomID INT,
-@dentistID INT
+@dentistID INT,
+@assistantID INT
 AS 
 BEGIN
 		BEGIN TRY
@@ -124,24 +125,36 @@ BEGIN
 			DECLARE @PatientID INT;
 			DECLARE @examSessionID INT;
 			DECLARE @SessionID INT;
-			IF EXISTS (SELECT [dbo].[Patient].id, [dbo].[Patient].name FROM [dbo].[Patient] WHERE [dbo].[Patient].phone = @patientPhone)
+			DECLARE @time DATETIME2;
+			SELECT top 1 @time = appointmentTime FROM AppointmentRequest WHERE dbo.AppointmentRequest.patientPhone = @patientPhone AND  appointmentTime < GETDATE() ORDER BY id DESC 
+			SELECT @PatientID = id FROM [dbo].[Patient] WHERE [dbo].[Patient].phone = @patientPhone
+			IF @PatientID IS NOT NULL 
 			BEGIN
-				SELECT @PatientID = id FROM [dbo].[Patient] WHERE [dbo].[Patient].phone = @patientPhone;
-				SELECT @examSessionID = id FROM [dbo].[Session] WHERE [dbo].[Session].patientID = @PatientID AND [dbo].[Session].type = 'EXA';
 				DECLARE @InsertedIDs TABLE (ID INT);
-				INSERT INTO [dbo].[Session](time, patientID, note, type, roomID, dentistID) OUTPUT inserted.id INTO @InsertedIDs VALUES (GETDATE(), @PatientID, @note, 'EXA', @roomID, @dentistID);
-				SELECT @SessionID = ID FROM @InsertedIDs;
+				IF EXISTS (SELECT [dbo].[Personnel].id FROM [dbo].[Personnel] WHERE [dbo].[Personnel].id = @assistantID AND [dbo].[Personnel].type = 'AST')
+					BEGIN
+						SELECT @examSessionID = MAX(id) FROM [dbo].[Session] WHERE [dbo].[Session].patientID = @PatientID AND [dbo].[Session].type = 'EXA'
+						INSERT INTO [dbo].[Session](time, patientID, note, type, roomID, dentistID, assistantID) OUTPUT inserted.id INTO @InsertedIDs VALUES (@time, @PatientID, @note, 'REX', @roomID, @dentistID, @assistantID);
+						SELECT @SessionID = ID FROM @InsertedIDs;
+					END
+					ELSE
+					BEGIN
+						SELECT @examSessionID = MAX(id) FROM [dbo].[Session] WHERE [dbo].[Session].patientID = @PatientID AND [dbo].[Session].type = 'EXA'
+						INSERT INTO [dbo].[Session](time, patientID, note, type, roomID, dentistID) OUTPUT inserted.id INTO @InsertedIDs VALUES (@time, @PatientID, @note, 'REX', @roomID, @dentistID);
+						SELECT @SessionID = ID FROM @InsertedIDs;
+					END
 				INSERT INTO [dbo].[ReExaminationSession] (id,relatedExaminationID) VALUES (@SessionID, @examSessionID);
 			END
 			COMMIT TRAN
 		END TRY
 		BEGIN CATCH
+			print('123')
 			ROLLBACK TRAN
 		END CATCH
 END
 GO
 
-CREATE PROCEDURE viewAvailableDentist			--STA7
+CREATE PROCEDURE viewAvailableDentist			--STA7			-- FIX THIS PROC
 @appointmentID INT
 AS 
 BEGIN
@@ -183,37 +196,6 @@ BEGIN
 			BEGIN
 				SELECT @PatientID = id FROM [dbo].[Patient] WHERE [dbo].[Patient].phone = @patientPhone;
 				INSERT INTO [dbo].[PaymentRecord](date, total, paid, change, patientID) VALUES (GETDATE(), @total, @paid, @change, @PatientID)
-			END
-			COMMIT TRAN
-		END TRY
-		BEGIN CATCH
-			ROLLBACK TRAN
-		END CATCH
-END
-GO
-
-GO
-CREATE PROCEDURE updatePayment				--STA15
-@patientPhone CHAR(10),
-@paid INT,
-@change INT,
-@method CHAR(1),
-@date DATETIME2
-AS 
-BEGIN
-		BEGIN TRY
-			BEGIN TRAN
-			DECLARE @PatientID INT;
-			DECLARE @TotalFee INT;
-			IF EXISTS (SELECT [dbo].[Patient].id, [dbo].[Patient].name FROM [dbo].[Patient] WHERE [dbo].[Patient].phone = @patientPhone)
-			BEGIN
-				SELECT @PatientID = id FROM [dbo].[Patient] WHERE [dbo].[Patient].phone = @patientPhone;
-				UPDATE [dbo].[PaymentRecord]
-				SET [dbo].[PaymentRecord].[paid] = @paid,
-				[dbo].[PaymentRecord].[change] = @change,
-				[dbo].[PaymentRecord].[method] = @method,
-				[dbo].[PaymentRecord].[date] = GETDATE()
-				WHERE [patientID] = @PatientID AND [date] = @date
 			END
 			COMMIT TRAN
 		END TRY
