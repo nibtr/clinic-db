@@ -166,3 +166,59 @@ BEGIN
 		END CATCH
 END
 GO
+
+
+
+CREATE PROCEDURE createNewPayment			--STA14
+@patientPhone CHAR(10),
+@total INT,
+@change INT,
+@paid INT
+AS 
+BEGIN
+		BEGIN TRY
+			BEGIN TRAN
+			DECLARE @PatientID INT;
+			IF EXISTS (SELECT [dbo].[Patient].id, [dbo].[Patient].name FROM [dbo].[Patient] WHERE [dbo].[Patient].phone = @patientPhone)
+			BEGIN
+				SELECT @PatientID = id FROM [dbo].[Patient] WHERE [dbo].[Patient].phone = @patientPhone;
+				INSERT INTO [dbo].[PaymentRecord](date, total, paid, change, patientID) VALUES (GETDATE(), @total, @paid, @change, @PatientID)
+			END
+			COMMIT TRAN
+		END TRY
+		BEGIN CATCH
+			ROLLBACK TRAN
+		END CATCH
+END
+GO
+
+GO
+CREATE PROCEDURE updatePayment				--STA15
+@patientPhone CHAR(10),
+@paid INT,
+@change INT,
+@method CHAR(1),
+@date DATETIME2
+AS 
+BEGIN
+		BEGIN TRY
+			BEGIN TRAN
+			DECLARE @PatientID INT;
+			DECLARE @TotalFee INT;
+			IF EXISTS (SELECT [dbo].[Patient].id, [dbo].[Patient].name FROM [dbo].[Patient] WHERE [dbo].[Patient].phone = @patientPhone)
+			BEGIN
+				SELECT @PatientID = id FROM [dbo].[Patient] WHERE [dbo].[Patient].phone = @patientPhone;
+				UPDATE [dbo].[PaymentRecord]
+				SET [dbo].[PaymentRecord].[paid] = @paid,
+				[dbo].[PaymentRecord].[change] = @change,
+				[dbo].[PaymentRecord].[method] = @method,
+				[dbo].[PaymentRecord].[date] = GETDATE()
+				WHERE [patientID] = @PatientID AND [date] = @date
+			END
+			COMMIT TRAN
+		END TRY
+		BEGIN CATCH
+			ROLLBACK TRAN
+		END CATCH
+END
+GO
