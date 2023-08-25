@@ -160,17 +160,21 @@ AS
 BEGIN
 		BEGIN TRY
 			BEGIN TRAN
-			DECLARE @PatientID INT;
+			
 			DECLARE @SessionID INT;
 			DECLARE @Time DATETIME2;
 			IF EXISTS (SELECT [dbo].[AppointmentRequest].id FROM [dbo].[AppointmentRequest] WHERE [dbo].[AppointmentRequest].id = @appointmentID)
 			BEGIN
-				SELECT @PatientID = id FROM [dbo].[Patient] WHERE [dbo].[Patient].phone IN (SELECT phone FROM [dbo].[AppointmentRequest] WHERE [dbo].[AppointmentRequest].id = @appointmentID);
-				SELECT @SessionID = id , @Time = time FROM [dbo].[Session] WHERE [patientID] = @PatientID AND [type] = 'EXA';
-				SELECT P.id AS dentistID, P.name AS dentistName FROM [dbo].[Session] S INNER JOIN [dbo].[Personnel] P ON S.[dentistID] = P.[id]
-				WHERE S.[time] >= DATEADD(DAY, DATEDIFF(DAY, 0, GETDATE()), 0) -- Today's start
-						AND S.[time] < DATEADD(DAY, DATEDIFF(DAY, 0, GETDATE()) + 1, 0) -- Tomorrow's start
-						AND DATEDIFF(minute, S.[time], GETDATE()) > 30;
+				SELECT  @Time = appointmentTime FROM [dbo].[AppointmentRequest] WHERE [dbo].[AppointmentRequest].id = @appointmentID;
+				DECLARE @EndTime DATETIME2;
+ 	            SET @EndTime = DATEADD(MINUTE, 30, @Time);
+				SELECT P.id AS dentistID, P.name AS dentistName
+            	FROM [dbo].[Personnel] P
+            	WHERE P.type = 'DEN' AND P.id NOT IN (
+                	SELECT DISTINCT S.[dentistID]
+                	FROM [dbo].[Session] S
+                	WHERE S.[time] >= @Time AND S.[time] <= @EndTime
+            	);
 			END
 			COMMIT TRAN
 		END TRY
@@ -179,6 +183,7 @@ BEGIN
 		END CATCH
 END
 GO
+
 
 
 
