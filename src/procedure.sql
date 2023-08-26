@@ -284,15 +284,13 @@ GO
 CREATE PROCEDURE updateAccDetail						--ADM29
 @username CHAR(10),
 @oldPass CHAR(60),
-@newPass CHAR(60),
-@role CHAR(3)
+@newPass CHAR(60)
 AS
 BEGIN
 		BEGIN TRY
 		BEGIN TRAN
-			IF EXISTS (SELECT A.username FROM [dbo].[Account] A INNER JOIN [dbo].[Personnel] P ON p.id = A.personnelID WHERE A.username = @username 
-															AND A.password = @oldPass
-															AND P.type = @role)
+			IF EXISTS (SELECT A.username FROM [dbo].[Account] A WHERE A.username = @username 
+															AND A.password = @oldPass)
 			BEGIN
 				UPDATE [dbo].[Account]
 				SET [password] = @newPass
