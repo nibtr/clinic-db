@@ -1,7 +1,7 @@
 ---
 title: DA#3 - Indexing
 date-of-creation: 2023-08-15
-date-last-updated: 2023-08-15
+date-last-updated: 2023-08-26
 description: This document describes the indexing process of the database.
 ---
 
@@ -15,21 +15,6 @@ description: This document describes the indexing process of the database.
 - Staffs will usually rely on the `appointmentTime` of an appointment request to create a schedule, that is why it is necessary to index on `appointmentTime`.
 - According to the business, every day, staffs will usually check the appointment requests made on the same day (`requestTime` = TODAY), so indexing on `requestTime` is necessary when the query frequency occurs daily.
 
-Consider the following query. The query is used to find appointments that are requested on the same day. Although due to the randomness of the data, we change the year difference to 1 instead of 0:
-
-```sql
-select * from AppointmentRequest
-where DATEDIFF(YEAR, requestTime, GETDATE()) = 1
-```
-
-Without index, the execution plan is as follows:
-
-![Alt text](../assets/index-1.png)
-
-![Alt text](image.png)
-
-With index, the execution plan is as follows:
-
 ### Session Table:
 
 **Create non clustered index on `time`, `patientID`, `dentistID`**
@@ -38,9 +23,6 @@ With index, the execution plan is as follows:
 - Fields such as `time`, `patientID`, `dentistID` are fields that are rarely updated once created. Because of this, we can indexing on these fields to reduce the query time:
   - Indexing on `time` to reduce the query time of sessions, which include treatment sessions, examinations, re-examinations. According to the business, the query frequency of these sessions is very high and also occurs daily.
   - Indexing on `patientID`, `dentistID` to reduce the query time when joining the `Session` table with the `Patient` or `Personnel` table, as well as querying the `Session` table by `patientID`, `dentistID`, some of which include searching for the sessions of a patient, the sessions of a dentist, etc.
-  - Create an index on `type` to reduce the query time when querying the `Session` table by `type`. By doing this, we can search for the type of a session (treatment session, examination, re-examination) faster. In addition, according to the database design, the *Treatment Session Table*, *Examination Table*, *Re-examination Table* are all inherited from the *Session Table*, so indexing on `type` is necessary when the query frequency of these tables is very high.
-
- <!-- hình minh chứng -->
 
 ### Payment Record Table:
 
@@ -62,3 +44,91 @@ With index, the execution plan is as follows:
 **Clustered index on `treatmentSessionID`, `toothID`**
 
 Similar to the *Prescription Table*, `treatmentSessionID`, `toothID` have already been indexed as a composite primary key, but sorting `treatmentSessionID` first plays an important role when most of the conditions in the query use `treatmentSessionID` to compare or to search.
+
+### Evaluation
+
+#### Evaluation 1
+
+Consider the following query: to find appointments that are requested on the same day. This query will be used on the `AppointmentRequest` table:
+
+```sql
+select * from dbo.[AppointmentRequest]
+where appointmentTime >= '2023-08-26 00:00:00'
+and appointmentTime < '2023-08-27 00:00:00'
+-- The time is hard-coded for testing purpose
+```
+
+Without index, the execution plan is as follows:
+
+![Alt text](../assets/index-1.png)
+
+We can see that the query optimizer has to scan the clustered index of the table, which is very time-consuming. The query optimizer also suggests us to create an index (by stating "Missing Index").
+The client statistics is as follows:
+
+![Alt text](../assets/index-2.png)
+
+With index, the execution plan is as follows:
+
+![Alt text](../assets/index-3.png)
+
+As you can see, the query optimizer now utilizes sthe `Index Seek` operator, which is much faster than the `Clustered Index Scan` operator.
+The client statistics is as follows:
+
+![Alt text](../assets/index-4.png)
+
+Trial 4 is the query with index, and Trial 3 is the query without index. We can see that the query with index is much faster than the query without index and the average processing time is almost 3 times faster. The bytes sent from client and bytes received from server are also much smaller. Overall, everything has improved, denoted with the green arrows
+
+We also noticed that the query optimizer would not utilize the index if there is a function applied to the field. For example, the following query will not utilize the index although it is the same query as the previous one:
+
+```sql
+select * from dbo.[AppointmentRequest]
+where DATEDIFF(day, appointmentTime, '2023-08-26') = 0
+```
+
+The execution plan now uses `Index Scan` instead of `Index Seek` (we have indexed on `appointmentTime`), which is slower than `Index Seek`:
+
+![Alt text](../assets/index-5.png)
+
+Comparing that with the previous query:
+
+![Alt text](../assets/index-6.png)
+
+Trial 5 is the old query, and Trial 6 is the new query. We can see that the query with function applied to the field is slower than the query without function applied to the field.
+
+Therefore, we need to make sure that the query does not have any function applied to the `appointmentTime` field, and have come with workarounds to solve this problem. This also applies to other fields with `datetime` data type.
+
+The index on `requestTime` is similar to the index on `appointmentTime`, so we will not go into details.
+
+#### Evaluation 2
+
+Consider the following query: to find sessions that belong to a patient. This query will be used on the `Session` table:
+
+```sql
+select * from dbo.[Session]
+where patientID = 1
+-- The patientID is hard-coded for testing purpose
+```
+
+Without index, the execution plan is as follows:
+
+![Alt text](../assets/index-7.png)
+
+We can see that the query optimizer has to scan the clustered index of the table. The query optimizer also suggests us to create an index (by stating "Missing Index").
+
+The client statistics is as follows:
+
+![Alt text](../assets/index-8.png)
+
+With index, the execution plan is as follows:
+
+![Alt text](../assets/index-9.png)
+
+As you can see, the query optimizer now utilizes the `Index Seek` operator, which is much faster than the `Clustered Index Scan` operator.
+
+The client statistics is as follows:
+
+![Alt text](../assets/index-10.png)
+
+Trial 1 is the query with index, and Trial 2 is the query without index. We can see that the total execution time of the query with index is much faster than the query without index.
+
+The same can be applied to queries with foreign keys.
