@@ -279,3 +279,131 @@ BEGIN
 END
 GO
 
+-- PROC OF ADMIN
+
+CREATE PROCEDURE updateAccDetail						--ADM29
+@username CHAR(10),
+@oldPass CHAR(60),
+@newPass CHAR(60)
+AS
+BEGIN
+		BEGIN TRY
+		BEGIN TRAN
+			IF EXISTS (SELECT A.username FROM [dbo].[Account] A WHERE A.username = @username 
+															AND A.password = @oldPass)
+			BEGIN
+				UPDATE [dbo].[Account]
+				SET [password] = @newPass
+				WHERE [dbo].[Account].username = @username 
+			END
+			COMMIT TRAN
+		END TRY
+		BEGIN CATCH
+			ROLLBACK TRAN
+		END CATCH
+END
+GO
+
+CREATE PROCEDURE viewAcc				--ADM30
+@personnelID INT
+AS
+BEGIN
+		BEGIN TRY
+			BEGIN TRAN
+			BEGIN
+				SELECT * FROM [dbo].[Account] WHERE [dbo].[Account].personnelID = @personnelID
+			END
+			COMMIT TRAN
+		END TRY
+		BEGIN CATCH
+			ROLLBACK TRAN
+		END CATCH
+END
+GO
+
+
+-- PROC OF PATIENT
+
+CREATE PROCEDURE viewCategories						--PAT1
+AS
+BEGIN
+		BEGIN TRY
+		BEGIN TRAN
+			SELECT name FROM [dbo].[Category]
+			COMMIT TRAN
+		END TRY
+		BEGIN CATCH
+			ROLLBACK TRAN
+		END CATCH
+END
+GO
+
+
+CREATE PROCEDURE viewProcedures					--PAT2
+AS
+BEGIN
+		BEGIN TRY
+		BEGIN TRAN
+			SELECT P.name, C.name, P.fee FROM [dbo].[Procedure] P JOIN [dbo].[Category] C ON P.[categoryID] = C.[id]
+			COMMIT TRAN
+		END TRY
+		BEGIN CATCH
+			ROLLBACK TRAN
+		END CATCH
+END
+GO
+
+CREATE PROCEDURE createNewAppointment						--PAT3
+@appointmentTime DATETIME2,
+@note NVARCHAR(255),
+@categoryName NVARCHAR(50),
+@patientName NVARCHAR(50),
+@patientPhone CHAR(10)
+AS
+BEGIN
+		BEGIN TRY
+		BEGIN TRAN
+			BEGIN
+				INSERT INTO [dbo].[AppointmentRequest](appointmentTime, requestTime, note, patientName, patientPhone, categoryName)
+				values (@appointmentTime, CONVERT(DATETIME2,GETDATE()), @note, @patientName, @patientPhone, @categoryName);
+			END
+			COMMIT TRAN
+		END TRY
+		BEGIN CATCH
+			ROLLBACK TRAN
+		END CATCH
+END
+GO
+
+
+-- PROC OF DENTIST
+
+CREATE PROCEDURE updatePrescription								 --DEN12
+@dentistID INT,
+@patientID INT,
+@newNote NVARCHAR(500),
+@drugID INT
+AS
+BEGIN
+		BEGIN TRY
+		BEGIN TRAN
+			IF EXISTS (SELECT dentistID, patientID FROM [dbo].[Session] S WHERE S.[dentistID] = @dentistID
+															AND S.[patientID] = @patientID)
+			BEGIN
+				UPDATE P
+				SET P.[note] = @newNote
+				P.[drugID] = @drugID
+				FROM [dbo].[Prescription] P
+				INNER JOIN [dbo].[TreatmentSession] TS ON P.[treatmentSessionID] = TS.[id]
+				INNER JOIN [dbo].[Session] S ON TS.[id] = S.[id]
+				WHERE S.[patientID] = @patientID
+				AND S.[dentistID] = @dentistID
+			END
+			COMMIT TRAN
+		END TRY
+		BEGIN CATCH
+			ROLLBACK TRAN
+		END CATCH
+END
+GO
+
