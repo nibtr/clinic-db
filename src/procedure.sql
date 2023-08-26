@@ -367,7 +367,7 @@ BEGIN
 		BEGIN TRAN
 			BEGIN
 				INSERT INTO [dbo].[AppointmentRequest](appointmentTime, requestTime, note, patientName, patientPhone, categoryName)
-				values (@appointmentTime, GETDATE(), @note, @patientName, @patientPhone, @categoryName);
+				values (@appointmentTime, CONVERT(DATETIME2,GETDATE()), @note, @patientName, @patientPhone, @categoryName);
 			END
 			COMMIT TRAN
 		END TRY
