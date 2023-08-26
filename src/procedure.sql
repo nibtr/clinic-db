@@ -204,7 +204,6 @@ GO
 CREATE PROCEDURE updatePayment				--STA15
 @patientPhone CHAR(10),
 @paid INT,
-@change INT,
 @method CHAR(1),
 @date DATETIME2
 AS 
@@ -212,13 +211,11 @@ BEGIN
 	BEGIN TRY
 		BEGIN TRAN
 		DECLARE @PatientID INT;
-		DECLARE @TotalFee INT;
 		SELECT @PatientID = id FROM [dbo].[Patient] WHERE [dbo].[Patient].phone = @patientPhone
 		IF @PatientID IS NOT NULL
 		BEGIN
 			UPDATE [dbo].[PaymentRecord]
 			SET [dbo].[PaymentRecord].[paid] = @paid,
-			[dbo].[PaymentRecord].[change] = @change,
 			[dbo].[PaymentRecord].[method] = @method,
 			[dbo].[PaymentRecord].[date] = CONVERT(DATE, GETDATE())
 			WHERE [patientID] = @PatientID AND [date] = @date
@@ -241,7 +238,6 @@ AS
 BEGIN
 	BEGIN TRY
 		BEGIN TRAN
-		IF EXISTS (SELECT [dbo].[PaymentRecord].id, [dbo].[PaymentRecord].date FROM [dbo].[PaymentRecord] WHERE [dbo].[PaymentRecord].patientID = @patientID)
 		BEGIN
 			SELECT * FROM [dbo].[PaymentRecord] WHERE [dbo].[PaymentRecord].patientID = @patientID
 		END
@@ -253,16 +249,20 @@ BEGIN
 END
 GO
 
-CREATE PROCEDURE createNewSession				--STA24
+CREATE PROCEDURE createNewTreatmentSession				--STA24
 @patientPhone CHAR(10),
 @note VARCHAR(1000),
 @room INT,
 @dentistID INT,
-@assistantID INT
+@assistantID INT,
+@healthNote nvarchar(1000),
+@des nvarchar(1000),
+@categoryID INT
 AS
 BEGIN
 	BEGIN TRAN
 		BEGIN TRY
+		BEGIN TRAN
 			DECLARE @PatientID INT;
 			DECLARE @SessionID INT;
 			SELECT @PatientID = id FROM [dbo].[Patient] WHERE [dbo].[Patient].phone = @patientPhone;
@@ -271,7 +271,7 @@ BEGIN
 				DECLARE @InsertedIDs TABLE (ID INT);
 				INSERT INTO [dbo].[Session](time, patientID, note, type, status, dentistID, assistantID, roomID) OUTPUT inserted.id INTO @InsertedIDs VALUES (CONVERT(DATETIME2,GETDATE()), @PatientID, @note, 'TRE','SCH', @dentistID, @assistantID, @room);
 				SELECT @SessionID = ID FROM @InsertedIDs;
-				INSERT INTO [dbo].[ExaminationSession] (id) VALUES (@SessionID)
+				INSERT INTO [dbo].[TreatmentSession] (id,healthNote,description,categoryID) VALUES (@SessionID, @healthNote, @des, @categoryID)
 			END
 			COMMIT TRAN
 		END TRY
@@ -281,3 +281,4 @@ BEGIN
 	COMMIT TRAN
 END
 GO
+
