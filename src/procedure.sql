@@ -344,7 +344,7 @@ AS
 BEGIN
 		BEGIN TRY
 		BEGIN TRAN
-			SELECT P.name FROM [dbo].[Procedure] P JOIN [dbo].[Category] C ON P.[categoryID] = C.[id]
+			SELECT P.name, C.name FROM [dbo].[Procedure] P JOIN [dbo].[Category] C ON P.[categoryID] = C.[id]
 			COMMIT TRAN
 		END TRY
 		BEGIN CATCH
