@@ -383,7 +383,8 @@ GO
 CREATE PROCEDURE updatePrescription								 --DEN12
 @dentistID INT,
 @patientID INT,
-@newNote NVARCHAR(500)
+@newNote NVARCHAR(500),
+@drugID INT
 AS
 BEGIN
 		BEGIN TRY
@@ -393,6 +394,7 @@ BEGIN
 			BEGIN
 				UPDATE P
 				SET P.[note] = @newNote
+				P.[drugID] = @drugID
 				FROM [dbo].[Prescription] P
 				INNER JOIN [dbo].[TreatmentSession] TS ON P.[treatmentSessionID] = TS.[id]
 				INNER JOIN [dbo].[Session] S ON TS.[id] = S.[id]
