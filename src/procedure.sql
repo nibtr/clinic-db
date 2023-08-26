@@ -249,8 +249,8 @@ BEGIN
 END
 GO
 
-CREATE PROCEDURE createNewTreatmentSession				--STA24
-@patientPhone CHAR(10),
+ALTER PROCEDURE createNewTreatmentSession				--STA24
+@patientID CHAR(10),
 @note VARCHAR(1000),
 @room INT,
 @dentistID INT,
@@ -263,10 +263,7 @@ BEGIN
 	BEGIN TRAN
 		BEGIN TRY
 		BEGIN TRAN
-			DECLARE @PatientID INT;
 			DECLARE @SessionID INT;
-			SELECT @PatientID = id FROM [dbo].[Patient] WHERE [dbo].[Patient].phone = @patientPhone;
-			IF @PatientID IS NOT NULL
 			BEGIN
 				DECLARE @InsertedIDs TABLE (ID INT);
 				INSERT INTO [dbo].[Session](time, patientID, note, type, status, dentistID, assistantID, roomID) OUTPUT inserted.id INTO @InsertedIDs VALUES (CONVERT(DATETIME2,GETDATE()), @PatientID, @note, 'TRE','SCH', @dentistID, @assistantID, @room);
