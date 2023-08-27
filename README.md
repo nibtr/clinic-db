@@ -14,11 +14,12 @@ For each diagram, if there are older versions, please refer to the latest one.
 
 ## Docs
 
-For the overview of the business rules (requirements) of the project, please refer to [The Overview Doc](docs/da3-overview.md).
+- For the overview of the business rules (requirements) of the project, please refer to [The Overview Doc](docs/da3-overview.md).
+- For other documentations, please refer to the `docs` folder.
 
 ## Script
 
-- All the script related to the database can be found in the `src` folder
+- All the scripts can be found in the `src` folder
 - Link for the .bak file: [Google Drive](https://drive.google.com/file/d/19hX4QG41Mtk_7PfUi3FokmyGdKGaU6ZM/view?usp=sharing)
 
 ## Server
