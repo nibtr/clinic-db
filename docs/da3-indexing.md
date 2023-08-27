@@ -31,8 +31,6 @@ description: This document describes the indexing process of the database.
 - *Payment Record Table* is a table with a 1-1 relationship with the *Treatment Session Table*, whose data is also very large.
 - Indexing on the foreign key `patientID` will speed up the query when we want to get information related to the patient of a payment record, get the payment records of a patient, etc.
 
-  <!-- hình minh chứng -->
-
 ### Prescription Table:
 
 **Clustered index on `treatmentSessionID`, `drugID`**
@@ -132,3 +130,25 @@ The client statistics is as follows:
 Trial 1 is the query with index, and Trial 2 is the query without index. We can see that the total execution time of the query with index is much faster than the query without index.
 
 The same can be applied to queries with foreign keys.
+
+#### Evaluation 3
+
+Consider the following query: to find prescription belonging to a treatment session. This query will be used on the `Prescription` table:
+
+```sql
+select * from dbo.[Prescription]
+where treatmentSessionID = 500
+-- The treatmentSessionID is hard-coded for testing purpose
+```
+
+When the index is created on the reverse order to what we have suggested, which is to put `drugID` first and `treatmentSessionID` second, the execution plan is as follows:
+
+![Alt text](../assets/index-11.png)
+
+Although we have index on the table, the query optimizer still has to scan the clustered index of the table instead of utilizing the Index Seek operator.
+
+By placing `treatmentSessionID` first, the query optimizer can utilize the Index Seek operator:
+
+![Alt text](../assets/index-13.png)
+
+This is because the query optimizer will utilize the index if the query has the same order as the index. Therefore, we need to make sure that the query has the same order as the index. This applies to other tables with composite primary keys as well.
