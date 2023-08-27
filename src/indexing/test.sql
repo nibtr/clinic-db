@@ -13,4 +13,10 @@ where DATEDIFF(day, appointmentTime, '2023-08-26') = 0
 select * from dbo.[Session]
 where patientID = 1
 
+select * from dbo.[PaymentRecord]
+where patientID = 6969
+
+select * from dbo.[Prescription]
+where treatmentSessionID = 500
+
 DBCC DROPCLEANBUFFERS

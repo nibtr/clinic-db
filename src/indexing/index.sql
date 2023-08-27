@@ -7,5 +7,3 @@ CREATE NONCLUSTERED INDEX idx_appointment_req_request_time ON [dbo].[Appointment
 CREATE NONCLUSTERED INDEX idx_session_time ON [dbo].[Session]([time]);
 CREATE NONCLUSTERED INDEX idx_session_patient_id ON [dbo].[Session]([patientID]);
 CREATE NONCLUSTERED INDEX idx_session_dentist_id ON [dbo].[Session]([dentistID]);
-
-CREATE CLUSTERED INDEX idx_prescription_test ON [dbo].[Prescription]([treatmentSessionID], [drugID])
