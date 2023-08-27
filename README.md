@@ -8,18 +8,18 @@ All the diagrams are located in the `diagram` folder. This includes:
 
 - Conceptual design diagram
 - Logical design diagram
+- Physical design diagram
 
-For each diagram there are older versions, please refer to the latest one.
+For each diagram, if there are older versions, please refer to the latest one.
 
 ## Docs
 
-For the overview of the business rules (requirements) of the project, please refer to [The Overview Doc](docs/da3-overview.md) (Vietnamese only).
+For the overview of the business rules (requirements) of the project, please refer to [The Overview Doc](docs/da3-overview.md).
 
 ## Script
 
 - All the script related to the database can be found in the `src` folder
 - Link for the .bak file: [Google Drive](https://drive.google.com/file/d/19hX4QG41Mtk_7PfUi3FokmyGdKGaU6ZM/view?usp=sharing)
-<!-- - Link for the master document (all the docs combined): [Microsoft Word](https://studenthcmusedu-my.sharepoint.com/:w:/g/personal/20126038_student_hcmus_edu_vn/EX75X6yCZBJJl8BJ9sE50eIB00rIrXb-2jooJzEpkflm0w?e=JnVk3e) -->
 
 ## Server
 
