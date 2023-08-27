@@ -19,4 +19,4 @@ where patientID = 6969
 select * from dbo.[Prescription]
 where treatmentSessionID = 500
 
-DBCC DROPCLEANBUFFERS
+-- DBCC DROPCLEANBUFFERS

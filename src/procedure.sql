@@ -111,7 +111,6 @@ BEGIN
 END
 GO
 
-
 CREATE PROCEDURE createNewReExaminationSession			--STA5
 @patientPhone CHAR(10),
 @note VARCHAR(1000),
@@ -174,9 +173,6 @@ BEGIN
 	END CATCH
 END
 GO
-
-
-
 
 CREATE PROCEDURE createNewPayment			--STA14
 @patientPhone CHAR(10),
@@ -280,7 +276,6 @@ END
 GO
 
 -- PROC OF ADMIN
-
 CREATE PROCEDURE updateAccDetail						--ADM29
 @username CHAR(10),
 @oldPass CHAR(60),
@@ -321,9 +316,7 @@ BEGIN
 END
 GO
 
-
 -- PROC OF PATIENT
-
 CREATE PROCEDURE viewCategories						--PAT1
 AS
 BEGIN
@@ -337,7 +330,6 @@ BEGIN
 		END CATCH
 END
 GO
-
 
 CREATE PROCEDURE viewProcedures					--PAT2
 AS
@@ -375,9 +367,7 @@ BEGIN
 END
 GO
 
-
 -- PROC OF DENTIST
-
 CREATE PROCEDURE updatePrescription								 --DEN12
 @dentistID INT,
 @patientID INT,
@@ -406,4 +396,3 @@ BEGIN
 		END CATCH
 END
 GO
-

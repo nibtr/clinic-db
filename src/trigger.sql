@@ -105,7 +105,6 @@ END;
 GO
 
 -- Patient Table
-
 CREATE TRIGGER CheckPatientNationalIDLength
 ON [dbo].[Patient]
 FOR INSERT, UPDATE
