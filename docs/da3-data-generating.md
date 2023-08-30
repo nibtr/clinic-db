@@ -11,7 +11,7 @@ We have decided to use [Red Gate SQL Data Generator](https://www.red-gate.com/pr
 
 ![data gen](../assets/data-gen.png)
 
-### Functionalities
+## Functionalities
 
 The tool also provides preview of the data that will be generated, which is useful for checking if the data is generated correctly. In some cases where the type of data is genereted by regex pattern, this functionality is very useful.
 
@@ -25,7 +25,31 @@ The results will in most cases be instantly visible in the database, but in some
 
 ![Alt text](../assets/data-gen-3.png)
 
-### Limitations
+## Foreign Keys
+
+The tool also supports generating data based on other tables. This is useful for generating foreign keys. The tool will automatically detect the foreign keys and will generate data based on the data in the referenced table.
+
+We will discuss 2 cases of generating foreign keys:
+
+- The first case is when the foreign key is a simple reference to another table. For example, the `Session` table has a foreign key to the `Patient` table, as you can see in the image below:
+
+![Alt text](../assets/data-gen-5.png)
+
+In this case, the tool will automatically detect the foreign key and will generate data based on the `Patient` table:
+
+![Alt text](../assets/data-gen-6.png)
+
+- The second case is when the foreign key is a reference to another table with a specific type. Take for example the following 4 tables: `Session`, `ExaminationSession`, `ReExaminationSession` and `TreatmentSession`. In which, `Session` is the parent relation and the rest are child relations who reference the `Session` table. There is a `type` field in the `Session` relation which can be used to help reference the exact type for the child relations:
+
+![Alt text](../assets/data-gen-5.png)
+
+The tool default foreign key is automatically referenced with the input table but we can opt in to change to a custom foreign key if we want to, by writing a custom query. In this case, we reference the `Session` table with `type = EXA` in the `ExaminationSession` table:
+
+![Alt text](../assets/data-gen-7.png)
+
+The other cases are similar to this one, by changing the `type` to the corresponding type of the child relation.
+
+## Limitations
 
 - Datetime data type can be a trouble in terms of correctness due to it being generated randomly. This can lead to some cases where the data is not consistent. For example, a session can have a start time that is later than the end time.
 - The tool does not support generating data based on other tables if the table is empty. This can be a problem if the table is empty and the data is generated based on that table.
