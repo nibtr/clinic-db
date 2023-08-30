@@ -31,3 +31,6 @@ WHERE $PARTITION.Session_by_year_function(time) = 6
 
 --Get the partition number
 SELECT $PARTITION.Session_by_year_function('2024-01-01') 
+
+select * from session
+where time >= '2021-01-01 00:00:00' and time < '2022-01-01 00:00:00'
